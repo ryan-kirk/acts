@@ -2,7 +2,9 @@ import type { Event } from "../domain/dataset";
 import { formatDateRange, type DatasetIndex } from "../domain/events";
 
 interface EventRailProps {
+  activeBookLabel: string;
   events: Event[];
+  eventBookLabels: Map<string, string>;
   query: string;
   selectedEventId: string;
   selectedEventHidden: boolean;
@@ -12,7 +14,9 @@ interface EventRailProps {
 }
 
 export function EventRail({
+  activeBookLabel,
   events,
+  eventBookLabels,
   query,
   selectedEventId,
   selectedEventHidden,
@@ -23,11 +27,11 @@ export function EventRail({
   return (
     <section className="rail-panel">
       <div className="section-heading-block">
-        <p className="section-eyebrow">Acts Dataset</p>
+        <p className="section-eyebrow">Scripture Library</p>
         <h2>Event Rail</h2>
         <p className="section-copy">
           Search by title, location, participant, summary, or citation to keep the
-          explorer anchored to canonical Acts records.
+          explorer anchored to normalized Luke and Acts records.
         </p>
       </div>
 
@@ -38,7 +42,7 @@ export function EventRail({
         id="event-rail-search"
         className="search-input"
         type="search"
-        placeholder="Try Jerusalem, Malta, or Acts 15"
+        placeholder="Try Jerusalem, Emmaus, or Luke 24"
         value={query}
         onChange={(event) => onQueryChange(event.currentTarget.value)}
       />
@@ -52,14 +56,15 @@ export function EventRail({
 
         {events.length === 0 ? (
           <div className="empty-state" role="status">
-            <h3>No matching Acts events</h3>
-            <p>Adjust the search to see more of the validated dataset.</p>
+            <h3>No matching events</h3>
+            <p>Adjust the search or book focus to restore visible canonical records.</p>
           </div>
         ) : (
           <ol className="event-list">
             {events.map((event) => {
               const place = index.placesById.get(event.location_id);
               const primaryCitation = event.source_refs[0]?.citation;
+              const bookLabel = eventBookLabels.get(event.id) ?? activeBookLabel;
               const isSelected = event.id === selectedEventId;
 
               return (
@@ -73,7 +78,7 @@ export function EventRail({
                     <span className="event-item-date">{formatDateRange(event)}</span>
                     <span className="event-item-title">{event.title}</span>
                     <span className="event-item-meta">
-                      {place?.name ?? "Unknown place"}
+                      {bookLabel} • {place?.name ?? "Unknown place"}
                       {primaryCitation ? ` • ${primaryCitation}` : ""}
                     </span>
                   </button>
@@ -85,8 +90,8 @@ export function EventRail({
       </div>
 
       <footer className="rail-footer">
-        <span>Book of Acts · first canonical dataset</span>
-        <span>Luke and external source layers remain queued in the backlog</span>
+        <span>{activeBookLabel} focus · normalized scripture records</span>
+        <span>Shared entities merge by stable IDs across the Luke-Acts library</span>
       </footer>
     </section>
   );

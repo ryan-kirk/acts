@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { loadDatasetFromFile } from "../data/loadDataset";
 
-describe("Acts canonical dataset", () => {
+describe("canonical scripture datasets", () => {
   it("loads the canonical Acts dataset and meets minimum scope expectations", async () => {
     const dataset = await loadDatasetFromFile(path.resolve("data/acts.yaml"));
 
@@ -14,6 +14,22 @@ describe("Acts canonical dataset", () => {
     expect(dataset.people.length).toBeGreaterThanOrEqual(8);
     expect(dataset.journeys.length).toBeGreaterThanOrEqual(2);
 
+    expect(dataset.events.every((event) => event.source_refs.length > 0)).toBe(true);
+    expect(dataset.sources.every((source) => source.usage_rights.status !== "unknown")).toBe(
+      true
+    );
+    expect(
+      dataset.places.some((place) => place.location_certainty !== "exact")
+    ).toBe(true);
+  });
+
+  it("loads the canonical Luke dataset and meets initial scope expectations", async () => {
+    const dataset = await loadDatasetFromFile(path.resolve("data/luke.yaml"));
+
+    expect(dataset.metadata.dataset_id).toBe("luke");
+    expect(dataset.events.length).toBeGreaterThanOrEqual(8);
+    expect(dataset.places.length).toBeGreaterThanOrEqual(6);
+    expect(dataset.people.length).toBeGreaterThanOrEqual(8);
     expect(dataset.events.every((event) => event.source_refs.length > 0)).toBe(true);
     expect(dataset.sources.every((source) => source.usage_rights.status !== "unknown")).toBe(
       true

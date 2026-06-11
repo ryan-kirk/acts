@@ -1,28 +1,40 @@
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 
 import { EventInspector } from "../components/EventInspector";
 import { EventRail } from "../components/EventRail";
 import { ExplorerStage } from "../components/ExplorerStage";
 import { ViewNavigation } from "../components/ViewNavigation";
-import type { CanonicalDataset } from "../domain/dataset";
+import type { ExplorerDataset, ExplorerDatasetProvenance } from "../domain/library";
 import {
   buildDatasetIndex,
   filterEventsByQuery,
   sortEventsChronologically,
   type ExplorerView
 } from "../domain/events";
+import {
+  filterExplorerDatasetByBook,
+  getBookLabelForFilter,
+  getEventBookLabel,
+  getEventBookLabelMap,
+  type BookFilterId
+} from "../domain/library";
 import { defaultTimelineFilters } from "../domain/timeline";
 
 interface ExplorerShellProps {
-  dataset: CanonicalDataset;
+  dataset: ExplorerDataset;
+  provenance: ExplorerDatasetProvenance;
 }
 
-export function ExplorerShell({ dataset }: ExplorerShellProps) {
-  const datasetIndex = buildDatasetIndex(dataset);
-  const sortedEvents = sortEventsChronologically(dataset.events);
+export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
   const [activeView, setActiveView] = useState<ExplorerView>("overview");
-  const [selectedEventId, setSelectedEventId] = useState(sortedEvents[0]?.id ?? "");
+  const [activeBookId, setActiveBookId] = useState<BookFilterId>("acts");
   const [searchQuery, setSearchQuery] = useState("");
+  const filteredDataset = filterExplorerDatasetByBook(dataset, provenance, activeBookId);
+  const datasetIndex = buildDatasetIndex(filteredDataset);
+  const sortedEvents = sortEventsChronologically(filteredDataset.events);
+  const eventBookLabels = getEventBookLabelMap(dataset, provenance);
+  const activeBookLabel = getBookLabelForFilter(dataset, activeBookId);
+  const [selectedEventId, setSelectedEventId] = useState(sortedEvents[0]?.id ?? "");
   const [focusedPersonId, setFocusedPersonId] = useState<string | null>(null);
   const [focusedPlaceId, setFocusedPlaceId] = useState<string | null>(null);
   const [focusedSourceId, setFocusedSourceId] = useState<string | null>(null);
@@ -37,6 +49,23 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
   const filteredEvents = filterEventsByQuery(sortedEvents, deferredSearchQuery, datasetIndex);
   const selectedEventHidden =
     selectedEvent !== null && !filteredEvents.some((event) => event.id === selectedEvent.id);
+
+  useEffect(() => {
+    if (sortedEvents.length === 0) {
+      return;
+    }
+
+    const selectedEventIsVisible = sortedEvents.some((event) => event.id === selectedEventId);
+
+    if (selectedEventIsVisible) {
+      return;
+    }
+
+    setSelectedEventId(sortedEvents[0]!.id);
+    setFocusedPersonId(null);
+    setFocusedPlaceId(null);
+    setFocusedSourceId(null);
+  }, [selectedEventId, sortedEvents]);
 
   function clearEntityFocus(): void {
     setFocusedPersonId(null);
@@ -75,15 +104,25 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
     setIsInspectorOpen(true);
   }
 
+  function handleBookFilterChange(bookId: BookFilterId): void {
+    setActiveBookId(bookId);
+    setSearchQuery("");
+    setTimelineFilters({
+      ...defaultTimelineFilters
+    });
+    clearEntityFocus();
+    setIsRailOpen(false);
+  }
+
   if (selectedEvent === null) {
     return (
       <main className="app-shell">
         <section className="error-panel">
           <p className="section-eyebrow">Dataset Unavailable</p>
-          <h1>No events were found in the validated Acts dataset.</h1>
+          <h1>No events were found in the filtered canonical library.</h1>
           <p>
-            The explorer shell expects at least one canonical event record before it can
-            render shared navigation.
+            The explorer shell expects at least one canonical event record before it can render
+            shared navigation.
           </p>
         </section>
       </main>
@@ -95,14 +134,15 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
       <header className="hero-banner">
         <div>
           <p className="eyebrow">Bible Time &amp; Place Explorer</p>
-          <h1>Acts explorer with shared navigation, filtering, and a real chronology view.</h1>
+          <h1>Luke-Acts explorer with shared navigation, filtering, and synchronized context.</h1>
           <p className="lede">
-            Interactive scripture explorer · Book of Acts · shared timeline, map, people,
-            and source-grounded event context.
+            Interactive scripture explorer · Luke and Acts · shared timeline, map, people, and
+            source-grounded event context.
           </p>
         </div>
         <div className="status-cluster" aria-label="Dataset status">
           <span className="status-pill">{dataset.events.length} events</span>
+          <span className="status-pill">{dataset.books.length} books</span>
           <span className="status-pill">{dataset.journeys.length} journeys</span>
           <span className="status-pill">Version {dataset.metadata.version}</span>
         </div>
@@ -110,6 +150,25 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
 
       <section className="control-bar">
         <ViewNavigation activeView={activeView} onViewChange={setActiveView} />
+        <div className="book-filter-bar" aria-label="Book filters">
+          <button
+            type="button"
+            className={`book-filter-chip ${activeBookId === "all" ? "is-active" : ""}`}
+            onClick={() => handleBookFilterChange("all")}
+          >
+            All Books
+          </button>
+          {dataset.books.map((book) => (
+            <button
+              key={book.id}
+              type="button"
+              className={`book-filter-chip ${activeBookId === book.id ? "is-active" : ""}`}
+              onClick={() => handleBookFilterChange(book.id)}
+            >
+              {book.label}
+            </button>
+          ))}
+        </div>
         <div className="mobile-toggle-group" aria-label="Explorer drawers">
           <button
             type="button"
@@ -134,6 +193,8 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
         <aside className={`surface rail-surface ${isRailOpen ? "is-open" : ""}`}>
           <EventRail
             events={filteredEvents}
+            activeBookLabel={activeBookLabel}
+            eventBookLabels={eventBookLabels}
             query={searchQuery}
             selectedEventId={selectedEvent.id}
             selectedEventHidden={selectedEventHidden}
@@ -146,8 +207,10 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
         <section className="surface stage-surface">
           <ExplorerStage
             activeView={activeView}
-            dataset={dataset}
+            activeBookLabel={activeBookLabel}
+            dataset={filteredDataset}
             event={selectedEvent}
+            eventBookLabels={eventBookLabels}
             events={sortedEvents}
             index={datasetIndex}
             focusedPersonId={focusedPersonId}
@@ -163,7 +226,11 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
 
         <aside className={`surface inspector-surface ${isInspectorOpen ? "is-open" : ""}`}>
           <EventInspector
+            activeBookLabel={activeBookLabel}
             event={selectedEvent}
+            eventBookLabel={
+              getEventBookLabel(dataset, provenance, selectedEvent.id) ?? activeBookLabel
+            }
             events={sortedEvents}
             index={datasetIndex}
             onSelectEvent={handleSelectEvent}

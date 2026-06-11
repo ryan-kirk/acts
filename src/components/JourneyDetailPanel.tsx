@@ -7,8 +7,10 @@ import {
 import type { MapJourneyOverlay } from "../domain/map";
 
 interface JourneyDetailPanelProps {
+  activeBookLabel: string;
   activeJourneyOverlay: MapJourneyOverlay | null;
   activePlaceId: string | null;
+  eventBookLabels: Map<string, string>;
   index: DatasetIndex;
   onFocusPlace: (placeId: string) => void;
   onSelectEvent: (eventId: string) => void;
@@ -18,8 +20,10 @@ interface JourneyDetailPanelProps {
 }
 
 export function JourneyDetailPanel({
+  activeBookLabel,
   activeJourneyOverlay,
   activePlaceId,
+  eventBookLabels,
   index,
   onFocusPlace,
   onSelectEvent,
@@ -31,7 +35,7 @@ export function JourneyDetailPanel({
     return (
       <div className="empty-state">
         <h3>No journey overlays are currently visible</h3>
-        <p>Re-enable a route toggle to inspect the canonical Acts journeys.</p>
+        <p>Re-enable a route toggle to inspect the visible journey records in this book focus.</p>
       </div>
     );
   }
@@ -140,7 +144,7 @@ export function JourneyDetailPanel({
 
           <div className="journey-section">
             <div className="section-header-row">
-              <h3>Linked Acts events</h3>
+              <h3>Linked events in view</h3>
             </div>
             {activeJourneyOverlay.relatedEvents.length === 0 ? (
               <p className="muted-copy">
@@ -159,6 +163,7 @@ export function JourneyDetailPanel({
                     >
                       <strong>{relatedEvent.title}</strong>
                       <span>
+                        {eventBookLabels.get(relatedEvent.id) ?? activeBookLabel} •{" "}
                         {formatDateRange(relatedEvent)} •{" "}
                         {relatedEvent.source_refs[0]?.citation ?? "Citation pending"}
                       </span>

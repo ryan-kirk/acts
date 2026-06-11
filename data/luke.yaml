@@ -1,0 +1,533 @@
+metadata:
+  dataset_id: luke
+  title: Gospel of Luke Canonical Dataset
+  version: 1.0.0
+  schema_version: 1.0.0
+  description: >
+    Canonical Luke dataset for the Bible Time & Place Explorer, modeled with
+    normalized places, people, events, tags, and source-backed references that
+    can merge cleanly with Acts through shared stable IDs.
+  created: 2026-06-11
+  updated: 2026-06-11
+
+sources:
+  - id: luke
+    name: Gospel of Luke
+    type: scripture
+    citation: New Testament
+    usage_rights:
+      status: not_applicable
+      attribution_text: >
+        This dataset stores canonical scripture citations to Luke and does not
+        reproduce licensed Bible translation text.
+      usage_notes: >
+        Event, place, person, and relationship records are grounded in passage
+        references only. Any future translation text will require separate
+        rights review.
+
+places:
+  - id: nazareth
+    name: Nazareth
+    latitude: 32.6996
+    longitude: 35.3035
+    region: Galilee
+    modern_country: Israel
+    location_certainty: exact
+    summary: >
+      Nazareth is the Galilean hometown associated with Mary, Joseph, and the
+      early hidden years of Jesus, as well as Jesus's synagogue reading in
+      Luke's ministry narrative.
+    source_refs:
+      - source_id: luke
+        citation: Luke 1:26-27
+
+  - id: bethlehem
+    name: Bethlehem
+    latitude: 31.7054
+    longitude: 35.2024
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    summary: >
+      Bethlehem is the Davidic town where Luke locates the birth narrative of
+      Jesus and frames the messianic expectation around his arrival.
+    source_refs:
+      - source_id: luke
+        citation: Luke 2:1-20
+
+  - id: capernaum
+    name: Capernaum
+    latitude: 32.8803
+    longitude: 35.5736
+    region: Galilee
+    modern_country: Israel
+    location_certainty: approximate
+    summary: >
+      Capernaum functions as a major Galilean ministry base in Luke and is tied
+      to the call of Simon Peter and other early disciples.
+    source_refs:
+      - source_id: luke
+        citation: Luke 4:31-5:11
+
+  - id: bethany
+    name: Bethany
+    latitude: 31.7717
+    longitude: 35.2656
+    region: Judea
+    modern_country: Palestine
+    location_certainty: traditional
+    summary: >
+      Bethany is associated with Jesus's close circle, the hospitality of Mary
+      and Martha, and the ascension setting near the close of Luke.
+    source_refs:
+      - source_id: luke
+        citation: Luke 10:38-42
+
+  - id: jericho
+    name: Jericho
+    latitude: 31.8667
+    longitude: 35.45
+    region: Judea
+    modern_country: Palestine
+    location_certainty: exact
+    summary: >
+      Jericho is the setting for Luke's Zacchaeus account, where salvation is
+      narrated as coming to a household on the road toward Jerusalem.
+    source_refs:
+      - source_id: luke
+        citation: Luke 19:1-10
+
+  - id: emmaus
+    name: Emmaus
+    latitude: 31.8389
+    longitude: 35.0139
+    region: Judea
+    modern_country: Israel
+    location_certainty: traditional
+    summary: >
+      Emmaus is the traditionally identified village tied to Luke's post-
+      resurrection road encounter, though the precise site remains debated.
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:13-35
+
+  - id: jerusalem
+    name: Jerusalem
+    latitude: 31.7683
+    longitude: 35.2137
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    summary: >
+      Jerusalem is the narrative starting point of Acts, the location of the
+      ascension, Pentecost, the Temple ministry, and the Jerusalem Council.
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:44-49
+
+people:
+  - id: jesus
+    name: Jesus Christ
+    aliases: []
+    role: Risen Lord
+    summary: >
+      Jesus appears in the opening of Acts, commissions the apostles, and
+      ascends from the disciples' sight.
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:36-53
+
+  - id: peter
+    name: Peter
+    aliases:
+      - Simon Peter
+      - Cephas
+    role: Apostle
+    summary: >
+      Peter is a leading apostolic witness in the Jerusalem church and a key
+      figure in the Gentile-inclusion turning point with Cornelius.
+    source_refs:
+      - source_id: luke
+        citation: Luke 5:1-11
+
+  - id: john
+    name: John
+    aliases: []
+    role: Apostle
+    summary: >
+      John appears alongside Peter in the early Jerusalem ministry, including
+      the Temple healing account.
+    source_refs:
+      - source_id: luke
+        citation: Luke 5:10
+
+  - id: james_zebedee
+    name: James
+    aliases:
+      - James son of Zebedee
+    role: Apostle
+    summary: >
+      James son of Zebedee is one of the Twelve and becomes an early martyr in
+      the apostolic period.
+    source_refs:
+      - source_id: luke
+        citation: Luke 5:10
+
+  - id: mary_mother_of_jesus
+    name: Mary
+    aliases:
+      - Mother of Jesus
+    role: Mother of Jesus
+    summary: >
+      Mary receives the annunciation in Luke, bears Jesus in Bethlehem, and
+      anchors the Gospel's opening scenes of promise and obedience.
+    source_refs:
+      - source_id: luke
+        citation: Luke 1:26-38
+
+  - id: joseph_husband_of_mary
+    name: Joseph
+    aliases:
+      - Husband of Mary
+    role: Davidic guardian of Jesus's family
+    summary: >
+      Joseph accompanies Mary to Bethlehem in Luke and situates Jesus's birth
+      in relation to Davidic ancestry and imperial registration.
+    source_refs:
+      - source_id: luke
+        citation: Luke 2:1-7
+
+  - id: martha
+    name: Martha
+    aliases: []
+    role: Host and disciple
+    summary: >
+      Martha welcomes Jesus into her household in Luke and is remembered
+      alongside Mary in a scene centered on hospitality and discipleship.
+    source_refs:
+      - source_id: luke
+        citation: Luke 10:38-42
+
+  - id: mary_of_bethany
+    name: Mary of Bethany
+    aliases: []
+    role: Disciple
+    summary: >
+      Mary of Bethany is portrayed in Luke as a hearer of Jesus's teaching and
+      becomes a remembered figure of attentive discipleship.
+    source_refs:
+      - source_id: luke
+        citation: Luke 10:38-42
+
+  - id: zacchaeus
+    name: Zacchaeus
+    aliases: []
+    role: Chief tax collector
+    summary: >
+      Zacchaeus becomes a memorable Luke figure through his encounter with
+      Jesus in Jericho and his concrete response of restitution.
+    source_refs:
+      - source_id: luke
+        citation: Luke 19:1-10
+
+  - id: cleopas
+    name: Cleopas
+    aliases: []
+    role: Disciple on the Emmaus road
+    summary: >
+      Cleopas is one of the travelers in Luke's Emmaus narrative and becomes a
+      witness to the risen Jesus in the breaking of bread.
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:13-35
+
+events:
+  - id: luke_001
+    title: Annunciation to Mary
+    summary: >
+      Gabriel's message to Mary frames Luke's opening around divine promise,
+      the Holy Spirit, and Mary's obedient reception of Jesus's coming birth.
+    date:
+      start_year: -6
+      end_year: -5
+      certainty: estimated
+    location_id: nazareth
+    participants:
+      - mary_mother_of_jesus
+    tag_ids:
+      - holy_spirit
+      - nativity
+    source_refs:
+      - source_id: luke
+        citation: Luke 1:26-38
+    related_event_ids:
+      - luke_002
+
+  - id: luke_002
+    title: Birth of Jesus in Bethlehem
+    summary: >
+      Luke places Jesus's birth in Bethlehem and frames it as the arrival of
+      David's promised savior in a setting of humility and joy.
+    date:
+      start_year: -5
+      end_year: -4
+      certainty: estimated
+    location_id: bethlehem
+    participants:
+      - jesus
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+    tag_ids:
+      - nativity
+      - holy_spirit
+    source_refs:
+      - source_id: luke
+        citation: Luke 2:1-20
+    related_event_ids:
+      - luke_001
+      - luke_003
+
+  - id: luke_003
+    title: Jesus Reads Isaiah at Nazareth
+    summary: >
+      Jesus's synagogue reading in Nazareth becomes Luke's inaugural public
+      ministry scene and announces good news to the poor and oppressed.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: nazareth
+    participants:
+      - jesus
+    tag_ids:
+      - preaching
+      - leadership
+    source_refs:
+      - source_id: luke
+        citation: Luke 4:16-30
+    related_event_ids:
+      - luke_004
+
+  - id: luke_004
+    title: Call of Simon Peter
+    summary: >
+      The miraculous catch of fish and Jesus's call of Simon Peter, James, and
+      John frames discipleship around both wonder and future witness.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: capernaum
+    participants:
+      - jesus
+      - peter
+      - john
+      - james_zebedee
+    tag_ids:
+      - apostles
+      - miracle
+    source_refs:
+      - source_id: luke
+        citation: Luke 5:1-11
+    related_event_ids:
+      - luke_003
+      - luke_005
+
+  - id: luke_005
+    title: Mary and Martha Welcome Jesus
+    summary: >
+      Luke's Bethany household scene contrasts distracted service and attentive
+      listening while portraying discipleship within ordinary hospitality.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: bethany
+    participants:
+      - jesus
+      - martha
+      - mary_of_bethany
+    tag_ids:
+      - discipleship
+    source_refs:
+      - source_id: luke
+        citation: Luke 10:38-42
+    related_event_ids:
+      - luke_006
+
+  - id: luke_006
+    title: Zacchaeus Receives Jesus
+    summary: >
+      The Jericho encounter with Zacchaeus presents repentance and restitution
+      as signs of salvation arriving to a household.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: jericho
+    participants:
+      - jesus
+      - zacchaeus
+    tag_ids:
+      - conversion
+      - discipleship
+    source_refs:
+      - source_id: luke
+        citation: Luke 19:1-10
+    related_event_ids:
+      - luke_007
+
+  - id: luke_007
+    title: Emmaus Road Encounter
+    summary: >
+      The risen Jesus opens the Scriptures to travelers on the Emmaus road and
+      is recognized in the breaking of bread.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: emmaus
+    participants:
+      - jesus
+      - cleopas
+    tag_ids:
+      - resurrection
+      - preaching
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:13-35
+    related_event_ids:
+      - luke_008
+
+  - id: luke_008
+    title: Risen Jesus Commissions the Disciples in Jerusalem
+    summary: >
+      Jesus interprets the Law, Prophets, and Psalms in Jerusalem and
+      commissions the disciples to proclaim repentance and forgiveness to all
+      nations.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+      - peter
+      - john
+      - james_zebedee
+    tag_ids:
+      - leadership
+      - preaching
+      - resurrection
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:44-49
+    related_event_ids:
+      - luke_007
+      - luke_009
+
+  - id: luke_009
+    title: Ascension Near Bethany
+    summary: >
+      Luke closes with Jesus blessing the disciples near Bethany and being
+      carried up, creating the narrative bridge into the witness era of Acts.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: bethany
+    participants:
+      - jesus
+      - peter
+      - john
+      - james_zebedee
+    tag_ids:
+      - apostles
+      - leadership
+      - resurrection
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:50-53
+    related_event_ids:
+      - luke_008
+
+journeys: []
+
+relationships:
+  - id: relationship_jesus_peter_calls
+    from_type: person
+    from_id: jesus
+    to_type: person
+    to_id: peter
+    relationship_type: calls_to_follow
+    source_refs:
+      - source_id: luke
+        citation: Luke 5:1-11
+
+  - id: relationship_martha_mary_siblings
+    from_type: person
+    from_id: martha
+    to_type: person
+    to_id: mary_of_bethany
+    relationship_type: sibling
+    source_refs:
+      - source_id: luke
+        citation: Luke 10:38-42
+
+  - id: relationship_jesus_zacchaeus_restores
+    from_type: person
+    from_id: jesus
+    to_type: person
+    to_id: zacchaeus
+    relationship_type: receives_with_salvation
+    source_refs:
+      - source_id: luke
+        citation: Luke 19:1-10
+
+tags:
+  - id: apostles
+    label: Apostles
+    description: Events centered on the apostolic witnesses.
+    group: people
+
+  - id: conversion
+    label: Conversion
+    description: Events marked by a dramatic turn toward faith in Jesus.
+    group: response
+
+  - id: discipleship
+    label: Discipleship
+    description: Events focused on hearing, following, and responding to Jesus.
+    group: response
+
+  - id: holy_spirit
+    label: Holy Spirit
+    description: Events centered on the Spirit's empowering presence.
+    group: theology
+
+  - id: leadership
+    label: Leadership
+    description: Events focused on communal leadership and apostolic direction.
+    group: governance
+
+  - id: miracle
+    label: Miracle
+    description: Events marked by extraordinary acts of divine power.
+    group: sign
+
+  - id: nativity
+    label: Nativity
+    description: Events focused on Jesus's conception, birth, and early promise.
+    group: theology
+
+  - id: preaching
+    label: Preaching
+    description: Events centered on proclamation, speech, or public witness.
+    group: proclamation
+
+  - id: resurrection
+    label: Resurrection
+    description: Events centered on post-resurrection witness and recognition.
+    group: theology
+
+claims: []

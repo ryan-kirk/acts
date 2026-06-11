@@ -14,6 +14,7 @@ import {
 } from "../domain/people";
 
 interface PeopleViewProps {
+  activeBookLabel: string;
   dataset: CanonicalDataset;
   event: Event;
   focusedPersonId: string | null;
@@ -46,6 +47,7 @@ function getRelationshipActionLabel(
 }
 
 export function PeopleView({
+  activeBookLabel,
   dataset,
   event,
   focusedPersonId,
@@ -130,13 +132,13 @@ export function PeopleView({
   }
 
   return (
-    <section className="people-view" aria-label="Acts people explorer">
+    <section className="people-view" aria-label="Scripture people explorer">
       <div className="people-toolbar">
         <div className="people-counts">
           <span className="people-count-pill">
             {filteredPeopleRecords.length} of {peopleRecords.length} people visible
           </span>
-          <span className="people-count-pill">Acts biographical catalog</span>
+          <span className="people-count-pill">{activeBookLabel} biographical catalog</span>
         </div>
       </div>
 
@@ -157,7 +159,7 @@ export function PeopleView({
           {filteredPeopleRecords.length === 0 ? (
             <div className="empty-state people-empty-list" role="status">
               <h3>No people match this search</h3>
-              <p>Try a person name, alias, or role from the Acts dataset.</p>
+              <p>Try a person name, alias, or role from the active scripture view.</p>
             </div>
           ) : (
             <ul className="people-record-list" aria-label="People results">
@@ -249,10 +251,12 @@ export function PeopleView({
 
               <section className="people-section">
                 <div className="section-header-row">
-                  <h3>Acts appearances</h3>
+                  <h3>{activeBookLabel} appearances</h3>
                 </div>
                 {selectedProfile.appearances.length === 0 ? (
-                  <p className="muted-copy">No Acts appearances are linked to this person yet.</p>
+                  <p className="muted-copy">
+                    No appearances are linked to this person in the active book scope yet.
+                  </p>
                 ) : (
                   <ul className="linked-record-list">
                     {selectedProfile.appearances.map((appearance) => {
@@ -284,7 +288,9 @@ export function PeopleView({
                   <h3>Related places</h3>
                 </div>
                 {selectedProfile.relatedPlaces.length === 0 ? (
-                  <p className="muted-copy">No related places are linked through Acts appearances.</p>
+                  <p className="muted-copy">
+                    No related places are linked through the current scripture appearances.
+                  </p>
                 ) : (
                   <ul className="linked-record-list">
                     {selectedProfile.relatedPlaces.map((place) => (

@@ -17,7 +17,9 @@ import {
 } from "../domain/timeline";
 
 interface TimelineViewProps {
+  activeBookLabel: string;
   dataset: CanonicalDataset;
+  eventBookLabels: Map<string, string>;
   events: Event[];
   filters: TimelineFilters;
   index: DatasetIndex;
@@ -36,7 +38,9 @@ function parseYearInput(value: string): number | null {
 }
 
 export function TimelineView({
+  activeBookLabel,
   dataset,
+  eventBookLabels,
   events,
   filters,
   index,
@@ -50,13 +54,13 @@ export function TimelineView({
   const selectedEventHidden = !filteredEvents.some((event) => event.id === selectedEventId);
 
   return (
-    <section className="timeline-view" aria-label="Acts timeline">
+    <section className="timeline-view" aria-label="Scripture timeline">
       <div className="timeline-toolbar">
         <div className="timeline-counts">
           <span className="timeline-count-pill">
             {filteredEvents.length} of {events.length} events visible
           </span>
-          <span className="timeline-count-pill">Acts-first chronology</span>
+          <span className="timeline-count-pill">{activeBookLabel} chronology</span>
         </div>
         <button
           type="button"
@@ -210,7 +214,7 @@ export function TimelineView({
 
       {groupedEvents.length === 0 ? (
         <div className="empty-state" role="status">
-          <h3>No Acts events match these timeline filters</h3>
+          <h3>No events match these timeline filters</h3>
           <p>Clear or widen the filters to restore the full chronology.</p>
         </div>
       ) : (
@@ -238,6 +242,7 @@ export function TimelineView({
                   const tags = getEventTags(event, index);
                   const primaryTag = getPrimaryTimelineTag(event, index);
                   const categoryTone = getTimelineCategoryTone(event, index);
+                  const bookLabel = eventBookLabels.get(event.id) ?? activeBookLabel;
                   const isSelected = event.id === selectedEventId;
 
                   return (
@@ -263,7 +268,7 @@ export function TimelineView({
 
                           <h4>{event.title}</h4>
                           <p className="timeline-event-meta">
-                            {place?.name ?? "Unknown place"} •{" "}
+                            {bookLabel} • {place?.name ?? "Unknown place"} •{" "}
                             {primaryTag?.label ?? "Uncategorized event"}
                           </p>
                           <p className="timeline-event-summary">{event.summary}</p>

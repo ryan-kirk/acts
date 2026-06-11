@@ -29,7 +29,9 @@ import {
 import { JourneyDetailPanel } from "./JourneyDetailPanel";
 
 interface MapViewProps {
+  activeBookLabel: string;
   dataset: CanonicalDataset;
+  eventBookLabels: Map<string, string>;
   events: Event[];
   focusedPlaceId: string | null;
   index: DatasetIndex;
@@ -52,7 +54,9 @@ function createCertaintyVisibilityState(): VisibilityMap<Place["location_certain
 }
 
 export function MapView({
+  activeBookLabel,
   dataset,
+  eventBookLabels,
   events,
   focusedPlaceId,
   index,
@@ -384,7 +388,7 @@ export function MapView({
   }, [activePlaceRecord]);
 
   return (
-    <section className="map-view" aria-label="Acts map explorer">
+    <section className="map-view" aria-label="Scripture map explorer">
       <div className="map-toolbar">
         <div className="map-toolbar-group map-toolbar-group-compact">
           <span className="map-toolbar-label">Basemap</span>
@@ -457,6 +461,7 @@ export function MapView({
           <span>
             {journeyOverlays.length} journey overlay{journeyOverlays.length === 1 ? "" : "s"} loaded
           </span>
+          <span>Book focus: {activeBookLabel}</span>
           <span>
             Focus route: {activeJourneyOverlay?.journey.title ?? "None selected"}
           </span>
@@ -465,7 +470,7 @@ export function MapView({
         <div className="map-overlay map-event-legend-card">
           <div className="map-legend-header">
             <strong>Event types</strong>
-            <span>Shared Acts record tones used across the explorer.</span>
+            <span>Shared scripture record tones used across the explorer.</span>
           </div>
           <ul className="map-event-legend-list">
             {visibleEventTypeLegendEntries.map((legendEntry) => (
@@ -489,6 +494,8 @@ export function MapView({
         <JourneyDetailPanel
           activeJourneyOverlay={activeJourneyOverlay}
           activePlaceId={activePlaceRecord?.place.id ?? null}
+          activeBookLabel={activeBookLabel}
+          eventBookLabels={eventBookLabels}
           index={index}
           onFocusPlace={onFocusPlace}
           onSelectEvent={onSelectEvent}
@@ -551,6 +558,7 @@ export function MapView({
                     >
                       <strong>{placeEvent.title}</strong>
                       <span>
+                        {eventBookLabels.get(placeEvent.id) ?? activeBookLabel} •{" "}
                         {formatDateRange(placeEvent)} •{" "}
                         {placeEvent.source_refs[0]?.citation ?? "Citation pending"}
                       </span>
@@ -603,6 +611,7 @@ export function MapView({
                       >
                         <strong>{relatedEvent.title}</strong>
                         <span>
+                          {eventBookLabels.get(relatedEvent.id) ?? activeBookLabel} •{" "}
                           {formatDateRange(relatedEvent)} •{" "}
                           {relatedEvent.source_refs[0]?.citation ?? "Citation pending"}
                         </span>

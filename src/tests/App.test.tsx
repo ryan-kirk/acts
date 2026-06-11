@@ -11,18 +11,19 @@ describe("App", () => {
     resetLeafletMockState();
   });
 
-  it("renders the explorer shell from the canonical Acts dataset", () => {
+  it("renders the explorer shell from the canonical Luke-Acts library", () => {
     render(<App />);
 
     expect(
       screen.getByRole("heading", {
-        name: /acts explorer with shared navigation, filtering, and a real chronology view/i
+        name: /luke-acts explorer with shared navigation, filtering, and synchronized context/i
       })
     ).toBeInTheDocument();
 
     expect(screen.getByRole("heading", { name: /event rail/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /ascension of jesus/i })).toBeInTheDocument();
-    expect(screen.getByText(/book of acts canonical dataset/i)).toBeInTheDocument();
+    expect(screen.getByText(/luke-acts canonical library/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^luke$/i })).toBeInTheDocument();
   });
 
   it("keeps the selected event when switching views", () => {
@@ -40,7 +41,7 @@ describe("App", () => {
 
     expect(within(inspector).getByRole("heading", { name: /shipwreck on malta/i }))
       .toBeInTheDocument();
-    expect(screen.getByText(/source-backed acts events/i)).toBeInTheDocument();
+    expect(screen.getByText(/source-backed events in view/i)).toBeInTheDocument();
   });
 
   it("renders source-grounded inspector context for the selected event", () => {
@@ -61,12 +62,12 @@ describe("App", () => {
     expect(within(inspector).getAllByText(/scripture/i).length).toBeGreaterThan(0);
   });
 
-  it("renders the Acts timeline in chronological order", () => {
+  it("renders the default Acts-focused timeline in chronological order", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("tab", { name: /timeline/i }));
 
-    const timeline = screen.getByLabelText(/acts timeline/i);
+    const timeline = screen.getByLabelText(/scripture timeline/i);
     const eventItems = within(timeline).getAllByRole("listitem");
 
     expect(eventItems[0]).toHaveTextContent(/ascension of jesus/i);
@@ -101,7 +102,7 @@ describe("App", () => {
       target: { value: "51" }
     });
 
-    const timeline = screen.getByLabelText(/acts timeline/i);
+    const timeline = screen.getByLabelText(/scripture timeline/i);
 
     expect(within(timeline).getByRole("button", { name: /philippian jailer converted/i }))
       .toBeInTheDocument();
@@ -145,7 +146,7 @@ describe("App", () => {
     fireEvent.click(
       within(inspector).getByRole("button", { name: /open person focus for jesus christ/i })
     );
-    expect(screen.getByLabelText(/acts people explorer/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/scripture people explorer/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /jesus christ/i })).toBeInTheDocument();
     expect(screen.getAllByText(/risen lord/i).length).toBeGreaterThan(0);
 
@@ -159,7 +160,7 @@ describe("App", () => {
     fireEvent.click(
       within(inspector).getByRole("button", { name: /open source focus for book of acts/i })
     );
-    expect(screen.getByText(/source-backed acts events/i)).toBeInTheDocument();
+    expect(screen.getByText(/source-backed events in view/i)).toBeInTheDocument();
     expect(screen.getAllByText(/not_applicable/i)[0]).toBeInTheDocument();
   });
 
@@ -168,7 +169,7 @@ describe("App", () => {
 
     fireEvent.click(screen.getByRole("tab", { name: /people/i }));
 
-    const peopleExplorer = screen.getByLabelText(/acts people explorer/i);
+    const peopleExplorer = screen.getByLabelText(/scripture people explorer/i);
 
     fireEvent.change(within(peopleExplorer).getByLabelText(/search people/i), {
       target: { value: "Cornelius" }
@@ -212,12 +213,33 @@ describe("App", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("switches the explorer to Luke and updates the rail, timeline, and inspector context", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /^luke$/i }));
+
+    expect(screen.getByRole("button", { name: /annunciation to mary/i })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /shipwreck on malta/i })
+    ).not.toBeInTheDocument();
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+    expect(within(inspector).getByText(/^luke$/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: /timeline/i }));
+
+    const timeline = screen.getByLabelText(/scripture timeline/i);
+    expect(within(timeline).getByText(/luke chronology/i)).toBeInTheDocument();
+    expect(within(timeline).getByRole("button", { name: /birth of jesus in bethlehem/i }))
+      .toBeInTheDocument();
+  });
+
   it("renders the map explorer controls, legend, and default place context", () => {
     render(<App />);
 
     fireEvent.click(screen.getByRole("tab", { name: /map/i }));
 
-    const mapExplorer = screen.getByLabelText(/acts map explorer/i);
+    const mapExplorer = screen.getByLabelText(/scripture map explorer/i);
 
     expect(within(mapExplorer).getByRole("button", { name: /satellite/i }))
       .toBeInTheDocument();
@@ -243,7 +265,7 @@ describe("App", () => {
 
     fireEvent.click(screen.getByRole("tab", { name: /map/i }));
 
-    const mapExplorer = screen.getByLabelText(/acts map explorer/i);
+    const mapExplorer = screen.getByLabelText(/scripture map explorer/i);
     const secondJourneyOverlay = getLeafletMockState().polylines[1];
 
     expect(secondJourneyOverlay).toBeDefined();
@@ -300,7 +322,7 @@ describe("App", () => {
     expect(within(inspector).getByRole("heading", { name: /shipwreck on malta/i }))
       .toBeInTheDocument();
     expect(
-      within(screen.getByLabelText(/acts map explorer/i)).getByRole("heading", {
+      within(screen.getByLabelText(/scripture map explorer/i)).getByRole("heading", {
         name: /malta/i
       })
     ).toBeInTheDocument();
@@ -329,7 +351,7 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /the acts explorer could not start from the canonical dataset/i
+        name: /the luke-acts explorer could not start from the canonical datasets/i
       })
     ).toBeInTheDocument();
 

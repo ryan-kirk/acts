@@ -3,20 +3,22 @@ import type { JSX } from "react";
 import { MapView } from "../components/MapView";
 import { PeopleView } from "../components/PeopleView";
 import { TimelineView } from "../components/TimelineView";
-import type { CanonicalDataset, Event } from "../domain/dataset";
+import type { Event } from "../domain/dataset";
 import {
-  explorerViews,
   formatSourceType,
   getEventsForSource,
   type DatasetIndex,
   type ExplorerView
 } from "../domain/events";
+import type { ExplorerDataset } from "../domain/library";
 import type { TimelineFilters } from "../domain/timeline";
 
 interface ExplorerStageProps {
   activeView: ExplorerView;
-  dataset: CanonicalDataset;
+  activeBookLabel: string;
+  dataset: ExplorerDataset;
   event: Event;
+  eventBookLabels: Map<string, string>;
   events: Event[];
   index: DatasetIndex;
   focusedPersonId: string | null;
@@ -31,8 +33,10 @@ interface ExplorerStageProps {
 
 export function ExplorerStage({
   activeView,
+  activeBookLabel,
   dataset,
   event,
+  eventBookLabels,
   events,
   index,
   focusedPersonId,
@@ -44,7 +48,6 @@ export function ExplorerStage({
   onSelectEvent,
   onTimelineFiltersChange
 }: ExplorerStageProps) {
-  const selectedView = explorerViews.find((view) => view.id === activeView) ?? explorerViews[0]!;
   const defaultSourceId = event.source_refs[0]?.source_id ?? dataset.sources[0]?.id ?? null;
   const activeSourceId = focusedSourceId ?? defaultSourceId;
   const focusedSource = activeSourceId ? index.sourcesById.get(activeSourceId) ?? null : null;
@@ -58,7 +61,9 @@ export function ExplorerStage({
     case "timeline":
       content = (
         <TimelineView
+          activeBookLabel={activeBookLabel}
           dataset={dataset}
+          eventBookLabels={eventBookLabels}
           events={events}
           filters={timelineFilters}
           index={index}
@@ -71,7 +76,9 @@ export function ExplorerStage({
     case "map":
       content = (
         <MapView
+          activeBookLabel={activeBookLabel}
           dataset={dataset}
+          eventBookLabels={eventBookLabels}
           events={events}
           focusedPlaceId={focusedPlaceId}
           index={index}
@@ -84,6 +91,7 @@ export function ExplorerStage({
     case "people":
       content = (
         <PeopleView
+          activeBookLabel={activeBookLabel}
           dataset={dataset}
           event={event}
           focusedPersonId={focusedPersonId}
@@ -140,7 +148,7 @@ export function ExplorerStage({
             ) : null}
           </div>
           <div className="stage-card stage-card-compact">
-            <h3>Source-backed Acts events</h3>
+            <h3>Source-backed events in view</h3>
             <ul className="linked-record-list">
               {getEventsForSource(focusedSource.id, events).map((sourceEvent) => (
                 <li key={sourceEvent.id}>
@@ -170,11 +178,15 @@ export function ExplorerStage({
       content = (
         <div className="stage-stack">
           <div className="stage-card">
-            <p className="stage-card-eyebrow">Validated Dataset</p>
+            <p className="stage-card-eyebrow">Validated Library</p>
             <h3>{dataset.metadata.title}</h3>
             <p>{dataset.metadata.description}</p>
           </div>
           <div className="metric-grid" aria-label="Dataset counts">
+            <article className="metric-card">
+              <span>Books</span>
+              <strong>{dataset.books.length}</strong>
+            </article>
             <article className="metric-card">
               <span>Events</span>
               <strong>{dataset.events.length}</strong>
@@ -192,19 +204,18 @@ export function ExplorerStage({
               <strong>{dataset.journeys.length}</strong>
             </article>
           </div>
+          <div className="stage-card stage-card-compact">
+            <p className="stage-card-eyebrow">Current Focus</p>
+            <h3>{activeBookLabel}</h3>
+            <p>
+              The explorer is currently scoped to {activeBookLabel} while shared people,
+              places, tags, and sources remain normalized across the Luke-Acts library.
+            </p>
+          </div>
         </div>
       );
       break;
   }
 
-  return (
-    <section className="stage-panel">
-      <div className="section-heading-block">
-        <p className="section-eyebrow">Explorer View</p>
-        <h2>{selectedView.label}</h2>
-        <p className="section-copy">{selectedView.description}</p>
-      </div>
-      {content}
-    </section>
-  );
+  return <section className="stage-panel">{content}</section>;
 }

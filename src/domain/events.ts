@@ -34,27 +34,27 @@ export const explorerViews: ExplorerViewOption[] = [
   {
     id: "overview",
     label: "Overview",
-    description: "Dataset status and current explorer scope."
+    description: "Library status, book coverage, and current explorer scope."
   },
   {
     id: "timeline",
     label: "Timeline",
-    description: "Chronological Acts explorer with filters, era bands, and shared selection."
+    description: "Chronological scripture explorer with book focus, era bands, and shared selection."
   },
   {
     id: "map",
     label: "Map",
-    description: "Geographic Acts explorer with validated places, journey overlays, and shared selection."
+    description: "Geographic scripture explorer with validated places, journey overlays, and shared selection."
   },
   {
     id: "people",
     label: "People",
-    description: "Searchable Acts people explorer with appearances, places, and relationship context."
+    description: "Searchable people explorer with appearances, places, and relationship context."
   },
   {
     id: "sources",
     label: "Sources",
-    description: "Source and rights preview for the selected event."
+    description: "Source and rights preview for the selected record."
   }
 ];
 
@@ -173,7 +173,7 @@ export function getDateCertaintyDescription(certainty: Event["date"]["certainty"
     case "explicit":
       return "This record is anchored by an explicit chronological cue in the modeled source material.";
     case "estimated":
-      return "This record uses a best-fit year or short range derived from the surrounding Acts chronology.";
+      return "This record uses a best-fit year or short range derived from the surrounding scriptural chronology.";
     case "approximate":
       return "This record is intentionally placed with a loose date range because the exact year is uncertain.";
     case "traditional":

@@ -15,7 +15,9 @@ import {
 } from "../domain/events";
 
 interface EventInspectorProps {
+  activeBookLabel: string;
   event: Event;
+  eventBookLabel: string;
   events: Event[];
   index: DatasetIndex;
   onSelectEvent: (eventId: string) => void;
@@ -25,7 +27,9 @@ interface EventInspectorProps {
 }
 
 export function EventInspector({
+  activeBookLabel,
   event,
+  eventBookLabel,
   events,
   index,
   onSelectEvent,
@@ -54,6 +58,10 @@ export function EventInspector({
       <p className="inspector-summary">{event.summary}</p>
 
       <dl className="detail-grid">
+        <div>
+          <dt>Book</dt>
+          <dd>{eventBookLabel}</dd>
+        </div>
         <div>
           <dt>Date</dt>
           <dd>{formatDateRange(event)}</dd>
@@ -271,7 +279,8 @@ export function EventInspector({
           <h3>Record Scope</h3>
         </div>
         <p className="muted-copy">
-          This view is grounded in normalized Acts data only. It currently resolves{" "}
+          This view is grounded in normalized {activeBookLabel} data within the Luke-Acts
+          library. It currently resolves{" "}
           {participants.length} participant{participants.length === 1 ? "" : "s"},{" "}
           {relatedEvents.length} related event{relatedEvents.length === 1 ? "" : "s"}, and{" "}
           {events.filter((candidateEvent) => candidateEvent.id === event.id).length} selected

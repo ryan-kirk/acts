@@ -2,29 +2,29 @@
 
 ## Application Purpose
 
-Bible Time & Place Explorer is a source-grounded application for exploring biblical events across time and geography. The first product focus is the Book of Acts, with the long-term goal of expanding into Luke and additional historical sources while preserving referential integrity, explicit uncertainty, and traceable citations for every visible claim.
+Bible Time & Place Explorer is a source-grounded application for exploring biblical events across time and geography. The current canonical library now includes both the Gospel of Luke and the Book of Acts, with Acts remaining the default focus while the shared architecture proves multi-book expansion, explicit uncertainty, and traceable citations for every visible claim.
 
 ## Current Development Status
 
-The repository now has a working Phase 9 journey route-exploration layer on top of the scaffold, delivery baseline, validation layer, canonical Acts dataset, explorer shell, timeline explorer, map explorer, people explorer, and event inspector.
+The repository now has a working Phase 10 Luke-Acts explorer layer on top of the scaffold, delivery baseline, validation tooling, canonical datasets, explorer shell, timeline explorer, map explorer, people explorer, journey overlays, and event inspector.
 
 - Core planning documents are in place in `AGENTS.md`, `STRATEGY.md`, and `BACKLOG.md`.
 - A strict TypeScript `React + Vite + Vitest` frontend scaffold is in place.
-- The current UI is a dataset-backed explorer shell that boots from the canonical Acts dataset, keeps a shared selected-event state across top-level views, and now adds map-level journey focus for missionary route exploration.
+- The current UI is a dataset-backed explorer shell that boots from validated canonical Luke and Acts datasets, merges them into a shared library, and keeps a shared selected-event state across top-level views.
 - Delivery hardening is now in place with a GitHub Actions verification workflow, Node runtime guidance, and baseline Fly.io deployment files for the static frontend.
 - Canonical schema and validation tooling are now in place for normalized YAML or JSON datasets, including referential-integrity checks and a dataset validation CLI.
 - Source records now support structured usage-rights metadata so terms of use, licensing, and attribution requirements can be tracked as data work continues.
-- A validated canonical Acts dataset now exists in [data/acts.yaml](/Users/rakirk/dev/acts/data/acts.yaml), covering 17 events, 14 places, 14 people, 3 journeys, 5 relationships, and tracked source-rights metadata.
+- Validated canonical datasets now exist in [data/acts.yaml](/Users/rakirk/dev/acts/data/acts.yaml) and [data/luke.yaml](/Users/rakirk/dev/acts/data/luke.yaml), covering 26 total events across the merged explorer library with shared-ID deduplication for common people, places, and other normalized records.
 - `ACTS_TIMELINE.md` remains in the repository as the original source draft, while `data/acts.yaml` is now the canonical machine-parseable dataset.
-- The explorer shell now includes top-level `Overview`, `Timeline`, `Map`, `People`, and `Sources` navigation, a searchable Acts event rail, a responsive detail panel, and a real timeline explorer.
-- The timeline view now renders canonical Acts events in chronological order with era bands, certainty legend cards, category-toned styling, and first-pass filters for category, person, place, certainty, and date range.
-- The map view now renders validated Acts places with Leaflet, basemap switching, location-certainty styling, journey overlay toggles, clickable route overlays, attribution, and synchronized place and journey context panels tied to canonical records.
-- The journey route surface now lets users select missionary journeys, inspect ordered stops, and jump into linked Acts events without leaving the map explorer.
-- The people view now renders a searchable Acts biographical catalog with person summaries, aliases, appearance lists, related places, normalized relationship context, and source-backed record support.
+- The explorer shell now includes top-level `Overview`, `Timeline`, `Map`, `People`, and `Sources` navigation, a searchable scripture event rail, book filters for `All Books`, `Acts`, and `Luke`, plus a responsive detail panel.
+- The timeline view now renders book-aware scripture chronology with era bands, certainty legend cards, category-toned styling, and filters for category, person, place, certainty, and date range.
+- The map view now renders validated places with Leaflet, basemap switching, location-certainty styling, journey overlay toggles, compact legends, attribution, and synchronized place and journey context panels tied to canonical records.
+- The journey route surface now lets users select missionary journeys, inspect ordered stops, and jump into linked events without leaving the map explorer. The current journey data remains Acts-only.
+- The people view now renders a searchable scripture biographical catalog with person summaries, aliases, appearance lists, related places, normalized relationship context, and source-backed record support.
 - The event inspector now renders source-grounded record detail with chronology explanations, place context, participant summaries, source-type distinctions, journey context, and related-event navigation.
-- People, place, and source actions from the inspector now open focused preview surfaces without losing the selected Acts event.
+- People, place, and source actions from the inspector now open focused preview surfaces without losing the selected event.
 - The sources view is still a preview surface rather than its full dedicated explorer implementation.
-- The next major work is Phase 10 in `BACKLOG.md`: Luke multi-book expansion, while the dedicated sources explorer remains queued in the later external-sources phase.
+- The next major work is Phase 11 in `BACKLOG.md`: external sources and claims, while deeper source exploration and bundle-size hardening remain queued follow-up work.
 
 ## Setup
 
@@ -64,6 +64,12 @@ Validate a canonical dataset file:
 npm run validate:data -- path/to/dataset.yaml
 ```
 
+Validate the current canonical library inputs together:
+
+```bash
+npm run validate:data -- data/acts.yaml data/luke.yaml
+```
+
 ## Build
 
 Create a production build:
@@ -74,24 +80,26 @@ npm run build
 
 ## Current App Scope
 
-The current app is now a small but real explorer shell with working timeline, map, people, and journey-route exploration surfaces plus a source-grounded event detail panel.
+The current app is now a small but real Luke-Acts explorer shell with working timeline, map, people, and journey-route exploration surfaces plus a source-grounded event detail panel.
 
 - It proves the repository can build and test successfully.
-- It boots directly from the validated canonical Acts dataset in `data/acts.yaml`.
+- It boots directly from the validated canonical datasets in `data/acts.yaml` and `data/luke.yaml`.
+- It merges both datasets into a normalized Luke-Acts library while preserving shared IDs for common people, places, sources, tags, and claims.
+- It currently defaults to an Acts-focused view while letting users switch to `All Books`, `Acts`, or `Luke` from the shell.
 - It provides shared view navigation for overview, a working timeline explorer, a working map explorer, a working people explorer, and the remaining sources preview.
-- It includes a searchable Acts event rail with deterministic filtering and active selection styling.
-- It includes a chronological Acts timeline grouped into era bands and styled by category and certainty.
+- It includes a searchable scripture event rail with deterministic filtering and active selection styling.
+- It includes a chronological book-aware timeline grouped into era bands and styled by category and certainty.
 - It includes first-pass timeline filters for category, person, place, certainty, and date range.
-- It includes a map explorer with validated place markers, basemap controls, journey overlay toggles, clickable route lines, location-certainty legend, attribution, and a place interaction panel with related event links.
-- It includes a journey focus panel with selectable missionary routes, ordered stop lists, linked Acts events, source support, and synchronized place highlighting on the map.
-- It includes a people explorer with searchable biographical records, alias and role metadata, linked Acts appearances, place navigation, normalized relationship context, and source support for person records.
+- It includes a map explorer with validated place markers, basemap controls, journey overlay toggles, compact certainty and event-type legends, attribution, and a place interaction panel with related event links.
+- It includes a journey focus panel with selectable missionary routes, ordered stop lists, linked events, source support, and synchronized place highlighting on the map.
+- It includes a people explorer with searchable biographical records, alias and role metadata, linked appearances, place navigation, normalized relationship context, and source support for person records.
 - It includes a responsive event detail surface with chronology explanation, place context, participant summaries, journey context, related-event navigation, and source-support details.
 - It includes linked person, place, and source focus actions that open the corresponding preview surfaces while preserving the current selected event.
 - It includes baseline CI verification and Fly.io deployment configuration for the static frontend.
 - It now includes canonical schema types, dataset loading utilities, and validation rules for normalized YAML or JSON datasets.
 - It now tracks source usage-rights metadata in the schema so licensing and terms information can be captured per source record.
-- It now includes a validated canonical Acts dataset in `data/acts.yaml`.
-- It does not yet include the dedicated sources explorer, URL persistence, relationship-driven inspector extensions, or later multi-book and external-source phases.
+- It now includes validated canonical Acts and Luke datasets plus a multi-book bootstrap and provenance layer.
+- It does not yet include the dedicated sources explorer, URL persistence, relationship-driven inspector extensions, or the later external-source claims layer.
 
 ## Environment Policy
 
