@@ -12,8 +12,8 @@ build/
 *.egg-info/
 *.tsbuildinfo
 
-# Examples
-/examples/*
+# Local reference work not meant for versioned app source
+examples/
 
 # Node
 node_modules/
