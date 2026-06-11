@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+dist/
+build/
+*.egg-info/
+*.tsbuildinfo
+
+# Node
+node_modules/
+coverage/
+.vite/
+
+# Specification files
+AGENTS.md
+BACKLOG.md
+STRATEGY.md
+
+# Virtual environments
+.venv/
+venv/
+
+# Local environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+
+# Local application data
+*.db
+*.sqlite3
+*.log
+
+# Editor and system files
+.DS_Store
+.idea/
+.vscode/
+.python-version
