@@ -97,16 +97,14 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
           <p className="eyebrow">Bible Time &amp; Place Explorer</p>
           <h1>Acts explorer with shared navigation, filtering, and a real chronology view.</h1>
           <p className="lede">
-            The app now boots directly from the canonical Acts dataset and keeps a shared
-            event selection across working timeline, map, and people explorers, with
-            selectable missionary journey routes now layered into the map while the
-            sources surface remains queued for deeper expansion.
+            Interactive scripture explorer · Book of Acts · shared timeline, map, people,
+            and source-grounded event context.
           </p>
         </div>
         <div className="status-cluster" aria-label="Dataset status">
-          <span className="status-pill">Validated static dataset</span>
+          <span className="status-pill">{dataset.events.length} events</span>
+          <span className="status-pill">{dataset.journeys.length} journeys</span>
           <span className="status-pill">Version {dataset.metadata.version}</span>
-          <span className="status-pill">{dataset.metadata.updated ?? "Updated date pending"}</span>
         </div>
       </header>
 

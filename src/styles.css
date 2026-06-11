@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Crimson+Pro:wght@400;500;600&display=swap");
+
 :root {
   color-scheme: light;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
@@ -1607,6 +1609,803 @@ body {
   white-space: pre-wrap;
 }
 
+/* Harmonized workspace styling inspired by the example explorer's compact shell. */
+:root {
+  color-scheme: dark;
+  --shell-bg: #100d08;
+  --shell-bg-muted: #15110c;
+  --shell-stage: #120f0b;
+  --shell-card: #1a1510;
+  --shell-card-strong: #231b12;
+  --shell-border: rgba(201, 146, 42, 0.16);
+  --shell-border-strong: rgba(201, 146, 42, 0.3);
+  --shell-text: #e4cfa0;
+  --shell-text-strong: #f4e6c4;
+  --shell-muted: #c8b07a;
+  --shell-soft: #7a6b4f;
+  --shell-accent: #c9922a;
+  --shell-highlight: rgba(201, 146, 42, 0.08);
+  --shell-highlight-strong: rgba(201, 146, 42, 0.16);
+  --shell-shadow: inset 0 1px 0 rgba(255, 239, 204, 0.05);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 146, 42, 0.42) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(201, 146, 42, 0.28);
+  background-clip: padding-box;
+}
+
+body {
+  overflow: hidden;
+  color: var(--shell-text);
+  background:
+    radial-gradient(circle at top, rgba(201, 146, 42, 0.14), transparent 22%),
+    radial-gradient(circle at right top, rgba(94, 53, 31, 0.16), transparent 18%),
+    linear-gradient(180deg, #120e09 0%, #0f0b07 100%);
+}
+
+button {
+  font-family: "Cinzel", "Palatino Linotype", serif;
+}
+
+input,
+select,
+textarea {
+  font-family: "Crimson Pro", Georgia, serif;
+}
+
+#root {
+  min-height: 100vh;
+  background: var(--shell-bg);
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  background: var(--shell-bg);
+}
+
+.hero-banner {
+  align-items: center;
+  padding: 0.7rem 1rem 0.65rem;
+  border: 0;
+  border-bottom: 1px solid var(--shell-border);
+  border-radius: 0;
+  background: var(--shell-bg-muted);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--shell-text-strong);
+}
+
+.hero-banner h1,
+.error-panel h1 {
+  margin: 0.2rem 0 0;
+  max-width: none;
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--shell-muted);
+}
+
+.lede {
+  margin: 0.28rem 0 0;
+  max-width: none;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--shell-soft);
+}
+
+.status-cluster {
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.status-pill,
+.drawer-toggle,
+.pill,
+.timeline-count-pill,
+.timeline-reset-button,
+.timeline-tag-pill,
+.people-count-pill,
+.people-stat-badge,
+.people-record-badge,
+.detail-action-button,
+.map-inline-button {
+  border-radius: 999px;
+  border: 1px solid var(--shell-border);
+  background: var(--shell-highlight);
+  color: var(--shell-text-strong);
+  box-shadow: none;
+}
+
+.status-pill,
+.drawer-toggle,
+.pill {
+  min-height: auto;
+  padding: 0.35rem 0.62rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+}
+
+.control-bar {
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid var(--shell-border);
+  background: #130f0b;
+}
+
+.view-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.view-tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  background: transparent;
+  padding: 0.45rem 0.75rem;
+  box-shadow: none;
+}
+
+.view-tab:hover {
+  transform: none;
+  border-color: var(--shell-border);
+  background: rgba(201, 146, 42, 0.06);
+  box-shadow: none;
+}
+
+.view-tab.is-active {
+  border-color: var(--shell-border-strong);
+  background: var(--shell-highlight-strong);
+  box-shadow: none;
+}
+
+.view-tab-label {
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--shell-muted);
+}
+
+.view-tab.is-active .view-tab-label {
+  color: var(--shell-accent);
+}
+
+.view-tab-description {
+  display: none;
+}
+
+.explorer-layout {
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(320px, 370px);
+  gap: 0;
+  margin-top: 0;
+  min-height: 0;
+  align-items: stretch;
+}
+
+.surface,
+.error-panel {
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--shell-bg-muted);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.rail-surface {
+  border-right: 1px solid var(--shell-border);
+}
+
+.stage-surface {
+  background: var(--shell-stage);
+}
+
+.inspector-surface {
+  border-left: 1px solid var(--shell-border);
+}
+
+.rail-panel,
+.stage-panel,
+.inspector-panel,
+.error-panel {
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+}
+
+.rail-panel {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0;
+  padding: 0.7rem 0 0;
+}
+
+.stage-panel,
+.inspector-panel,
+.error-panel {
+  padding: 0.9rem 1rem 1rem;
+}
+
+.section-heading-block h2 {
+  margin: 0;
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 1.06rem;
+  letter-spacing: 0.04em;
+  color: var(--shell-text-strong);
+}
+
+.section-eyebrow,
+.stage-card-eyebrow,
+.timeline-event-date,
+.event-item-date,
+.preview-meta-grid dt,
+.detail-grid dt,
+.map-toolbar-label {
+  color: var(--shell-accent);
+}
+
+.section-eyebrow,
+.stage-card-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.section-copy,
+.muted-copy,
+.helper-note,
+.inspector-summary,
+.error-panel p,
+.context-note,
+.entity-meta,
+.entity-summary,
+.map-place-summary,
+.journey-summary,
+.timeline-legend-copy p,
+.timeline-event-meta,
+.timeline-event-summary,
+.linked-record-button span,
+.citation-list span,
+.people-detail-summary,
+.people-detail-aliases,
+.people-relationship-citation {
+  color: var(--shell-muted);
+}
+
+.rail-panel .section-heading-block {
+  padding: 0 1rem 0.6rem;
+  border-bottom: 1px solid var(--shell-border);
+}
+
+.rail-panel .section-copy {
+  display: none;
+}
+
+.search-label {
+  margin: 0.75rem 1rem 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--shell-muted);
+}
+
+.search-input {
+  width: calc(100% - 2rem);
+  margin: 0.35rem 1rem 0;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid var(--shell-border);
+  border-radius: 0.25rem;
+  background: var(--shell-card);
+  color: var(--shell-text);
+}
+
+.search-input::placeholder,
+.timeline-filter-field input::placeholder,
+.people-search-input::placeholder {
+  color: rgba(228, 207, 160, 0.44);
+}
+
+.search-input:focus,
+.view-tab:focus,
+.event-item:focus,
+.drawer-toggle:focus,
+.timeline-filter-field select:focus,
+.timeline-filter-field input:focus,
+.timeline-reset-button:focus,
+.timeline-event-card:focus,
+.detail-action-button:focus,
+.linked-record-button:focus,
+.people-search-input:focus,
+.people-record-button:focus,
+.journey-selector-card:focus,
+.map-inline-button:focus {
+  outline: 2px solid rgba(201, 146, 42, 0.34);
+  outline-offset: 2px;
+}
+
+.rail-scroll-region {
+  min-height: 0;
+  overflow: auto;
+}
+
+.event-list {
+  margin: 0.85rem 0 0;
+  gap: 0;
+}
+
+.event-item {
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-top: 1px solid rgba(201, 146, 42, 0.1);
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.event-item:hover {
+  transform: none;
+  border-color: rgba(201, 146, 42, 0.18);
+  background: rgba(201, 146, 42, 0.05);
+  box-shadow: none;
+}
+
+.event-list li:last-child .event-item {
+  border-bottom: 1px solid rgba(201, 146, 42, 0.1);
+}
+
+.event-item.is-selected {
+  border-left-color: var(--shell-accent);
+  background: rgba(201, 146, 42, 0.1);
+}
+
+.event-item-date {
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
+.event-item-title {
+  margin-top: 0.28rem;
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: var(--shell-text-strong);
+}
+
+.event-item-meta {
+  margin-top: 0.26rem;
+  font-size: 0.88rem;
+  color: var(--shell-soft);
+}
+
+.rail-footer {
+  padding: 0.8rem 1rem 0.95rem;
+  border-top: 1px solid var(--shell-border);
+  color: var(--shell-soft);
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rail-footer span {
+  display: block;
+}
+
+.rail-footer span + span {
+  margin-top: 0.3rem;
+}
+
+.stage-panel > .section-heading-block,
+.inspector-panel > .section-heading-block {
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--shell-border);
+}
+
+.stage-panel > .section-heading-block .section-copy {
+  margin-top: 0.2rem;
+  font-size: 0.84rem;
+  color: var(--shell-soft);
+}
+
+.stage-stack,
+.timeline-view,
+.map-view,
+.people-view {
+  margin-top: 0.85rem;
+}
+
+.stage-card,
+.metric-card,
+.empty-state,
+.detail-grid div,
+.preview-meta-grid div,
+.entity-card,
+.linked-record-button,
+.citation-list li,
+.timeline-legend,
+.timeline-legend-card,
+.timeline-era-band,
+.timeline-event-card,
+.journey-panel,
+.map-place-panel,
+.people-detail-card,
+.people-relationship-card {
+  border: 1px solid var(--shell-border);
+  border-radius: 0.45rem;
+  background:
+    linear-gradient(180deg, rgba(35, 27, 18, 0.98), rgba(26, 21, 16, 0.98)),
+    var(--shell-card);
+  box-shadow: var(--shell-shadow);
+}
+
+.stage-card h3,
+.empty-state h3,
+.citation-block h3,
+.pill-section h3,
+.section-header-row h3,
+.timeline-legend-copy h3,
+.timeline-era-header h3,
+.timeline-event-card h4,
+.map-place-header h3,
+.journey-panel-header h3,
+.people-detail-header h3 {
+  color: var(--shell-text-strong);
+}
+
+.metric-card span,
+.timeline-era-summary span,
+.entity-subtitle,
+.citation-list span,
+.people-record-role,
+.people-record-aliases,
+.people-record-meta {
+  color: var(--shell-muted);
+}
+
+.metric-card strong,
+.timeline-era-summary strong,
+.detail-grid dd,
+.preview-meta-grid dd,
+.entity-card strong,
+.linked-record-button strong,
+.citation-list strong,
+.map-legend-list strong,
+.map-status-card strong {
+  color: var(--shell-text-strong);
+}
+
+.detail-grid div,
+.preview-meta-grid div {
+  background: rgba(255, 244, 224, 0.04);
+}
+
+.entity-type-badge,
+.timeline-tag-pill,
+.timeline-count-pill,
+.people-record-badge {
+  border-color: var(--shell-border);
+  background: rgba(255, 244, 224, 0.05);
+  color: var(--shell-text-strong);
+}
+
+.detail-action-button,
+.map-inline-button {
+  padding: 0.42rem 0.72rem;
+  color: var(--shell-text-strong);
+}
+
+.linked-record-button:hover,
+.detail-action-button:hover,
+.map-inline-button:hover {
+  transform: none;
+  border-color: var(--shell-border-strong);
+  box-shadow: none;
+}
+
+.linked-record-button.is-selected,
+.map-inline-button.is-selected {
+  border-color: var(--shell-border-strong);
+  background: rgba(201, 146, 42, 0.12);
+  box-shadow: none;
+  color: var(--shell-text-strong);
+}
+
+.timeline-toolbar,
+.people-toolbar {
+  align-items: center;
+}
+
+.timeline-reset-button,
+.people-count-pill,
+.people-stat-badge,
+.timeline-count-pill,
+.timeline-tag-pill {
+  color: var(--shell-text-strong);
+}
+
+.timeline-filter-field {
+  color: var(--shell-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.timeline-filter-field select,
+.timeline-filter-field input,
+.people-search-input {
+  border: 1px solid var(--shell-border);
+  border-radius: 0.3rem;
+  background: var(--shell-card);
+  color: var(--shell-text);
+}
+
+.timeline-legend-card span {
+  color: var(--shell-muted);
+}
+
+.timeline-era-band {
+  background:
+    linear-gradient(180deg, rgba(24, 18, 12, 0.98), rgba(20, 15, 10, 0.98)),
+    var(--shell-card);
+}
+
+.timeline-era-summary {
+  text-align: left;
+}
+
+.timeline-event-card {
+  background: rgba(255, 244, 224, 0.03);
+}
+
+.timeline-event-card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--shell-border-strong);
+}
+
+.timeline-event-card.is-selected {
+  border-color: var(--shell-border-strong);
+  background: rgba(201, 146, 42, 0.09);
+  box-shadow: none;
+}
+
+.map-view {
+  gap: 0.8rem;
+}
+
+.map-toolbar {
+  gap: 0.55rem;
+}
+
+.map-toolbar-group {
+  flex: 0 1 auto;
+  min-width: min(100%, 240px);
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--shell-border);
+  border-radius: 0.35rem;
+  background:
+    linear-gradient(180deg, rgba(35, 27, 18, 0.98), rgba(26, 21, 16, 0.98)),
+    var(--shell-card);
+  box-shadow: var(--shell-shadow);
+}
+
+.map-toolbar-label {
+  margin-bottom: 0.45rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.map-chip {
+  min-height: 2rem;
+  padding: 0.42rem 0.68rem;
+  border: 1px solid var(--shell-border);
+  background: rgba(255, 244, 224, 0.04);
+  color: var(--shell-text);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  box-shadow: none;
+}
+
+.map-chip:hover,
+.map-chip:focus,
+.map-chip.is-active {
+  transform: none;
+  box-shadow: none;
+}
+
+.map-chip.is-active {
+  border-color: var(--shell-border-strong);
+  background: rgba(201, 146, 42, 0.14);
+  color: var(--shell-text-strong);
+}
+
+.map-shell {
+  padding: 0.8rem;
+  border: 1px solid var(--shell-border);
+  border-radius: 0.45rem;
+  background: rgba(15, 12, 9, 0.96);
+  box-shadow: none;
+}
+
+.map-canvas {
+  min-height: clamp(30rem, 54vh, 44rem);
+  border: 1px solid rgba(255, 237, 203, 0.08);
+  border-radius: 0.45rem;
+}
+
+.map-status-card,
+.map-legend-card,
+.map-attribution-card {
+  border: 1px solid var(--shell-border);
+  border-radius: 0.35rem;
+  background: rgba(18, 14, 9, 0.82);
+  color: var(--shell-text-strong);
+}
+
+.map-status-card {
+  top: 1rem;
+  left: 1rem;
+}
+
+.map-legend-card {
+  right: 1rem;
+  bottom: 3.3rem;
+}
+
+.map-attribution-card {
+  right: 1rem;
+  bottom: 1rem;
+  color: var(--shell-muted);
+}
+
+.map-legend-header span,
+.map-status-card span,
+.map-legend-list span {
+  color: var(--shell-muted);
+}
+
+.map-detail-grid {
+  gap: 0.8rem;
+  align-items: stretch;
+}
+
+.journey-panel,
+.map-place-panel {
+  max-height: 24rem;
+  overflow: auto;
+  padding: 0.95rem;
+}
+
+.journey-panel-header h3,
+.map-place-header h3 {
+  font-size: 1.15rem;
+}
+
+.journey-selector-row {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.6rem;
+}
+
+.journey-selector-card {
+  padding: 0.78rem;
+  border: 1px solid var(--shell-border);
+  border-radius: 0.35rem;
+  background: rgba(255, 244, 224, 0.04);
+  box-shadow: none;
+}
+
+.journey-selector-card:hover,
+.journey-selector-card:focus {
+  transform: none;
+  border-color: var(--shell-border-strong);
+  box-shadow: none;
+}
+
+.journey-selector-card.is-selected {
+  border-color: var(--shell-border-strong);
+  background: rgba(201, 146, 42, 0.12);
+  box-shadow: none;
+}
+
+.journey-selector-card strong {
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 0.92rem;
+  color: var(--shell-text-strong);
+}
+
+.journey-selector-card span {
+  color: var(--shell-muted);
+  font-size: 0.82rem;
+}
+
+.people-layout {
+  align-items: stretch;
+}
+
+.people-list-panel {
+  border: 1px solid var(--shell-border);
+  border-radius: 0.45rem;
+  background:
+    linear-gradient(180deg, rgba(24, 18, 12, 0.98), rgba(20, 15, 10, 0.98)),
+    var(--shell-card);
+  box-shadow: var(--shell-shadow);
+}
+
+.people-record-button {
+  padding: 0.82rem;
+  border: 1px solid rgba(201, 146, 42, 0.12);
+  border-radius: 0.35rem;
+  background: rgba(255, 244, 224, 0.03);
+  box-shadow: none;
+}
+
+.people-record-button:hover {
+  transform: none;
+  border-color: var(--shell-border-strong);
+  box-shadow: none;
+}
+
+.people-record-button.is-selected {
+  border-color: var(--shell-border-strong);
+  background: rgba(201, 146, 42, 0.12);
+  box-shadow: none;
+}
+
+.people-record-header strong {
+  font-family: "Cinzel", "Palatino Linotype", serif;
+  font-size: 0.96rem;
+  color: var(--shell-text-strong);
+}
+
+.people-detail-card,
+.people-relationship-card {
+  padding: 1rem;
+}
+
 @media (max-width: 1100px) {
   .hero-banner {
     flex-direction: column;
@@ -1777,5 +2576,602 @@ body {
 
   .preview-meta-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1100px) {
+  body {
+    overflow: auto;
+  }
+
+  .hero-banner {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .hero-banner h1 {
+    font-size: 0.8rem;
+  }
+
+  .status-cluster {
+    justify-content: flex-start;
+  }
+
+  .explorer-layout {
+    grid-template-columns: minmax(230px, 260px) minmax(0, 1fr);
+  }
+
+  .inspector-surface {
+    grid-column: 1 / -1;
+    border-left: 0;
+    border-top: 1px solid var(--shell-border);
+    max-height: 24rem;
+  }
+
+  .map-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-panel,
+  .map-place-panel {
+    max-height: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    min-height: 100vh;
+  }
+
+  .hero-banner {
+    gap: 0.65rem;
+  }
+
+  .control-bar {
+    padding: 0.55rem 0.75rem;
+    align-items: stretch;
+  }
+
+  .view-navigation {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+  }
+
+  .view-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .mobile-toggle-group {
+    justify-content: flex-end;
+  }
+
+  .explorer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .stage-surface {
+    min-height: 0;
+  }
+
+  .rail-surface,
+  .inspector-surface {
+    border: 0;
+    border-top: 1px solid var(--shell-border);
+    max-height: none;
+  }
+
+  .stage-panel,
+  .inspector-panel {
+    padding: 0.85rem;
+  }
+
+  .map-shell {
+    padding: 0.7rem;
+  }
+
+  .map-canvas {
+    min-height: 24rem;
+  }
+
+  .map-overlay {
+    position: static;
+    margin-top: 0.65rem;
+  }
+
+  .map-status-card,
+  .map-legend-card,
+  .map-attribution-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-banner {
+    padding: 0.7rem 0.75rem;
+  }
+
+  .eyebrow {
+    font-size: 0.9rem;
+  }
+
+  .hero-banner h1 {
+    font-size: 0.75rem;
+  }
+
+  .lede {
+    font-size: 0.68rem;
+  }
+
+  .status-cluster {
+    gap: 0.35rem;
+  }
+
+  .control-bar {
+    padding-inline: 0.65rem;
+  }
+
+  .event-item {
+    padding-inline: 0.8rem;
+  }
+
+  .map-canvas {
+    min-height: 20rem;
+  }
+}
+
+/* Second-pass harmonization for compact rails, consistent typography, and usable internal scrolling. */
+:root {
+  font-family: "Crimson Pro", Georgia, serif;
+}
+
+body,
+#root,
+.app-shell {
+  height: 100vh;
+}
+
+body {
+  font-family: "Crimson Pro", Georgia, serif;
+}
+
+.app-shell {
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.explorer-layout {
+  height: 100%;
+  min-height: 0;
+}
+
+.surface,
+.rail-surface,
+.stage-surface,
+.inspector-surface {
+  overflow: hidden;
+}
+
+.rail-panel,
+.stage-panel,
+.inspector-panel {
+  overscroll-behavior: contain;
+}
+
+.rail-panel {
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+}
+
+.hero-banner h1,
+.error-panel h1,
+.eyebrow,
+.view-tab-label,
+.section-heading-block h2,
+.stage-card h3,
+.metric-card strong,
+.empty-state h3,
+.citation-block h3,
+.pill-section h3,
+.section-header-row h3,
+.timeline-legend-copy h3,
+.timeline-era-header h3,
+.timeline-event-card h4,
+.map-place-header h3,
+.journey-panel-header h3,
+.people-detail-header h3,
+.people-record-header strong,
+.journey-selector-card strong,
+.event-item-title,
+.rail-footer,
+.timeline-event-date,
+.event-item-date {
+  font-family: "Cinzel", "Palatino Linotype", serif;
+}
+
+.app-shell,
+.section-copy,
+.muted-copy,
+.helper-note,
+.inspector-summary,
+.error-panel p,
+.context-note,
+.entity-meta,
+.entity-summary,
+.map-place-summary,
+.journey-summary,
+.timeline-legend-copy p,
+.timeline-event-meta,
+.timeline-event-summary,
+.linked-record-button span,
+.citation-list span,
+.people-detail-summary,
+.people-detail-aliases,
+.people-relationship-citation,
+.event-item-meta,
+.preview-meta-grid dd,
+.detail-grid dd,
+.search-input,
+.people-search-input,
+.timeline-filter-field select,
+.timeline-filter-field input,
+.timeline-era-summary span {
+  font-family: "Crimson Pro", Georgia, serif;
+}
+
+button,
+.detail-action-button,
+.map-chip,
+.timeline-reset-button,
+.status-pill,
+.drawer-toggle,
+.pill,
+.timeline-tag-pill,
+.people-count-pill,
+.people-stat-badge,
+.people-record-badge,
+.entity-type-badge {
+  font-family: "Cinzel", "Palatino Linotype", serif;
+}
+
+.event-item,
+.linked-record-button,
+.journey-selector-card,
+.people-record-button,
+.timeline-event-card {
+  font-family: "Crimson Pro", Georgia, serif;
+}
+
+.hero-banner {
+  padding: 0.6rem 0.9rem 0.55rem;
+}
+
+.hero-banner h1 {
+  margin-top: 0.16rem;
+  font-size: 0.76rem;
+  line-height: 1.25;
+}
+
+.lede {
+  margin-top: 0.22rem;
+  font-size: 0.66rem;
+}
+
+.status-pill {
+  padding: 0.34rem 0.58rem;
+}
+
+.control-bar {
+  padding: 0.35rem 0.9rem;
+}
+
+.view-tab {
+  min-height: 1.9rem;
+  padding: 0.38rem 0.68rem;
+}
+
+.view-tab-label {
+  font-size: 0.75rem;
+}
+
+.explorer-layout {
+  grid-template-columns: minmax(230px, 295px) minmax(0, 1fr) minmax(305px, 360px);
+}
+
+.rail-panel .section-heading-block {
+  padding: 0 1rem 0.45rem;
+}
+
+.search-label {
+  margin: 0.45rem 1rem 0;
+  font-size: 0.69rem;
+}
+
+.search-input {
+  display: block;
+  height: 2.35rem;
+  margin-top: 0.28rem;
+  padding: 0.45rem 0.72rem;
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+.rail-scroll-region {
+  margin-top: 0.5rem;
+}
+
+.event-item {
+  padding: 0.78rem 1rem 0.76rem;
+}
+
+.event-item-title {
+  font-size: 0.94rem;
+}
+
+.event-item-meta {
+  font-size: 0.83rem;
+}
+
+.stage-panel,
+.inspector-panel {
+  padding-top: 0.78rem;
+}
+
+.stage-panel > .section-heading-block,
+.inspector-panel > .section-heading-block {
+  padding-bottom: 0.48rem;
+}
+
+.stage-panel > .section-heading-block .section-copy {
+  font-size: 0.8rem;
+}
+
+.map-shell {
+  padding: 0.72rem;
+}
+
+.map-canvas {
+  min-height: clamp(32rem, 57vh, 46rem);
+}
+
+.map-status-card {
+  top: 0.9rem;
+  left: 0.9rem;
+}
+
+.map-legend-card {
+  right: 0.9rem;
+  bottom: 3rem;
+}
+
+.map-attribution-card {
+  right: 0.9rem;
+  bottom: 0.9rem;
+}
+
+.map-detail-grid {
+  grid-template-columns: minmax(0, 1.08fr) minmax(250px, 0.92fr);
+}
+
+.journey-panel,
+.map-place-panel {
+  max-height: none;
+}
+
+.journey-selector-row {
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+}
+
+.detail-grid,
+.preview-meta-grid {
+  gap: 0.72rem;
+}
+
+@media (max-width: 1100px) {
+  body,
+  #root,
+  .app-shell {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  body {
+    overflow: auto;
+  }
+
+  .explorer-layout {
+    height: auto;
+  }
+
+  .surface,
+  .rail-surface,
+  .stage-surface,
+  .inspector-surface {
+    overflow: visible;
+  }
+
+  .rail-panel,
+  .stage-panel,
+  .inspector-panel {
+    height: auto;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 860px) {
+  .control-bar {
+    padding: 0.45rem 0.7rem;
+  }
+
+  .search-input {
+    height: 2.2rem;
+  }
+
+  .map-canvas {
+    min-height: 24rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-banner {
+    padding: 0.65rem 0.7rem 0.55rem;
+  }
+
+  .explorer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .search-label {
+    margin-top: 0.4rem;
+  }
+
+  .search-input {
+    width: calc(100% - 1.4rem);
+    margin-inline: 0.7rem;
+  }
+}
+
+/* Third-pass map-shell harmonization for denser controls and example-style event legend. */
+.map-toolbar {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr);
+  align-items: start;
+  gap: 0.45rem;
+}
+
+.map-toolbar-group {
+  min-width: 0;
+  padding: 0.45rem 0.55rem;
+}
+
+.map-toolbar-group-compact {
+  width: max-content;
+}
+
+.map-toolbar-group-wide {
+  min-width: 0;
+}
+
+.map-toolbar-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.28rem;
+}
+
+.map-toolbar-label {
+  margin-bottom: 0;
+  font-size: 0.64rem;
+}
+
+.map-toolbar-note {
+  color: var(--shell-soft);
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.map-chip-row {
+  gap: 0.35rem;
+}
+
+.map-chip {
+  min-height: 1.7rem;
+  padding: 0.28rem 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.map-status-card {
+  max-width: 18rem;
+  padding: 0.7rem 0.8rem;
+}
+
+.map-event-legend-card {
+  left: 0.9rem;
+  bottom: 0.9rem;
+  max-width: 15.5rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--shell-border);
+  border-radius: 0.35rem;
+  background: rgba(18, 14, 9, 0.84);
+  color: var(--shell-text-strong);
+}
+
+.map-event-legend-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem 0.7rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-event-legend-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.map-event-legend-list span:last-child {
+  color: var(--shell-muted);
+  font-size: 0.78rem;
+  line-height: 1.15;
+}
+
+.map-event-legend-swatch {
+  width: 0.7rem;
+  min-width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 239, 204, 0.3);
+}
+
+.map-attribution-card {
+  right: 0.9rem;
+}
+
+@media (max-width: 1480px) {
+  .map-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .map-toolbar-group-compact,
+  .map-toolbar-group-wide {
+    width: auto;
+  }
+
+  .map-toolbar-group-wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .map-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .map-toolbar-group-wide {
+    grid-column: auto;
+  }
+
+  .map-toolbar-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .map-event-legend-card {
+    position: static;
+    max-width: none;
+    margin-top: 0.65rem;
+  }
+
+  .map-event-legend-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .map-event-legend-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

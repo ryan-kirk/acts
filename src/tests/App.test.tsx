@@ -226,11 +226,9 @@ describe("App", () => {
     expect(within(mapExplorer).getByRole("button", { name: /traditional/i }))
       .toBeInTheDocument();
     expect(within(mapExplorer).getByText(/validated places visible/i)).toBeInTheDocument();
-    expect(
-      within(mapExplorer).getByText(
-        /marker tones stay tied to canonical place records while route strokes show active journey focus/i
-      )
-    ).toBeInTheDocument();
+    expect(within(mapExplorer).getByText(/marker tones reflect place certainty/i))
+      .toBeInTheDocument();
+    expect(within(mapExplorer).getByText(/event types/i)).toBeInTheDocument();
     expect(within(mapExplorer).getByRole("heading", { name: /first missionary journey/i }))
       .toBeInTheDocument();
     expect(within(mapExplorer).getByRole("heading", { name: /jerusalem/i }))

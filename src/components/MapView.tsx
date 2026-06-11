@@ -12,6 +12,10 @@ import {
   type DatasetIndex
 } from "../domain/events";
 import {
+  getTimelineCategoryTone,
+  timelineCategoryLegend
+} from "../domain/timeline";
+import {
   getActiveMapPlaceRecord,
   getMapJourneyOverlayById,
   getMapJourneyOverlays,
@@ -94,6 +98,11 @@ export function MapView({
   const visiblePlaceRecords = placeRecords.filter(
     (placeRecord) => certaintyVisibility[placeRecord.place.location_certainty]
   );
+  const visibleEventTypeLegendEntries = timelineCategoryLegend.filter((legendEntry) => {
+    return events.some(
+      (event) => getTimelineCategoryTone(event, index) === legendEntry.tone
+    );
+  });
 
   useEffect(() => {
     selectedEventIdRef.current = selectedEventId;
@@ -377,7 +386,7 @@ export function MapView({
   return (
     <section className="map-view" aria-label="Acts map explorer">
       <div className="map-toolbar">
-        <div className="map-toolbar-group">
+        <div className="map-toolbar-group map-toolbar-group-compact">
           <span className="map-toolbar-label">Basemap</span>
           <div className="map-chip-row">
             {mapBaseLayers.map((baseLayer) => (
@@ -393,7 +402,7 @@ export function MapView({
           </div>
         </div>
 
-        <div className="map-toolbar-group">
+        <div className="map-toolbar-group map-toolbar-group-compact">
           <span className="map-toolbar-label">Journey Visibility</span>
           <div className="map-chip-row">
             {journeyOverlays.map((overlay) => (
@@ -414,14 +423,18 @@ export function MapView({
           </div>
         </div>
 
-        <div className="map-toolbar-group">
-          <span className="map-toolbar-label">Location Certainty</span>
+        <div className="map-toolbar-group map-toolbar-group-wide">
+          <div className="map-toolbar-header">
+            <span className="map-toolbar-label">Location Certainty</span>
+            <span className="map-toolbar-note">Marker tones reflect place certainty.</span>
+          </div>
           <div className="map-chip-row">
             {Object.entries(locationCertaintyConfig).map(([certainty, config]) => (
               <button
                 key={certainty}
                 type="button"
                 className={`map-chip ${certaintyVisibility[certainty as Place["location_certainty"]] ? "is-active" : ""}`}
+                title={config.description}
                 onClick={() =>
                   setCertaintyVisibility((currentVisibility) => ({
                     ...currentVisibility,
@@ -449,28 +462,19 @@ export function MapView({
           </span>
         </div>
 
-        <div className="map-overlay map-legend-card">
+        <div className="map-overlay map-event-legend-card">
           <div className="map-legend-header">
-            <strong>Location certainty</strong>
-            <span>
-              Marker tones stay tied to canonical place records while route strokes show active
-              journey focus.
-            </span>
+            <strong>Event types</strong>
+            <span>Shared Acts record tones used across the explorer.</span>
           </div>
-          <ul className="map-legend-list">
-            {Object.entries(locationCertaintyConfig).map(([certainty, config]) => (
-              <li key={certainty}>
+          <ul className="map-event-legend-list">
+            {visibleEventTypeLegendEntries.map((legendEntry) => (
+              <li key={legendEntry.tone}>
                 <span
-                  className="map-legend-dot"
-                  style={{
-                    background: config.color,
-                    borderColor: config.stroke
-                  }}
+                  className="map-event-legend-swatch"
+                  style={{ background: legendEntry.color }}
                 />
-                <div>
-                  <strong>{config.label}</strong>
-                  <span>{config.description}</span>
-                </div>
+                <span>{legendEntry.label}</span>
               </li>
             ))}
           </ul>

@@ -50,6 +50,12 @@ export type TimelineCategoryTone =
   | "theology"
   | "uncategorized";
 
+export interface TimelineCategoryLegendEntry {
+  color: string;
+  label: string;
+  tone: TimelineCategoryTone;
+}
+
 const collator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: "base"
@@ -126,6 +132,54 @@ export const timelineCertaintyLegend = [
     certainty: "unknown" as const,
     label: formatDateCertainty("unknown"),
     description: "No supported chronological anchor is currently modeled."
+  }
+];
+
+export const timelineCategoryLegend: TimelineCategoryLegendEntry[] = [
+  {
+    tone: "movement",
+    label: "Movement",
+    color: "#b58c3f"
+  },
+  {
+    tone: "proclamation",
+    label: "Witness",
+    color: "#566f3a"
+  },
+  {
+    tone: "response",
+    label: "Response",
+    color: "#8a5f86"
+  },
+  {
+    tone: "sign",
+    label: "Signs",
+    color: "#37738c"
+  },
+  {
+    tone: "opposition",
+    label: "Opposition",
+    color: "#a15144"
+  },
+  {
+    tone: "governance",
+    label: "Governance",
+    color: "#496a56"
+  },
+  {
+    tone: "people",
+    label: "People",
+    color: "#5e7e89"
+  },
+  {
+    tone: "theology",
+    label: "Theology",
+    color: "#5d588d"
+  },
+  {
+    tone: "uncategorized",
+    label: "Other",
+    color: "#8f8c73"
   }
 ];
 
