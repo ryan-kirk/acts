@@ -6,7 +6,7 @@ Bible Time & Place Explorer is a source-grounded application for exploring bibli
 
 ## Current Development Status
 
-The repository now has a working Phase 2 data foundation on top of the initial app scaffold and delivery baseline.
+The repository now has a working Phase 3 canonical Acts dataset on top of the scaffold, delivery baseline, and validation layer.
 
 - Core planning documents are in place in `AGENTS.md`, `STRATEGY.md`, and `BACKLOG.md`.
 - A strict TypeScript `React + Vite + Vitest` frontend scaffold is in place.
@@ -14,8 +14,10 @@ The repository now has a working Phase 2 data foundation on top of the initial a
 - Delivery hardening is now in place with a GitHub Actions verification workflow, Node runtime guidance, and baseline Fly.io deployment files for the static frontend.
 - Canonical schema and validation tooling are now in place for normalized YAML or JSON datasets, including referential-integrity checks and a dataset validation CLI.
 - Source records now support structured usage-rights metadata so terms of use, licensing, and attribution requirements can be tracked as data work continues.
-- An initial Acts source draft exists in `ACTS_TIMELINE.md`, but it has not yet been normalized into the canonical schema, and timeline or map views have not been implemented yet.
-- The next major work is Phase 3 in `BACKLOG.md`: the Acts canonical dataset.
+- A validated canonical Acts dataset now exists in [data/acts.yaml](/Users/rakirk/dev/acts/data/acts.yaml), covering 17 events, 14 places, 14 people, 3 journeys, 5 relationships, and tracked source-rights metadata.
+- `ACTS_TIMELINE.md` remains in the repository as the original source draft, while `data/acts.yaml` is now the canonical machine-parseable dataset.
+- Timeline or map views still do not consume the canonical dataset yet.
+- The next major work is Phase 4 in `BACKLOG.md`: explorer shell and shared navigation.
 
 ## Setup
 
@@ -73,7 +75,8 @@ The current scaffold is intentionally small.
 - It includes baseline CI verification and Fly.io deployment configuration for the static frontend.
 - It now includes canonical schema types, dataset loading utilities, and validation rules for normalized YAML or JSON datasets.
 - It now tracks source usage-rights metadata in the schema so licensing and terms information can be captured per source record.
-- It does not yet normalize or validate `ACTS_TIMELINE.md` directly, because that draft belongs to the next phase of data conversion.
+- It now includes a validated canonical Acts dataset in `data/acts.yaml`.
+- It does not yet render the canonical Acts dataset in the UI, because dataset-driven explorer views belong to the next phase.
 
 ## Environment Policy
 

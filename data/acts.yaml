@@ -1,0 +1,1003 @@
+metadata:
+  dataset_id: acts
+  title: Book of Acts Canonical Dataset
+  version: "1.0.0"
+  schema_version: "1.0.0"
+  description: >
+    Canonical Acts dataset for Bible Time & Place Explorer, normalized for
+    timeline, map, relationship, and source-grounded UI views.
+  created: "2026-06-11"
+  updated: "2026-06-11"
+
+sources:
+  - id: acts
+    name: Book of Acts
+    type: scripture
+    citation: New Testament, Acts 1-28
+    author: Traditionally attributed to Luke
+    publication_date: 1st century AD
+    usage_rights:
+      status: not_applicable
+      attribution_text: >
+        This dataset stores canonical scripture citations to Acts and does not
+        reproduce licensed Bible translation text.
+      usage_notes: >
+        Event, place, person, journey, and relationship records are grounded in
+        passage references only. If translation text is added later, that text
+        will require separate rights review.
+
+places:
+  - id: jerusalem
+    name: Jerusalem
+    latitude: 31.7683
+    longitude: 35.2137
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    summary: >
+      Jerusalem is the narrative starting point of Acts, the location of the
+      ascension, Pentecost, the Temple ministry, and the Jerusalem Council.
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:12
+
+  - id: damascus
+    name: Damascus
+    latitude: 33.5138
+    longitude: 36.2765
+    region: Syria
+    modern_country: Syria
+    location_certainty: exact
+    summary: >
+      Damascus is the destination of Saul's persecution mission and the city
+      associated with his conversion account.
+    source_refs:
+      - source_id: acts
+        citation: Acts 9:2-8
+
+  - id: caesarea
+    name: Caesarea Maritima
+    latitude: 32.5
+    longitude: 34.9
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    summary: >
+      Caesarea Maritima is the Roman administrative capital where Cornelius
+      lives and where Paul later appears in custody.
+    source_refs:
+      - source_id: acts
+        citation: Acts 10:1
+
+  - id: antioch
+    name: Antioch
+    latitude: 36.2021
+    longitude: 36.1606
+    region: Roman Syria
+    modern_country: Turkey
+    location_certainty: approximate
+    summary: >
+      Antioch becomes a major Gentile-center church in Acts and serves as the
+      sending base for Paul's missionary journeys.
+    source_refs:
+      - source_id: acts
+        citation: Acts 11:26
+
+  - id: salamis
+    name: Salamis
+    latitude: 35.18
+    longitude: 33.9
+    region: Cyprus
+    modern_country: Cyprus
+    location_certainty: approximate
+    summary: >
+      Salamis is the eastern Cypriot port visited at the opening of the first
+      missionary journey.
+    source_refs:
+      - source_id: acts
+        citation: Acts 13:5
+
+  - id: paphos
+    name: Paphos
+    latitude: 34.775
+    longitude: 32.423
+    region: Cyprus
+    modern_country: Cyprus
+    location_certainty: exact
+    summary: >
+      Paphos is the western Cypriot capital where Paul confronts Elymas and the
+      proconsul Sergius Paulus believes.
+    source_refs:
+      - source_id: acts
+        citation: Acts 13:6-12
+
+  - id: lystra
+    name: Lystra
+    latitude: 37.583
+    longitude: 32.454
+    region: Galatia
+    modern_country: Turkey
+    location_certainty: approximate
+    summary: >
+      Lystra is an Anatolian stop on the first missionary journey and is
+      associated with Timothy's home region in Acts.
+    source_refs:
+      - source_id: acts
+        citation: Acts 14:6-20
+
+  - id: philippi
+    name: Philippi
+    latitude: 41.0139
+    longitude: 24.2867
+    region: Macedonia
+    modern_country: Greece
+    location_certainty: exact
+    summary: >
+      Philippi is a Macedonian city where Paul and Silas are imprisoned and the
+      jailer's household is converted.
+    source_refs:
+      - source_id: acts
+        citation: Acts 16:12-34
+
+  - id: athens
+    name: Athens
+    latitude: 37.9838
+    longitude: 23.7275
+    region: Achaia
+    modern_country: Greece
+    location_certainty: exact
+    summary: >
+      Athens is the setting for Paul's Areopagus address to philosophers and
+      civic listeners.
+    source_refs:
+      - source_id: acts
+        citation: Acts 17:16-34
+
+  - id: corinth
+    name: Corinth
+    latitude: 37.9381
+    longitude: 22.9322
+    region: Achaia
+    modern_country: Greece
+    location_certainty: exact
+    summary: >
+      Corinth is a major second-journey destination and a key location in
+      Pauline chronology.
+    source_refs:
+      - source_id: acts
+        citation: Acts 18:1-18
+
+  - id: ephesus
+    name: Ephesus
+    latitude: 37.939
+    longitude: 27.341
+    region: Asia
+    modern_country: Turkey
+    location_certainty: exact
+    summary: >
+      Ephesus is a major third-journey center where Paul's ministry provokes a
+      civic and religious backlash.
+    source_refs:
+      - source_id: acts
+        citation: Acts 19:1-41
+
+  - id: miletus
+    name: Miletus
+    latitude: 37.53
+    longitude: 27.28
+    region: Asia
+    modern_country: Turkey
+    location_certainty: exact
+    summary: >
+      Miletus is where Paul delivers his farewell address to the Ephesian
+      elders on the return leg of the third journey.
+    source_refs:
+      - source_id: acts
+        citation: Acts 20:17-38
+
+  - id: malta
+    name: Malta
+    latitude: 35.9375
+    longitude: 14.3754
+    region: Mediterranean
+    modern_country: Malta
+    location_certainty: traditional
+    summary: >
+      Malta is the traditional island identification for the Acts shipwreck
+      narrative; the island association is widely accepted though the exact
+      landing location remains debated.
+    source_refs:
+      - source_id: acts
+        citation: Acts 28:1
+
+  - id: rome
+    name: Rome
+    latitude: 41.9028
+    longitude: 12.4964
+    region: Italia
+    modern_country: Italy
+    location_certainty: exact
+    summary: >
+      Rome is the endpoint of Acts where Paul lives under house arrest while
+      continuing to proclaim the kingdom of God.
+    source_refs:
+      - source_id: acts
+        citation: Acts 28:16-31
+
+people:
+  - id: jesus
+    name: Jesus Christ
+    aliases: []
+    role: Risen Lord
+    summary: >
+      Jesus appears in the opening of Acts, commissions the apostles, and
+      ascends from the disciples' sight.
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:1-11
+
+  - id: matthias
+    name: Matthias
+    aliases: []
+    role: Apostle
+    summary: >
+      Matthias is chosen in Acts to take the apostolic place left vacant by
+      Judas Iscariot.
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:23-26
+
+  - id: peter
+    name: Peter
+    aliases:
+      - Simon Peter
+      - Cephas
+    role: Apostle
+    summary: >
+      Peter is a leading apostolic witness in the Jerusalem church and a key
+      figure in the Gentile-inclusion turning point with Cornelius.
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:13
+
+  - id: john
+    name: John
+    aliases: []
+    role: Apostle
+    summary: >
+      John appears alongside Peter in the early Jerusalem ministry, including
+      the Temple healing account.
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:13
+
+  - id: james_zebedee
+    name: James
+    aliases:
+      - James son of Zebedee
+    role: Apostle
+    summary: >
+      James son of Zebedee is one of the Twelve and becomes an early martyr in
+      the apostolic period.
+    source_refs:
+      - source_id: acts
+        citation: Acts 12:2
+
+  - id: stephen
+    name: Stephen
+    aliases: []
+    role: Witness and martyr
+    summary: >
+      Stephen's speech and martyrdom become a major turning point in the spread
+      of the church beyond Jerusalem.
+    source_refs:
+      - source_id: acts
+        citation: Acts 6:5-7:60
+
+  - id: philip
+    name: Philip
+    aliases:
+      - Philip the Evangelist
+    role: Evangelist
+    summary: >
+      Philip is one of the Seven and a witness to the spread of the gospel
+      beyond Jerusalem.
+    source_refs:
+      - source_id: acts
+        citation: Acts 8:5-40
+
+  - id: paul
+    name: Paul
+    aliases:
+      - Saul
+      - Saul of Tarsus
+    role: Apostle to the Gentiles
+    summary: >
+      Paul moves from persecutor to missionary witness and becomes the central
+      figure in the geographical expansion of Acts.
+    source_refs:
+      - source_id: acts
+        citation: Acts 9:1-22
+
+  - id: barnabas
+    name: Barnabas
+    aliases: []
+    role: Missionary and encourager
+    summary: >
+      Barnabas partners with Paul in Antioch and on the first missionary
+      journey, and is a trusted mediator in the church.
+    source_refs:
+      - source_id: acts
+        citation: Acts 11:22-30
+
+  - id: silas
+    name: Silas
+    aliases:
+      - Silvanus
+    role: Missionary companion
+    summary: >
+      Silas becomes Paul's companion on the second missionary journey and is
+      present in the Philippian imprisonment account.
+    source_refs:
+      - source_id: acts
+        citation: Acts 15:22-40
+
+  - id: timothy
+    name: Timothy
+    aliases: []
+    role: Missionary coworker
+    summary: >
+      Timothy joins Paul during the missionary journeys and becomes one of his
+      most trusted coworkers.
+    source_refs:
+      - source_id: acts
+        citation: Acts 16:1-3
+
+  - id: luke
+    name: Luke
+    aliases: []
+    role: Narrator traditionally identified with the author
+    summary: >
+      Luke is traditionally identified as the author of Acts and is associated
+      with the narrative's first-person travel sections.
+    source_refs:
+      - source_id: acts
+        citation: Acts 16:10-17
+        note: >
+          The narrative shifts to first-person plural in this section; the
+          authorial identification with Luke is traditional.
+
+  - id: cornelius
+    name: Cornelius
+    aliases: []
+    role: Roman centurion
+    summary: >
+      Cornelius is the centurion whose household becomes a pivotal witness to
+      Gentile inclusion in Acts.
+    source_refs:
+      - source_id: acts
+        citation: Acts 10:1-48
+
+  - id: james_brother_of_jesus
+    name: James
+    aliases:
+      - Brother of Jesus
+    role: Jerusalem church leader
+    summary: >
+      James speaks decisively in the Jerusalem Council and represents the
+      leadership of the Jerusalem church.
+    source_refs:
+      - source_id: acts
+        citation: Acts 15:13-21
+
+events:
+  - id: acts_001
+    title: Ascension of Jesus
+    summary: >
+      Jesus commissions the apostles and ascends, framing the opening movement
+      of Acts around witness empowered by the Spirit.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+      - peter
+      - john
+    tag_ids:
+      - apostles
+      - leadership
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:1-11
+    related_event_ids:
+      - acts_002
+      - acts_003
+
+  - id: acts_002
+    title: Selection of Matthias
+    summary: >
+      The Jerusalem believers choose Matthias to complete the apostolic circle
+      after Judas's absence.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - peter
+      - matthias
+    tag_ids:
+      - apostles
+      - leadership
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:12-26
+    related_event_ids:
+      - acts_001
+      - acts_003
+
+  - id: acts_003
+    title: Pentecost
+    summary: >
+      The Holy Spirit descends upon the gathered believers, Peter preaches, and
+      the church grows dramatically in Jerusalem.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - peter
+      - john
+    tag_ids:
+      - holy_spirit
+      - church_growth
+      - preaching
+    source_refs:
+      - source_id: acts
+        citation: Acts 2:1-41
+    related_event_ids:
+      - acts_001
+      - acts_004
+
+  - id: acts_004
+    title: Healing at the Temple Gate
+    summary: >
+      Peter heals a man at the Temple gate, prompting public amazement and a
+      new moment of witness in Jerusalem.
+    date:
+      start_year: 30
+      end_year: 31
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - peter
+      - john
+    tag_ids:
+      - healing
+      - miracle
+      - preaching
+    source_refs:
+      - source_id: acts
+        citation: Acts 3:1-26
+    related_event_ids:
+      - acts_003
+      - acts_005
+
+  - id: acts_005
+    title: Martyrdom of Stephen
+    summary: >
+      Stephen's speech before the council and his death mark a major escalation
+      of persecution and a turning point in the church's spread.
+    date:
+      start_year: 32
+      end_year: 32
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - stephen
+      - paul
+    tag_ids:
+      - martyrdom
+      - persecution
+    source_refs:
+      - source_id: acts
+        citation: Acts 7:54-8:3
+    related_event_ids:
+      - acts_006
+
+  - id: acts_006
+    title: Conversion of Saul
+    summary: >
+      Saul's encounter with the risen Jesus reorients his life and mission,
+      preparing the later Gentile-expansion focus of Acts.
+    date:
+      start_year: 34
+      end_year: 35
+      certainty: estimated
+    location_id: damascus
+    participants:
+      - paul
+    tag_ids:
+      - conversion
+      - gentile_mission
+    source_refs:
+      - source_id: acts
+        citation: Acts 9:1-22
+    related_event_ids:
+      - acts_005
+      - acts_007
+
+  - id: acts_007
+    title: Conversion of Cornelius
+    summary: >
+      Peter's visit to Cornelius's household becomes a defining moment for the
+      inclusion of Gentiles in the people of God.
+    date:
+      start_year: 40
+      end_year: 40
+      certainty: estimated
+    location_id: caesarea
+    participants:
+      - peter
+      - cornelius
+    tag_ids:
+      - gentile_mission
+      - holy_spirit
+    source_refs:
+      - source_id: acts
+        citation: Acts 10:1-48
+    related_event_ids:
+      - acts_006
+      - acts_010
+
+  - id: acts_008
+    title: Christians First Called Christians
+    summary: >
+      Antioch emerges as a major center for the church, and the disciples are
+      first called Christians there.
+    date:
+      start_year: 42
+      end_year: 42
+      certainty: estimated
+    location_id: antioch
+    participants:
+      - paul
+      - barnabas
+    tag_ids:
+      - church_growth
+      - gentile_mission
+    source_refs:
+      - source_id: acts
+        citation: Acts 11:25-26
+    related_event_ids:
+      - acts_009
+
+  - id: acts_009
+    title: Sergius Paulus Believes at Paphos
+    summary: >
+      During the first missionary journey, Paul confronts Elymas and the
+      proconsul Sergius Paulus believes the message.
+    date:
+      start_year: 47
+      end_year: 47
+      certainty: estimated
+    location_id: paphos
+    participants:
+      - paul
+      - barnabas
+    tag_ids:
+      - mission_journey
+      - gentile_mission
+      - miracle
+    source_refs:
+      - source_id: acts
+        citation: Acts 13:4-12
+    related_event_ids:
+      - acts_008
+      - acts_010
+    journey_id: missionary_journey_1
+
+  - id: acts_010
+    title: Jerusalem Council
+    summary: >
+      The church in Jerusalem resolves that Gentile converts are not required to
+      take on the full yoke of the Mosaic law.
+    date:
+      start_year: 49
+      end_year: 49
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - peter
+      - paul
+      - barnabas
+      - james_brother_of_jesus
+    tag_ids:
+      - church_governance
+      - gentile_mission
+      - leadership
+    source_refs:
+      - source_id: acts
+        citation: Acts 15:1-29
+    related_event_ids:
+      - acts_007
+      - acts_009
+      - acts_011
+
+  - id: acts_011
+    title: Philippian Jailer Converted
+    summary: >
+      Paul and Silas sing and witness through imprisonment, and the jailer's
+      household responds in faith after the earthquake.
+    date:
+      start_year: 50
+      end_year: 51
+      certainty: estimated
+    location_id: philippi
+    participants:
+      - paul
+      - silas
+    tag_ids:
+      - conversion
+      - imprisonment
+      - mission_journey
+    source_refs:
+      - source_id: acts
+        citation: Acts 16:22-34
+    related_event_ids:
+      - acts_010
+      - acts_012
+    journey_id: missionary_journey_2
+
+  - id: acts_012
+    title: Mars Hill Address
+    summary: >
+      Paul addresses the Areopagus in Athens, presenting Israel's God to a
+      philosophically diverse audience.
+    date:
+      start_year: 51
+      end_year: 51
+      certainty: estimated
+    location_id: athens
+    participants:
+      - paul
+    tag_ids:
+      - preaching
+      - gentile_mission
+      - mission_journey
+    source_refs:
+      - source_id: acts
+        citation: Acts 17:16-34
+    related_event_ids:
+      - acts_011
+      - acts_013
+    journey_id: missionary_journey_2
+
+  - id: acts_013
+    title: Riot in Ephesus
+    summary: >
+      Opposition to Paul's ministry erupts in Ephesus as economic and religious
+      interests tied to Artemis worship feel threatened.
+    date:
+      start_year: 55
+      end_year: 55
+      certainty: estimated
+    location_id: ephesus
+    participants:
+      - paul
+    tag_ids:
+      - persecution
+      - church_growth
+      - mission_journey
+    source_refs:
+      - source_id: acts
+        citation: Acts 19:23-41
+    related_event_ids:
+      - acts_012
+      - acts_014
+    journey_id: missionary_journey_3
+
+  - id: acts_014
+    title: Farewell to Ephesian Elders
+    summary: >
+      Paul meets the Ephesian elders at Miletus and delivers a farewell marked
+      by pastoral exhortation and impending suffering.
+    date:
+      start_year: 57
+      end_year: 57
+      certainty: estimated
+    location_id: miletus
+    participants:
+      - paul
+    tag_ids:
+      - leadership
+      - mission_journey
+      - preaching
+    source_refs:
+      - source_id: acts
+        citation: Acts 20:17-38
+    related_event_ids:
+      - acts_013
+      - acts_015
+    journey_id: missionary_journey_3
+
+  - id: acts_015
+    title: Arrest of Paul in Jerusalem
+    summary: >
+      Paul's Temple arrest launches the long imprisonment and trial sequence
+      that ultimately carries the narrative toward Rome.
+    date:
+      start_year: 57
+      end_year: 57
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - paul
+    tag_ids:
+      - imprisonment
+      - persecution
+    source_refs:
+      - source_id: acts
+        citation: Acts 21:27-36
+    related_event_ids:
+      - acts_014
+      - acts_016
+
+  - id: acts_016
+    title: Shipwreck on Malta
+    summary: >
+      Paul's voyage to Rome ends in shipwreck, yet all aboard survive and the
+      Malta episode becomes a dramatic witness account.
+    date:
+      start_year: 60
+      end_year: 60
+      certainty: estimated
+    location_id: malta
+    participants:
+      - paul
+    tag_ids:
+      - voyage
+      - miracle
+    source_refs:
+      - source_id: acts
+        citation: Acts 27:39-28:10
+    related_event_ids:
+      - acts_015
+      - acts_017
+    notes: >
+      The island identification with Malta is traditional and widely accepted,
+      while the exact landing bay remains debated.
+
+  - id: acts_017
+    title: Paul Under House Arrest in Rome
+    summary: >
+      Acts closes with Paul in Rome, proclaiming the kingdom of God and
+      teaching about Jesus with unusual narrative openness.
+    date:
+      start_year: 61
+      end_year: 62
+      certainty: estimated
+    location_id: rome
+    participants:
+      - paul
+    tag_ids:
+      - imprisonment
+      - preaching
+      - voyage
+    source_refs:
+      - source_id: acts
+        citation: Acts 28:16-31
+    related_event_ids:
+      - acts_016
+
+journeys:
+  - id: missionary_journey_1
+    title: First Missionary Journey
+    summary: >
+      Paul's first missionary journey moves outward from Antioch through Cyprus
+      and into Anatolia before returning to the sending church.
+    date:
+      start_year: 46
+      end_year: 48
+      certainty: estimated
+    source_refs:
+      - source_id: acts
+        citation: Acts 13:1-14:28
+    route:
+      - sequence: 1
+        place_id: antioch
+      - sequence: 2
+        place_id: salamis
+      - sequence: 3
+        place_id: paphos
+      - sequence: 4
+        place_id: lystra
+      - sequence: 5
+        place_id: antioch
+    related_event_ids:
+      - acts_009
+
+  - id: missionary_journey_2
+    title: Second Missionary Journey
+    summary: >
+      The second missionary journey carries Paul into Macedonia and Achaia,
+      including the Philippi and Athens episodes.
+    date:
+      start_year: 49
+      end_year: 52
+      certainty: estimated
+    source_refs:
+      - source_id: acts
+        citation: Acts 15:36-18:22
+    route:
+      - sequence: 1
+        place_id: antioch
+      - sequence: 2
+        place_id: philippi
+      - sequence: 3
+        place_id: athens
+      - sequence: 4
+        place_id: corinth
+      - sequence: 5
+        place_id: antioch
+    related_event_ids:
+      - acts_011
+      - acts_012
+
+  - id: missionary_journey_3
+    title: Third Missionary Journey
+    summary: >
+      The third missionary journey focuses heavily on Ephesus before the return
+      toward Jerusalem through Miletus.
+    date:
+      start_year: 53
+      end_year: 57
+      certainty: estimated
+    source_refs:
+      - source_id: acts
+        citation: Acts 18:23-21:17
+    route:
+      - sequence: 1
+        place_id: antioch
+      - sequence: 2
+        place_id: ephesus
+      - sequence: 3
+        place_id: miletus
+      - sequence: 4
+        place_id: jerusalem
+    related_event_ids:
+      - acts_013
+      - acts_014
+      - acts_015
+
+relationships:
+  - id: relationship_peter_john_ministry_partner
+    from_type: person
+    from_id: peter
+    to_type: person
+    to_id: john
+    relationship_type: ministry_partner
+    source_refs:
+      - source_id: acts
+        citation: Acts 3:1-11
+
+  - id: relationship_paul_barnabas_missionary_partner
+    from_type: person
+    from_id: paul
+    to_type: person
+    to_id: barnabas
+    relationship_type: missionary_partner
+    source_refs:
+      - source_id: acts
+        citation: Acts 13:2-12
+
+  - id: relationship_paul_silas_missionary_partner
+    from_type: person
+    from_id: paul
+    to_type: person
+    to_id: silas
+    relationship_type: missionary_partner
+    source_refs:
+      - source_id: acts
+        citation: Acts 15:40-41
+
+  - id: relationship_paul_timothy_mentor
+    from_type: person
+    from_id: paul
+    to_type: person
+    to_id: timothy
+    relationship_type: missionary_companion
+    source_refs:
+      - source_id: acts
+        citation: Acts 16:1-3
+
+  - id: relationship_peter_cornelius_evangelized
+    from_type: person
+    from_id: peter
+    to_type: person
+    to_id: cornelius
+    relationship_type: evangelized
+    source_refs:
+      - source_id: acts
+        citation: Acts 10:24-48
+
+tags:
+  - id: apostles
+    label: Apostles
+    description: Events centered on the apostolic witnesses.
+    group: people
+
+  - id: church_growth
+    label: Church Growth
+    description: Events marking numerical or geographic growth in the church.
+    group: movement
+
+  - id: church_governance
+    label: Church Governance
+    description: Events involving communal decision-making and doctrinal order.
+    group: governance
+
+  - id: conversion
+    label: Conversion
+    description: Events marked by a dramatic turn toward faith in Jesus.
+    group: response
+
+  - id: gentile_mission
+    label: Gentile Mission
+    description: Events that highlight the gospel's movement toward Gentiles.
+    group: movement
+
+  - id: healing
+    label: Healing
+    description: Events focused on bodily restoration or healing signs.
+    group: sign
+
+  - id: holy_spirit
+    label: Holy Spirit
+    description: Events centered on the Spirit's empowering presence.
+    group: theology
+
+  - id: imprisonment
+    label: Imprisonment
+    description: Events involving custody, arrest, or confinement.
+    group: opposition
+
+  - id: leadership
+    label: Leadership
+    description: Events focused on communal leadership and apostolic direction.
+    group: governance
+
+  - id: martyrdom
+    label: Martyrdom
+    description: Events involving faithful witness unto death.
+    group: opposition
+
+  - id: miracle
+    label: Miracle
+    description: Events marked by extraordinary acts of divine power.
+    group: sign
+
+  - id: mission_journey
+    label: Mission Journey
+    description: Events directly associated with Paul's missionary travel cycles.
+    group: movement
+
+  - id: persecution
+    label: Persecution
+    description: Events marked by organized resistance to the church.
+    group: opposition
+
+  - id: preaching
+    label: Preaching
+    description: Events centered on proclamation, speech, or public witness.
+    group: proclamation
+
+  - id: voyage
+    label: Voyage
+    description: Events centered on significant sea travel and transit.
+    group: movement
+
+claims: []

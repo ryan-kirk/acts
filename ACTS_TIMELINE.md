@@ -1,5 +1,11 @@
 # acts_timeline.md
 
+This file is the original Acts draft reference.
+
+The canonical machine-parseable dataset for the app now lives in
+`data/acts.yaml`. This draft is preserved as source material for review,
+comparison, and future normalization work.
+
 metadata:
 dataset_id: acts
 title: Book of Acts Timeline

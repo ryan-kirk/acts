@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "validate:data": "node --import tsx scripts/validate-data.ts",
-    "verify": "npm run test && npm run build"
+    "verify": "npm run test && npm run validate:data -- data/acts.yaml && npm run build"
   },
   "dependencies": {
     "react": "^19.2.7",
