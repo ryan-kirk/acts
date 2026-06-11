@@ -228,14 +228,53 @@ describe("App", () => {
     expect(within(mapExplorer).getByText(/validated places visible/i)).toBeInTheDocument();
     expect(
       within(mapExplorer).getByText(
-        /marker fill and edge styles stay tied to canonical place records/i
+        /marker tones stay tied to canonical place records while route strokes show active journey focus/i
       )
     ).toBeInTheDocument();
+    expect(within(mapExplorer).getByRole("heading", { name: /first missionary journey/i }))
+      .toBeInTheDocument();
     expect(within(mapExplorer).getByRole("heading", { name: /jerusalem/i }))
       .toBeInTheDocument();
 
     expect(getLeafletMockState().markers.length).toBeGreaterThan(0);
     expect(getLeafletMockState().polylines).toHaveLength(3);
+  });
+
+  it("lets route selection drive journey detail, place focus, and shared event selection", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: /map/i }));
+
+    const mapExplorer = screen.getByLabelText(/acts map explorer/i);
+    const secondJourneyOverlay = getLeafletMockState().polylines[1];
+
+    expect(secondJourneyOverlay).toBeDefined();
+
+    act(() => {
+      secondJourneyOverlay!.fire("click");
+    });
+
+    expect(within(mapExplorer).getByRole("heading", { name: /second missionary journey/i }))
+      .toBeInTheDocument();
+    expect(within(mapExplorer).getByText(/4 stop/i)).toBeInTheDocument();
+
+    fireEvent.click(within(mapExplorer).getByRole("button", { name: /2\. philippi/i }));
+
+    expect(within(mapExplorer).getByRole("heading", { name: /philippi/i })).toBeInTheDocument();
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+    expect(
+      within(inspector).getByRole("heading", { name: /philippian jailer converted/i })
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      within(mapExplorer).getAllByRole("button", { name: /mars hill address/i })[1]!
+    );
+
+    expect(within(inspector).getByRole("heading", { name: /mars hill address/i }))
+      .toBeInTheDocument();
+    expect(within(mapExplorer).getByRole("heading", { name: /second missionary journey/i }))
+      .toBeInTheDocument();
   });
 
   it("keeps map markers, controls, and shared inspector state synchronized", async () => {

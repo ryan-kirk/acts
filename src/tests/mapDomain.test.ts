@@ -72,7 +72,7 @@ describe("map domain helpers", () => {
     expect(records[1]?.eventCount).toBe(1);
   });
 
-  it("creates journey overlays only when at least two valid route points resolve", () => {
+  it("creates journey overlays in sequence order and links related journey events", () => {
     const dataset = createValidDataset();
 
     dataset.places.push(
@@ -100,12 +100,12 @@ describe("map domain helpers", () => {
         title: "Valid Journey",
         route: [
           {
-            sequence: 1,
-            place_id: "jerusalem"
-          },
-          {
             sequence: 2,
             place_id: "antioch"
+          },
+          {
+            sequence: 1,
+            place_id: "jerusalem"
           }
         ],
         related_event_ids: ["acts_001"]
@@ -127,6 +127,28 @@ describe("map domain helpers", () => {
         related_event_ids: []
       }
     ];
+    dataset.events = [
+      {
+        ...dataset.events[0]!,
+        id: "acts_001",
+        title: "Jerusalem Event",
+        journey_id: "journey_valid",
+        related_event_ids: []
+      },
+      {
+        ...dataset.events[0]!,
+        id: "acts_002",
+        title: "Antioch Event",
+        location_id: "antioch",
+        journey_id: "journey_valid",
+        date: {
+          start_year: 45,
+          end_year: 45,
+          certainty: "estimated"
+        },
+        related_event_ids: []
+      }
+    ];
 
     const overlays = getMapJourneyOverlays(dataset, buildDatasetIndex(dataset));
 
@@ -135,6 +157,14 @@ describe("map domain helpers", () => {
     expect(overlays[0]?.points).toEqual([
       [31.7683, 35.2137],
       [36.2021, 36.1606]
+    ]);
+    expect(overlays[0]?.stopRecords.map((stopRecord) => stopRecord.routePoint.sequence)).toEqual([
+      1,
+      2
+    ]);
+    expect(overlays[0]?.relatedEvents.map((event) => event.id)).toEqual([
+      "acts_001",
+      "acts_002"
     ]);
   });
 

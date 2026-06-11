@@ -65,6 +65,25 @@ describe("validateDataset", () => {
     );
   });
 
+  it("rejects duplicate journey route sequence numbers", () => {
+    const dataset = createValidDataset();
+    dataset.places.push({
+      ...dataset.places[0]!,
+      id: "antioch",
+      name: "Antioch",
+      latitude: 36.2021,
+      longitude: 36.1606
+    });
+    dataset.journeys[0]!.route = [
+      { sequence: 1, place_id: "jerusalem" },
+      { sequence: 1, place_id: "antioch" }
+    ];
+
+    expect(() => validateDataset(dataset)).toThrow(
+      /Journey routes must not contain duplicate sequence numbers/
+    );
+  });
+
   it("rejects relationships that point to unknown entities", () => {
     const dataset = createValidDataset();
     dataset.relationships[0]!.to_id = "missing_event";

@@ -98,8 +98,9 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
           <h1>Acts explorer with shared navigation, filtering, and a real chronology view.</h1>
           <p className="lede">
             The app now boots directly from the canonical Acts dataset and keeps a shared
-            event selection across working timeline, map, and people explorers,
-            with the sources surface still queued for deeper expansion.
+            event selection across working timeline, map, and people explorers, with
+            selectable missionary journey routes now layered into the map while the
+            sources surface remains queued for deeper expansion.
           </p>
         </div>
         <div className="status-cluster" aria-label="Dataset status">

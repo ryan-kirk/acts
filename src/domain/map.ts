@@ -1,5 +1,9 @@
 import type { CanonicalDataset, Event, Journey, Place } from "./dataset";
-import { sortEventsChronologically, type DatasetIndex } from "./events";
+import {
+  getEventsForJourney,
+  sortEventsChronologically,
+  type DatasetIndex
+} from "./events";
 
 export type MapBaseLayerId = "satellite" | "terrain" | "topo";
 
@@ -23,6 +27,14 @@ export interface MapJourneyOverlay {
   id: string;
   journey: Journey;
   points: Array<[number, number]>;
+  relatedEvents: Event[];
+  stopRecords: MapJourneyStopRecord[];
+}
+
+export interface MapJourneyStopRecord {
+  place: Place;
+  relatedEvents: Event[];
+  routePoint: Journey["route"][number];
 }
 
 export interface LocationCertaintyConfig {
@@ -166,12 +178,39 @@ export function getMapJourneyOverlays(
   index: DatasetIndex
 ): MapJourneyOverlay[] {
   return dataset.journeys.flatMap((journey, journeyIndex) => {
-    const points = journey.route
-      .flatMap((routePoint) => {
-        const place = index.placesById.get(routePoint.place_id);
-        return place && isRenderableCoordinate(place) ? [place] : [];
+    const routePoints = [...journey.route].sort(
+      (leftPoint, rightPoint) => leftPoint.sequence - rightPoint.sequence
+    );
+    const directJourneyEvents = getEventsForJourney(journey.id, dataset.events);
+    const relatedEventIds = new Set([
+      ...journey.related_event_ids,
+      ...directJourneyEvents.map((event) => event.id)
+    ]);
+    const relatedEvents = sortEventsChronologically(
+      Array.from(relatedEventIds).flatMap((relatedEventId) => {
+        const relatedEvent = index.eventsById.get(relatedEventId);
+        return relatedEvent ? [relatedEvent] : [];
       })
-      .map((place) => [place.latitude, place.longitude] as [number, number]);
+    );
+    const stopRecords = routePoints.flatMap((routePoint) => {
+      const place = index.placesById.get(routePoint.place_id);
+
+      if (!place || !isRenderableCoordinate(place)) {
+        return [];
+      }
+
+      return [
+        {
+          routePoint,
+          place,
+          relatedEvents: directJourneyEvents.filter((event) => event.location_id === place.id)
+        }
+      ];
+    });
+    const points = stopRecords.map((stopRecord) => [
+      stopRecord.place.latitude,
+      stopRecord.place.longitude
+    ] as [number, number]);
 
     if (points.length < 2) {
       return [];
@@ -182,10 +221,23 @@ export function getMapJourneyOverlays(
         id: journey.id,
         journey,
         points,
+        relatedEvents,
+        stopRecords,
         color: journeyPalette[journeyIndex % journeyPalette.length]!
       }
     ];
   });
+}
+
+export function getMapJourneyOverlayById(
+  journeyId: string | null,
+  journeyOverlays: MapJourneyOverlay[]
+): MapJourneyOverlay | null {
+  if (!journeyId) {
+    return null;
+  }
+
+  return journeyOverlays.find((journeyOverlay) => journeyOverlay.id === journeyId) ?? null;
 }
 
 export function getPreferredEventForPlace(

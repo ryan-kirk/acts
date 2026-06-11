@@ -125,6 +125,8 @@ export function filterEventsByQuery(
   return events.filter((event) => getEventSearchDocument(event, index).includes(normalizedQuery));
 }
 
+type DatedRecord = Pick<Event | Journey, "date">;
+
 function formatYear(year: number): string {
   if (year < 0) {
     return `${Math.abs(year)} BC`;
@@ -133,8 +135,8 @@ function formatYear(year: number): string {
   return `AD ${year}`;
 }
 
-export function formatDateRange(event: Event): string {
-  const { start_year: startYear, end_year: endYear } = event.date;
+export function formatDateRange(record: DatedRecord): string {
+  const { start_year: startYear, end_year: endYear } = record.date;
 
   if (startYear === null || endYear === null) {
     return "Date unknown";
@@ -300,6 +302,12 @@ export function getEventsForSource(sourceId: string, events: Event[]): Event[] {
     events.filter((event) =>
       event.source_refs.some((sourceRef) => sourceRef.source_id === sourceId)
     )
+  );
+}
+
+export function getEventsForJourney(journeyId: string, events: Event[]): Event[] {
+  return sortEventsChronologically(
+    events.filter((event) => event.journey_id === journeyId)
   );
 }
 

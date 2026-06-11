@@ -6,13 +6,14 @@ import "leaflet/dist/leaflet.css";
 import type { CanonicalDataset, Event, Place } from "../domain/dataset";
 import {
   formatCoordinate,
-  formatLocationCertainty,
   formatDateRange,
+  formatLocationCertainty,
   getRelatedEvents,
   type DatasetIndex
 } from "../domain/events";
 import {
   getActiveMapPlaceRecord,
+  getMapJourneyOverlayById,
   getMapJourneyOverlays,
   getMapPlaceRecords,
   getMarkerRadius,
@@ -21,6 +22,7 @@ import {
   mapBaseLayers,
   type MapBaseLayerId
 } from "../domain/map";
+import { JourneyDetailPanel } from "./JourneyDetailPanel";
 
 interface MapViewProps {
   dataset: CanonicalDataset;
@@ -59,6 +61,11 @@ export function MapView({
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const markerRefs = useRef<Record<string, L.CircleMarker>>({});
   const journeyLayerRefs = useRef<Record<string, L.Polyline>>({});
+  const selectedEventIdRef = useRef(selectedEventId);
+  const callbacksRef = useRef({
+    onFocusPlace,
+    onSelectEvent
+  });
 
   const placeRecords = getMapPlaceRecords(events, index);
   const journeyOverlays = getMapJourneyOverlays(dataset, index);
@@ -68,22 +75,25 @@ export function MapView({
     placeRecords,
     index
   );
+  const selectedEventJourneyId = index.eventsById.get(selectedEventId)?.journey_id ?? null;
 
   const [baseLayerId, setBaseLayerId] = useState<MapBaseLayerId>("satellite");
   const [certaintyVisibility, setCertaintyVisibility] = useState(createCertaintyVisibilityState);
   const [journeyVisibility, setJourneyVisibility] = useState<VisibilityMap<string>>(() =>
     Object.fromEntries(journeyOverlays.map((overlay) => [overlay.id, true]))
   );
-  const selectedEventIdRef = useRef(selectedEventId);
-  const callbacksRef = useRef({
-    onFocusPlace,
-    onSelectEvent
-  });
+  const [selectedJourneyId, setSelectedJourneyId] = useState<string | null>(
+    selectedEventJourneyId ?? journeyOverlays[0]?.id ?? null
+  );
 
+  const activeJourneyOverlay = getMapJourneyOverlayById(selectedJourneyId, journeyOverlays);
+  const activeJourneyPlaceIds = new Set(
+    activeJourneyOverlay?.stopRecords.map((stopRecord) => stopRecord.place.id) ?? []
+  );
+  const activeBaseLayer = mapBaseLayers.find((baseLayer) => baseLayer.id === baseLayerId)!;
   const visiblePlaceRecords = placeRecords.filter(
     (placeRecord) => certaintyVisibility[placeRecord.place.location_certainty]
   );
-  const activeBaseLayer = mapBaseLayers.find((baseLayer) => baseLayer.id === baseLayerId)!;
 
   useEffect(() => {
     selectedEventIdRef.current = selectedEventId;
@@ -95,6 +105,62 @@ export function MapView({
       onSelectEvent
     };
   }, [onFocusPlace, onSelectEvent]);
+
+  useEffect(() => {
+    setJourneyVisibility((currentVisibility) => {
+      const nextVisibility = Object.fromEntries(
+        journeyOverlays.map((overlay) => [overlay.id, currentVisibility[overlay.id] ?? true])
+      );
+      const currentKeys = Object.keys(currentVisibility);
+      const nextKeys = Object.keys(nextVisibility);
+      const visibilityChanged =
+        currentKeys.length !== nextKeys.length ||
+        nextKeys.some((journeyId) => currentVisibility[journeyId] !== nextVisibility[journeyId]);
+
+      return visibilityChanged ? nextVisibility : currentVisibility;
+    });
+  }, [journeyOverlays]);
+
+  useEffect(() => {
+    if (!selectedEventJourneyId) {
+      return;
+    }
+
+    setSelectedJourneyId(selectedEventJourneyId);
+  }, [selectedEventJourneyId]);
+
+  useEffect(() => {
+    if (journeyOverlays.length === 0) {
+      if (selectedJourneyId !== null) {
+        setSelectedJourneyId(null);
+      }
+      return;
+    }
+
+    if (!selectedJourneyId) {
+      setSelectedJourneyId(journeyOverlays[0]?.id ?? null);
+      return;
+    }
+
+    const selectedJourneyExists = journeyOverlays.some(
+      (journeyOverlay) => journeyOverlay.id === selectedJourneyId
+    );
+
+    if (!selectedJourneyExists) {
+      setSelectedJourneyId(journeyOverlays[0]?.id ?? null);
+    }
+  }, [journeyOverlays, selectedJourneyId]);
+
+  useEffect(() => {
+    if (!selectedJourneyId || journeyVisibility[selectedJourneyId]) {
+      return;
+    }
+
+    setJourneyVisibility((currentVisibility) => ({
+      ...currentVisibility,
+      [selectedJourneyId]: true
+    }));
+  }, [journeyVisibility, selectedJourneyId]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) {
@@ -153,6 +219,10 @@ export function MapView({
         weight: 2.4,
         opacity: 0.7,
         dashArray: "8 5"
+      });
+
+      polyline.on("click", () => {
+        setSelectedJourneyId(overlay.id);
       });
 
       polyline.addTo(map);
@@ -220,6 +290,7 @@ export function MapView({
 
       const isVisible = certaintyVisibility[placeRecord.place.location_certainty];
       const isSelected = activePlaceRecord?.place.id === placeRecord.place.id;
+      const isRouteStop = activeJourneyPlaceIds.has(placeRecord.place.id);
       const certaintyTone = locationCertaintyConfig[placeRecord.place.location_certainty];
 
       if (isVisible) {
@@ -231,14 +302,22 @@ export function MapView({
       }
 
       marker.setStyle({
-        radius: getMarkerRadius(placeRecord.eventCount, isSelected),
+        radius: isSelected
+          ? getMarkerRadius(placeRecord.eventCount, true)
+          : isRouteStop
+            ? getMarkerRadius(placeRecord.eventCount, false) + 1
+            : getMarkerRadius(placeRecord.eventCount, false),
         fillColor: isSelected ? "#c9922a" : certaintyTone.color,
-        fillOpacity: isSelected ? 1 : 0.82,
-        color: isSelected ? "#f2e4bd" : certaintyTone.stroke,
-        weight: isSelected ? 3 : 2
+        fillOpacity: isSelected ? 1 : isRouteStop ? 0.94 : 0.82,
+        color: isSelected
+          ? "#f2e4bd"
+          : isRouteStop
+            ? activeJourneyOverlay?.color ?? certaintyTone.stroke
+            : certaintyTone.stroke,
+        weight: isSelected ? 3 : isRouteStop ? 3 : 2
       });
     });
-  }, [activePlaceRecord, certaintyVisibility, placeRecords]);
+  }, [activeJourneyOverlay, activeJourneyPlaceIds, activePlaceRecord, certaintyVisibility, placeRecords]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -261,8 +340,27 @@ export function MapView({
       } else if (map.hasLayer(layer)) {
         map.removeLayer(layer);
       }
+
+      layer.setStyle({
+        color: overlay.color,
+        weight: activeJourneyOverlay?.id === overlay.id ? 4.2 : 2.4,
+        opacity: activeJourneyOverlay?.id === overlay.id ? 0.96 : 0.62,
+        dashArray: activeJourneyOverlay?.id === overlay.id ? "10 4" : "8 5"
+      });
     });
-  }, [journeyOverlays, journeyVisibility]);
+  }, [activeJourneyOverlay, journeyOverlays, journeyVisibility]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!map || !activeJourneyOverlay) {
+      return;
+    }
+
+    map.fitBounds(activeJourneyOverlay.points, {
+      padding: [36, 36]
+    });
+  }, [activeJourneyOverlay]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -296,7 +394,7 @@ export function MapView({
         </div>
 
         <div className="map-toolbar-group">
-          <span className="map-toolbar-label">Journeys</span>
+          <span className="map-toolbar-label">Journey Visibility</span>
           <div className="map-chip-row">
             {journeyOverlays.map((overlay) => (
               <button
@@ -346,12 +444,18 @@ export function MapView({
           <span>
             {journeyOverlays.length} journey overlay{journeyOverlays.length === 1 ? "" : "s"} loaded
           </span>
+          <span>
+            Focus route: {activeJourneyOverlay?.journey.title ?? "None selected"}
+          </span>
         </div>
 
         <div className="map-overlay map-legend-card">
           <div className="map-legend-header">
             <strong>Location certainty</strong>
-            <span>Marker fill and edge styles stay tied to canonical place records.</span>
+            <span>
+              Marker tones stay tied to canonical place records while route strokes show active
+              journey focus.
+            </span>
           </div>
           <ul className="map-legend-list">
             {Object.entries(locationCertaintyConfig).map(([certainty, config]) => (
@@ -377,118 +481,141 @@ export function MapView({
         </div>
       </div>
 
-      {activePlaceRecord ? (
-        <section className="map-place-panel">
-          <div className="map-place-header">
-            <div>
-              <p className="section-eyebrow">Place Interaction</p>
-              <h3>{activePlaceRecord.place.name}</h3>
-            </div>
-            <span className="entity-type-badge">
-              {formatLocationCertainty(activePlaceRecord.place.location_certainty)}
-            </span>
-          </div>
+      <div className="map-detail-grid">
+        <JourneyDetailPanel
+          activeJourneyOverlay={activeJourneyOverlay}
+          activePlaceId={activePlaceRecord?.place.id ?? null}
+          index={index}
+          onFocusPlace={onFocusPlace}
+          onSelectEvent={onSelectEvent}
+          onSelectJourney={setSelectedJourneyId}
+          selectedEventId={selectedEventId}
+          visibleJourneyOverlays={journeyOverlays}
+        />
 
-          <p className="map-place-summary">
-            {activePlaceRecord.place.summary ?? "No place summary has been modeled yet."}
-          </p>
+        {activePlaceRecord ? (
+          <section className="map-place-panel">
+            <div className="map-place-header">
+              <div>
+                <p className="section-eyebrow">Place Interaction</p>
+                <h3>{activePlaceRecord.place.name}</h3>
+              </div>
+              <span className="entity-type-badge">
+                {formatLocationCertainty(activePlaceRecord.place.location_certainty)}
+              </span>
+            </div>
 
-          <dl className="preview-meta-grid">
-            <div>
-              <dt>Region</dt>
-              <dd>{activePlaceRecord.place.region}</dd>
-            </div>
-            <div>
-              <dt>Modern Country</dt>
-              <dd>{activePlaceRecord.place.modern_country}</dd>
-            </div>
-            <div>
-              <dt>Coordinates</dt>
-              <dd>
-                {formatCoordinate(activePlaceRecord.place.latitude)},{" "}
-                {formatCoordinate(activePlaceRecord.place.longitude)}
-              </dd>
-            </div>
-            <div>
-              <dt>Related Events</dt>
-              <dd>{activePlaceRecord.eventCount}</dd>
-            </div>
-          </dl>
+            <p className="map-place-summary">
+              {activePlaceRecord.place.summary ?? "No place summary has been modeled yet."}
+            </p>
 
-          <div className="map-place-section">
-            <div className="section-header-row">
-              <h3>Events at this place</h3>
-            </div>
-            <ul className="linked-record-list">
-              {activePlaceRecord.events.map((placeEvent) => (
-                <li key={placeEvent.id}>
-                  <button
-                    type="button"
-                    className={`linked-record-button ${
-                      placeEvent.id === selectedEventId ? "is-selected" : ""
-                    }`}
-                    onClick={() => onSelectEvent(placeEvent.id)}
-                  >
-                    <strong>{placeEvent.title}</strong>
-                    <span>
-                      {formatDateRange(placeEvent)} •{" "}
-                      {placeEvent.source_refs[0]?.citation ?? "Citation pending"}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+            <dl className="preview-meta-grid">
+              <div>
+                <dt>Region</dt>
+                <dd>{activePlaceRecord.place.region}</dd>
+              </div>
+              <div>
+                <dt>Modern Country</dt>
+                <dd>{activePlaceRecord.place.modern_country}</dd>
+              </div>
+              <div>
+                <dt>Coordinates</dt>
+                <dd>
+                  {formatCoordinate(activePlaceRecord.place.latitude)},{" "}
+                  {formatCoordinate(activePlaceRecord.place.longitude)}
+                </dd>
+              </div>
+              <div>
+                <dt>Related Events</dt>
+                <dd>{activePlaceRecord.eventCount}</dd>
+              </div>
+            </dl>
 
-          {activePlaceRecord.journeyIds.length > 0 ? (
             <div className="map-place-section">
               <div className="section-header-row">
-                <h3>Journeys through this place</h3>
-              </div>
-              <div className="pill-row">
-                {activePlaceRecord.journeyIds.map((journeyId) => (
-                  <span key={journeyId} className="pill pill-muted">
-                    {index.journeysById.get(journeyId)?.title ?? journeyId}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : null}
-
-          {getPreferredEventForPlace(activePlaceRecord, selectedEventId) ? (
-            <div className="map-place-section">
-              <div className="section-header-row">
-                <h3>Selected event relationships</h3>
+                <h3>Events at this place</h3>
               </div>
               <ul className="linked-record-list">
-                {getRelatedEvents(
-                  getPreferredEventForPlace(activePlaceRecord, selectedEventId)!,
-                  index
-                ).map((relatedEvent) => (
-                  <li key={relatedEvent.id}>
+                {activePlaceRecord.events.map((placeEvent) => (
+                  <li key={placeEvent.id}>
                     <button
                       type="button"
-                      className="linked-record-button"
-                      onClick={() => onSelectEvent(relatedEvent.id)}
+                      className={`linked-record-button ${
+                        placeEvent.id === selectedEventId ? "is-selected" : ""
+                      }`}
+                      onClick={() => onSelectEvent(placeEvent.id)}
                     >
-                      <strong>{relatedEvent.title}</strong>
+                      <strong>{placeEvent.title}</strong>
                       <span>
-                        {formatDateRange(relatedEvent)} •{" "}
-                        {relatedEvent.source_refs[0]?.citation ?? "Citation pending"}
+                        {formatDateRange(placeEvent)} •{" "}
+                        {placeEvent.source_refs[0]?.citation ?? "Citation pending"}
                       </span>
                     </button>
                   </li>
                 ))}
               </ul>
             </div>
-          ) : null}
-        </section>
-      ) : (
-        <div className="empty-state">
-          <h3>No map place is currently selected</h3>
-          <p>Choose an event, marker, or place-focus action to anchor the map explorer.</p>
-        </div>
-      )}
+
+            {activePlaceRecord.journeyIds.length > 0 ? (
+              <div className="map-place-section">
+                <div className="section-header-row">
+                  <h3>Journeys through this place</h3>
+                </div>
+                <div className="map-journey-pill-row">
+                  {activePlaceRecord.journeyIds.map((journeyId) => {
+                    const journey = index.journeysById.get(journeyId);
+                    const isSelected = activeJourneyOverlay?.id === journeyId;
+
+                    return (
+                      <button
+                        key={journeyId}
+                        type="button"
+                        className={`map-inline-button ${isSelected ? "is-selected" : ""}`}
+                        onClick={() => setSelectedJourneyId(journeyId)}
+                      >
+                        {journey?.title ?? journeyId}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+
+            {getPreferredEventForPlace(activePlaceRecord, selectedEventId) ? (
+              <div className="map-place-section">
+                <div className="section-header-row">
+                  <h3>Selected event relationships</h3>
+                </div>
+                <ul className="linked-record-list">
+                  {getRelatedEvents(
+                    getPreferredEventForPlace(activePlaceRecord, selectedEventId)!,
+                    index
+                  ).map((relatedEvent) => (
+                    <li key={relatedEvent.id}>
+                      <button
+                        type="button"
+                        className="linked-record-button"
+                        onClick={() => onSelectEvent(relatedEvent.id)}
+                      >
+                        <strong>{relatedEvent.title}</strong>
+                        <span>
+                          {formatDateRange(relatedEvent)} •{" "}
+                          {relatedEvent.source_refs[0]?.citation ?? "Citation pending"}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </section>
+        ) : (
+          <div className="empty-state">
+            <h3>No map place is currently selected</h3>
+            <p>Choose an event, marker, or place-focus action to anchor the map explorer.</p>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

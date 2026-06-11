@@ -41,10 +41,15 @@ export interface MockCircleMarker {
 export interface MockPolyline {
   kind: "polyline";
   color: string | null;
+  currentStyle: Record<string, unknown>;
+  handlers: Record<string, () => void>;
   map: MockMap | null;
   options: Record<string, unknown>;
   points: Array<[number, number]>;
   addTo: (map: MockMap) => MockPolyline;
+  fire: (eventName: string) => void;
+  on: (eventName: string, handler: () => void) => MockPolyline;
+  setStyle: (nextStyle: Record<string, unknown>) => MockPolyline;
 }
 
 interface LeafletMockState {
@@ -178,9 +183,27 @@ function createMockPolyline(
     points,
     options,
     color: typeof options.color === "string" ? options.color : null,
+    currentStyle: {
+      ...options
+    },
+    handlers: {},
     map: null,
     addTo(map: MockMap) {
       return attachLayerToMap(map, this);
+    },
+    on(eventName: string, handler: () => void) {
+      this.handlers[eventName] = handler;
+      return this;
+    },
+    fire(eventName: string) {
+      this.handlers[eventName]?.();
+    },
+    setStyle(nextStyle: Record<string, unknown>) {
+      this.currentStyle = {
+        ...this.currentStyle,
+        ...nextStyle
+      };
+      return this;
     }
   };
 }
