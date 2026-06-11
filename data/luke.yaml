@@ -24,6 +24,60 @@ sources:
         Event, place, person, and relationship records are grounded in passage
         references only. Any future translation text will require separate
         rights review.
+  - id: barrington_atlas
+    name: Barrington Atlas of the Greek and Roman World
+    type: atlas
+    author: Richard J. A. Talbert, ed.
+    citation: Barrington Atlas of the Greek and Roman World
+    publication_date: "2000"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Geographic context cites the atlas bibliographically and does not
+        reproduce map plates or directory entries.
+      usage_notes: >
+        Any future use of atlas imagery, scans, or proprietary map assets must
+        receive separate permissions review.
+  - id: codex_bezae
+    name: Codex Bezae Cantabrigiensis
+    type: manuscript
+    citation: Codex Bezae (5th century), Acts and Luke witnesses
+    publication_date: 5th century AD
+    usage_rights:
+      status: cleared
+      attribution_text: >
+        Manuscript witnesses are cited by shelfmark and passage only; no image
+        or transcription assets are embedded.
+      usage_notes: >
+        If manuscript images or diplomatic transcriptions are added later,
+        repository-specific terms must be surfaced in the UI.
+  - id: green_luke_commentary
+    name: The Gospel of Luke
+    type: commentary
+    author: Joel B. Green
+    citation: New International Commentary on the New Testament
+    publication_date: "1997"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Commentary citations support interpretive claims without embedding
+        copyrighted prose.
+      usage_notes: >
+        Any future quotations or excerpts require publisher-specific rights
+        review and attribution.
+  - id: fitzmyer_luke_anchor
+    name: The Gospel According to Luke
+    type: book
+    author: Joseph A. Fitzmyer
+    citation: Anchor Bible volumes on Luke
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Book references remain bibliographic and do not reproduce copyrighted
+        explanatory text.
+      usage_notes: >
+        If extended quotations are added later, edition-specific permissions
+        and page attribution must be surfaced.
 
 places:
   - id: nazareth
@@ -530,4 +584,80 @@ tags:
     description: Events centered on post-resurrection witness and recognition.
     group: theology
 
-claims: []
+claims:
+  - id: claim_luke_nazareth_programmatic_scene
+    statement: >
+      Many interpreters treat Luke's Nazareth synagogue episode as a
+      programmatic scene placed early to frame the Gospel's concern for the
+      poor, the outsider, and Spirit-led proclamation.
+    claim_type: literary_structure
+    confidence: medium
+    related_event_ids:
+      - luke_003
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - nazareth
+    source_refs:
+      - source_id: green_luke_commentary
+        citation: Commentary discussion on Luke 4:16-30
+      - source_id: fitzmyer_luke_anchor
+        citation: Anchor Bible discussion on Luke 4
+  - id: claim_luke_zacchaeus_restitution
+    statement: >
+      Zacchaeus's restitution language is often read as a concrete sign that
+      repentance in Luke includes repaired economic relationships rather than
+      inward sentiment alone.
+    claim_type: theological_interpretation
+    confidence: medium
+    related_event_ids:
+      - luke_006
+    related_person_ids:
+      - zacchaeus
+      - jesus
+    related_place_ids:
+      - jericho
+    source_refs:
+      - source_id: green_luke_commentary
+        citation: Commentary discussion on Luke 19:1-10
+      - source_id: fitzmyer_luke_anchor
+        citation: Anchor Bible discussion on Luke 19
+  - id: claim_luke_emmaus_identification
+    statement: >
+      The precise site of Emmaus remains debated because the name attaches to
+      multiple locations and manuscript traditions preserve distance data that
+      later interpreters handled differently.
+    claim_type: geographic_identification
+    confidence: medium
+    related_event_ids:
+      - luke_007
+    related_person_ids:
+      - cleopas
+      - jesus
+    related_place_ids:
+      - emmaus
+    source_refs:
+      - source_id: barrington_atlas
+        citation: Barrington Atlas, Jerusalem region mapping
+      - source_id: codex_bezae
+        citation: Codex Bezae witness to Luke 24 route detail
+      - source_id: green_luke_commentary
+        citation: Commentary discussion on Luke 24:13-35
+  - id: claim_luke_bethany_ascension_tradition
+    statement: >
+      Luke's closing movement ties the ascension to the vicinity of Bethany,
+      while later Christian memory helped localize the scene more specifically
+      on the Mount of Olives through traditional site identification.
+    claim_type: later_tradition
+    confidence: medium
+    related_event_ids:
+      - luke_009
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - bethany
+    source_refs:
+      - source_id: barrington_atlas
+        citation: Barrington Atlas, Jerusalem-Bethany corridor
+      - source_id: green_luke_commentary
+        citation: Commentary discussion on Luke 24:50-53

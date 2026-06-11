@@ -54,7 +54,7 @@ export const explorerViews: ExplorerViewOption[] = [
   {
     id: "sources",
     label: "Sources",
-    description: "Source and rights preview for the selected record."
+    description: "Source explorer with claims, attestation groupings, and rights transparency."
   }
 ];
 

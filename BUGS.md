@@ -1,3 +1,6 @@
 # App regression for timline and map views 
 
 The journey type visibility should be made more functional on the map. Right now it does not seem to select things correctly. Users should be able to select multiple journeys. I also think that the journey to rome is missing. Finally, can we make it more extensible for future journeys? For example, users can select journeys to see from a drop down or something similar. I also think the timeline view needs to be harmonized with the examples/ui view because right now it shows up as a list in the application whereas it showed up as a scrollable timeline in the example. Finally I think that the "overview" page should allow users to select books (eg. Acts or Luke) and should be where other controls such as confidence level show up. 
+
+# Luke is missing meta-data
+The events, people, timelines, and places from Luke do not seem to be present in the app. It is as though the extraction of these data either has not occurred or it has not been rendered. I would expect this book to have at least as many if not more entries than Acts. 

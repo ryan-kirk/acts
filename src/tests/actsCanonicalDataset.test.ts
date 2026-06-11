@@ -13,11 +13,14 @@ describe("canonical scripture datasets", () => {
     expect(dataset.places.length).toBeGreaterThanOrEqual(8);
     expect(dataset.people.length).toBeGreaterThanOrEqual(8);
     expect(dataset.journeys.length).toBeGreaterThanOrEqual(2);
+    expect(dataset.sources.length).toBeGreaterThan(1);
+    expect(dataset.claims.length).toBeGreaterThan(0);
 
     expect(dataset.events.every((event) => event.source_refs.length > 0)).toBe(true);
     expect(dataset.sources.every((source) => source.usage_rights.status !== "unknown")).toBe(
       true
     );
+    expect(dataset.sources.some((source) => source.type !== "scripture")).toBe(true);
     expect(
       dataset.places.some((place) => place.location_certainty !== "exact")
     ).toBe(true);
@@ -30,10 +33,13 @@ describe("canonical scripture datasets", () => {
     expect(dataset.events.length).toBeGreaterThanOrEqual(8);
     expect(dataset.places.length).toBeGreaterThanOrEqual(6);
     expect(dataset.people.length).toBeGreaterThanOrEqual(8);
+    expect(dataset.sources.length).toBeGreaterThan(1);
+    expect(dataset.claims.length).toBeGreaterThan(0);
     expect(dataset.events.every((event) => event.source_refs.length > 0)).toBe(true);
     expect(dataset.sources.every((source) => source.usage_rights.status !== "unknown")).toBe(
       true
     );
+    expect(dataset.sources.some((source) => source.type !== "scripture")).toBe(true);
     expect(
       dataset.places.some((place) => place.location_certainty !== "exact")
     ).toBe(true);

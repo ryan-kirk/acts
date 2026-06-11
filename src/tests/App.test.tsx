@@ -129,7 +129,7 @@ describe("App", () => {
     const inspector = screen.getByLabelText(/selected event details/i);
 
     fireEvent.click(
-      within(inspector).getByRole("button", { name: /paul under house arrest in rome/i })
+      within(inspector).getAllByRole("button", { name: /paul under house arrest in rome/i })[0]!
     );
 
     expect(
@@ -161,7 +161,7 @@ describe("App", () => {
       within(inspector).getByRole("button", { name: /open source focus for book of acts/i })
     );
     expect(screen.getByText(/source-backed events in view/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/not_applicable/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/not applicable/i)[0]).toBeInTheDocument();
   });
 
   it("supports people search and cross-record navigation from biographical detail", () => {
@@ -232,6 +232,65 @@ describe("App", () => {
     expect(within(timeline).getByText(/luke chronology/i)).toBeInTheDocument();
     expect(within(timeline).getByRole("button", { name: /birth of jesus in bethlehem/i }))
       .toBeInTheDocument();
+  });
+
+  it("renders external claims in the inspector without replacing canonical event detail", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /arrest of paul in jerusalem/i }));
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    expect(
+      within(inspector).getByRole("heading", { name: /external attestation & claims/i })
+    ).toBeInTheDocument();
+    expect(
+      within(inspector).getByText(/temple warning inscription gives concrete archaeological context/i)
+    ).toBeInTheDocument();
+    expect(
+      within(inspector).getByRole("button", { name: /temple warning inscription/i })
+    ).toBeInTheDocument();
+    expect(within(inspector).getByRole("heading", { name: /arrest of paul in jerusalem/i }))
+      .toBeInTheDocument();
+  });
+
+  it("renders the sources explorer with grouped witnesses, claims, and rights transparency", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /mars hill address/i }));
+    fireEvent.click(screen.getByRole("tab", { name: /sources/i }));
+
+    const sourcesExplorer = screen.getByLabelText(/scripture sources explorer/i);
+
+    expect(
+      within(sourcesExplorer).getByRole("heading", { name: /sources & attestation/i })
+    ).toBeInTheDocument();
+    expect(
+      within(sourcesExplorer).getByRole("heading", { name: /scriptural witnesses/i })
+    ).toBeInTheDocument();
+    expect(
+      within(sourcesExplorer).getByRole("heading", {
+        name: /historical & scholarly witnesses/i
+      })
+    ).toBeInTheDocument();
+    expect(within(sourcesExplorer).getByRole("heading", { name: /claims in view/i }))
+      .toBeInTheDocument();
+    expect(
+      within(sourcesExplorer).getByText(
+        /the gallio inscription provides the strongest fixed chronological anchor/i
+      )
+    ).toBeInTheDocument();
+
+    fireEvent.click(
+      within(sourcesExplorer).getAllByRole("button", { name: /gallio inscription/i })[0]!
+    );
+
+    expect(within(sourcesExplorer).getAllByText(/cleared/i).length).toBeGreaterThan(0);
+    expect(
+      within(sourcesExplorer).getAllByText(
+        /delphi inscription, fouilles de delphes iii 4:286/i
+      ).length
+    ).toBeGreaterThan(0);
   });
 
   it("renders the map explorer controls, legend, and default place context", () => {

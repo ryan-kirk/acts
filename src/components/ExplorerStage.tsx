@@ -2,14 +2,10 @@ import type { JSX } from "react";
 
 import { MapView } from "../components/MapView";
 import { PeopleView } from "../components/PeopleView";
+import { SourcesView } from "../components/SourcesView";
 import { TimelineView } from "../components/TimelineView";
 import type { Event } from "../domain/dataset";
-import {
-  formatSourceType,
-  getEventsForSource,
-  type DatasetIndex,
-  type ExplorerView
-} from "../domain/events";
+import { type DatasetIndex, type ExplorerView } from "../domain/events";
 import type { ExplorerDataset } from "../domain/library";
 import type { TimelineFilters } from "../domain/timeline";
 
@@ -27,6 +23,7 @@ interface ExplorerStageProps {
   timelineFilters: TimelineFilters;
   onFocusPerson: (personId: string) => void;
   onFocusPlace: (placeId: string) => void;
+  onFocusSource: (sourceId: string) => void;
   onSelectEvent: (eventId: string) => void;
   onTimelineFiltersChange: (filters: TimelineFilters) => void;
 }
@@ -45,16 +42,10 @@ export function ExplorerStage({
   timelineFilters,
   onFocusPerson,
   onFocusPlace,
+  onFocusSource,
   onSelectEvent,
   onTimelineFiltersChange
 }: ExplorerStageProps) {
-  const defaultSourceId = event.source_refs[0]?.source_id ?? dataset.sources[0]?.id ?? null;
-  const activeSourceId = focusedSourceId ?? defaultSourceId;
-  const focusedSource = activeSourceId ? index.sourcesById.get(activeSourceId) ?? null : null;
-  const selectedSources = event.source_refs.flatMap((sourceRef) =>
-    index.sourcesById.has(sourceRef.source_id) ? [sourceRef] : []
-  );
-
   let content: JSX.Element;
 
   switch (activeView) {
@@ -104,73 +95,18 @@ export function ExplorerStage({
       );
       break;
     case "sources":
-      if (focusedSource === null) {
-        content = (
-          <div className="stage-stack">
-            <div className="stage-card">
-              <p className="stage-card-eyebrow">Source Preview</p>
-              <h3>No source focus available</h3>
-              <p>The selected event does not currently resolve to a known source record.</p>
-            </div>
-          </div>
-        );
-        break;
-      }
-
       content = (
-        <div className="stage-stack">
-          <div className="stage-card">
-            <p className="stage-card-eyebrow">Source Focus</p>
-            <h3>{focusedSource.name}</h3>
-            <p>{focusedSource.citation}</p>
-
-            <dl className="preview-meta-grid">
-              <div>
-                <dt>Type</dt>
-                <dd>{formatSourceType(focusedSource.type)}</dd>
-              </div>
-              <div>
-                <dt>Rights Status</dt>
-                <dd>{focusedSource.usage_rights.status}</dd>
-              </div>
-              <div>
-                <dt>Author</dt>
-                <dd>{focusedSource.author ?? "Not specified"}</dd>
-              </div>
-              <div>
-                <dt>Selected Citations</dt>
-                <dd>{selectedSources.length}</dd>
-              </div>
-            </dl>
-
-            {focusedSource.usage_rights.usage_notes ? (
-              <p className="muted-copy">{focusedSource.usage_rights.usage_notes}</p>
-            ) : null}
-          </div>
-          <div className="stage-card stage-card-compact">
-            <h3>Source-backed events in view</h3>
-            <ul className="linked-record-list">
-              {getEventsForSource(focusedSource.id, events).map((sourceEvent) => (
-                <li key={sourceEvent.id}>
-                  <button
-                    type="button"
-                    className="linked-record-button"
-                    onClick={() => onSelectEvent(sourceEvent.id)}
-                  >
-                    <strong>{sourceEvent.title}</strong>
-                    <span>
-                      {
-                        sourceEvent.source_refs.find(
-                          (sourceRef) => sourceRef.source_id === focusedSource.id
-                        )?.citation
-                      }
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <SourcesView
+          activeBookLabel={activeBookLabel}
+          dataset={dataset}
+          eventBookLabels={eventBookLabels}
+          events={events}
+          focusedSourceId={focusedSourceId}
+          index={index}
+          onFocusSource={onFocusSource}
+          onSelectEvent={onSelectEvent}
+          selectedEvent={event}
+        />
       );
       break;
     case "overview":

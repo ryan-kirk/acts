@@ -25,6 +25,130 @@ sources:
         Event, place, person, journey, and relationship records are grounded in
         passage references only. If translation text is added later, that text
         will require separate rights review.
+  - id: josephus_antiquities
+    name: Antiquities of the Jews
+    type: historical
+    citation: Josephus, Antiquities 19.338-352
+    author: Flavius Josephus
+    publication_date: c. 93-94 AD
+    usage_rights:
+      status: cleared
+      attribution_text: >
+        Historical claims cite Josephus at the reference level only and do not
+        reproduce translated text.
+      usage_notes: >
+        Public-domain and licensed translations vary. If direct quotations are
+        added later, translation-specific attribution and rights review will be
+        required.
+  - id: gallio_inscription
+    name: Gallio Inscription (Delphi)
+    type: archaeological
+    citation: Delphi Inscription, Fouilles de Delphes III 4:286
+    author: Claudius (inscribed letter)
+    publication_date: 52 AD
+    usage_rights:
+      status: cleared
+      attribution_text: >
+        Archaeological references cite the inscription and standard editions
+        without reproducing a full translation in the app.
+      usage_notes: >
+        Chronology notes derived from the inscription remain paraphrased unless
+        a translation with explicit reuse terms is added later.
+  - id: temple_warning_inscription
+    name: Temple Warning Inscription
+    type: archaeological
+    citation: Temple Warning Inscription, 23 BC-70 AD
+    publication_date: 1st century AD
+    usage_rights:
+      status: cleared
+      attribution_text: >
+        Archaeological context references cite the inscription and find record
+        only; no image or transcription asset is embedded.
+      usage_notes: >
+        If photographs, estampages, or published transcriptions are added
+        later, repository and edition terms must be surfaced to users.
+  - id: aratus_phaenomena
+    name: Phaenomena
+    type: book
+    author: Aratus of Soli
+    citation: Aratus, Phaenomena 1-5
+    publication_date: 3rd century BC
+    usage_rights:
+      status: cleared
+      attribution_text: >
+        Classical literary references are modeled as citations only.
+      usage_notes: >
+        Any direct translated excerpts would require edition-specific
+        attribution and review.
+  - id: eusebius_church_history
+    name: Ecclesiastical History
+    type: historical
+    author: Eusebius of Caesarea
+    citation: Eusebius, Ecclesiastical History 2.22
+    publication_date: 4th century AD
+    usage_rights:
+      status: cleared
+      attribution_text: >
+        Later Christian historical traditions are cited without reproducing
+        translation text.
+      usage_notes: >
+        Future quotation support should identify the exact translation or
+        edition in use.
+  - id: barrington_atlas
+    name: Barrington Atlas of the Greek and Roman World
+    type: atlas
+    author: Richard J. A. Talbert, ed.
+    citation: Barrington Atlas of the Greek and Roman World
+    publication_date: "2000"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Geographic context cites the atlas bibliographically and does not
+        reproduce map plates or directory entries.
+      usage_notes: >
+        Any future use of atlas imagery, scans, or proprietary map assets must
+        receive separate permissions review.
+  - id: codex_bezae
+    name: Codex Bezae Cantabrigiensis
+    type: manuscript
+    citation: Codex Bezae (5th century), Acts and Luke witnesses
+    publication_date: 5th century AD
+    usage_rights:
+      status: cleared
+      attribution_text: >
+        Manuscript witnesses are cited by shelfmark and passage only; no image
+        or transcription assets are embedded.
+      usage_notes: >
+        If manuscript images or diplomatic transcriptions are added later,
+        repository-specific terms must be surfaced in the UI.
+  - id: winter_gallio_judgement
+    name: Rehabilitating Gallio and his Judgement in Acts 18:14-15
+    type: scholarly_article
+    author: Bruce W. Winter
+    citation: Tyndale Bulletin 57.2 (2006)
+    publication_date: "2006"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Scholarly articles are cited bibliographically only and are not
+        reproduced in the app.
+      usage_notes: >
+        Quotations, scans, or hosted PDFs require journal-specific rights
+        review and attribution.
+  - id: witherington_acts_commentary
+    name: The Acts of the Apostles
+    type: commentary
+    author: Ben Witherington III
+    citation: A Socio-Rhetorical Commentary
+    publication_date: "1998"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Commentary citations support claims and chronology notes without
+        embedding copyrighted prose.
+      usage_notes: >
+        Any future excerpting or quotation must comply with publisher
+        permissions.
 
 places:
   - id: jerusalem
@@ -1000,4 +1124,130 @@ tags:
     description: Events centered on significant sea travel and transit.
     group: movement
 
-claims: []
+claims:
+  - id: claim_acts_caesarea_context
+    statement: >
+      Caesarea Maritima functioned as the Roman administrative capital of
+      Judaea in the early first century, matching Acts's portrayal of
+      Cornelius's household and later Roman custody proceedings there.
+    claim_type: historical_context
+    confidence: medium
+    related_event_ids:
+      - acts_007
+    related_person_ids:
+      - cornelius
+    related_place_ids:
+      - caesarea
+    source_refs:
+      - source_id: josephus_antiquities
+        citation: Antiquities 19.338-352
+      - source_id: barrington_atlas
+        citation: Barrington Atlas, Syria-Meroe regional mapping
+  - id: claim_acts_gallio_anchor
+    statement: >
+      The Gallio inscription provides the strongest fixed chronological anchor
+      for Paul's second-journey ministry in Achaia, helping situate nearby
+      Macedonian and Athenian episodes around AD 51-52.
+    claim_type: chronology_anchor
+    confidence: high
+    related_event_ids:
+      - acts_011
+      - acts_012
+    related_person_ids:
+      - paul
+    related_place_ids:
+      - philippi
+      - athens
+    source_refs:
+      - source_id: gallio_inscription
+        citation: Delphi Inscription, Fouilles de Delphes III 4:286
+      - source_id: winter_gallio_judgement
+        citation: Tyndale Bulletin 57.2 (2006)
+  - id: claim_acts_areopagus_literary_context
+    statement: >
+      Paul's Areopagus address likely echoes Aratus's Phaenomena, showing
+      engagement with Hellenistic literary culture rather than a purely
+      intra-scriptural proof pattern.
+    claim_type: literary_context
+    confidence: medium
+    related_event_ids:
+      - acts_012
+    related_person_ids:
+      - paul
+    related_place_ids:
+      - athens
+    source_refs:
+      - source_id: aratus_phaenomena
+        citation: Phaenomena 1-5
+      - source_id: witherington_acts_commentary
+        citation: Commentary discussion on Acts 17:22-31
+  - id: claim_acts_temple_barrier_context
+    statement: >
+      The Jerusalem Temple warning inscription gives concrete archaeological
+      context for the accusation that Paul brought a Gentile beyond the
+      permitted boundary and thereby triggered the arrest scene.
+    claim_type: archaeological_context
+    confidence: high
+    related_event_ids:
+      - acts_015
+    related_person_ids:
+      - paul
+    related_place_ids:
+      - jerusalem
+    source_refs:
+      - source_id: temple_warning_inscription
+        citation: Temple Warning Inscription
+      - source_id: witherington_acts_commentary
+        citation: Commentary discussion on Acts 21:27-29
+  - id: claim_acts_malta_identification
+    statement: >
+      The shipwreck setting is traditionally identified with Malta, but route
+      reconstruction and coastal arguments remain interpretive rather than
+      explicit in Acts itself.
+    claim_type: geographic_identification
+    confidence: medium
+    related_event_ids:
+      - acts_016
+    related_person_ids:
+      - paul
+    related_place_ids:
+      - malta
+    source_refs:
+      - source_id: barrington_atlas
+        citation: Barrington Atlas, central Mediterranean mapping
+      - source_id: witherington_acts_commentary
+        citation: Commentary discussion on Acts 27-28
+  - id: claim_acts_rome_later_tradition
+    statement: >
+      Eusebius preserves a later Christian tradition that Paul's Roman
+      imprisonment continued into a wider ministry and possible release beyond
+      the open-ended close of Acts.
+    claim_type: later_tradition
+    confidence: low
+    related_event_ids:
+      - acts_017
+    related_person_ids:
+      - paul
+    related_place_ids:
+      - rome
+    source_refs:
+      - source_id: eusebius_church_history
+        citation: Ecclesiastical History 2.22
+  - id: claim_acts_western_text_expansion
+    statement: >
+      Western-text witnesses such as Codex Bezae preserve expanded readings in
+      Acts, showing how later manuscript traditions sometimes elaborated travel
+      and speech material beyond the shorter canonical form.
+    claim_type: manuscript_tradition
+    confidence: low
+    related_event_ids:
+      - acts_016
+      - acts_017
+    related_person_ids:
+      - paul
+    related_place_ids:
+      - malta
+      - rome
+    source_refs:
+      - source_id: codex_bezae
+        citation: Codex Bezae witness to Acts travel and speech expansions

@@ -219,6 +219,7 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
             timelineFilters={timelineFilters}
             onFocusPerson={handleFocusPerson}
             onFocusPlace={handleFocusPlace}
+            onFocusSource={handleFocusSource}
             onSelectEvent={handleSelectEvent}
             onTimelineFiltersChange={setTimelineFilters}
           />
@@ -227,6 +228,7 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
         <aside className={`surface inspector-surface ${isInspectorOpen ? "is-open" : ""}`}>
           <EventInspector
             activeBookLabel={activeBookLabel}
+            dataset={filteredDataset}
             event={selectedEvent}
             eventBookLabel={
               getEventBookLabel(dataset, provenance, selectedEvent.id) ?? activeBookLabel
