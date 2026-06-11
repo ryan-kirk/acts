@@ -137,7 +137,7 @@ describe("App", () => {
     expect(within(inspector).getByText(/acts 28:16-31/i)).toBeInTheDocument();
   });
 
-  it("lets person, place, and source actions open focused preview surfaces", () => {
+  it("lets person, place, and source actions open focused explorer surfaces", () => {
     render(<App />);
 
     const inspector = screen.getByLabelText(/selected event details/i);
@@ -145,6 +145,8 @@ describe("App", () => {
     fireEvent.click(
       within(inspector).getByRole("button", { name: /open person focus for jesus christ/i })
     );
+    expect(screen.getByLabelText(/acts people explorer/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /jesus christ/i })).toBeInTheDocument();
     expect(screen.getAllByText(/risen lord/i).length).toBeGreaterThan(0);
 
     fireEvent.click(screen.getByRole("button", { name: /shipwreck on malta/i }));
@@ -159,6 +161,42 @@ describe("App", () => {
     );
     expect(screen.getByText(/source-backed acts events/i)).toBeInTheDocument();
     expect(screen.getAllByText(/not_applicable/i)[0]).toBeInTheDocument();
+  });
+
+  it("supports people search and cross-record navigation from biographical detail", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: /people/i }));
+
+    const peopleExplorer = screen.getByLabelText(/acts people explorer/i);
+
+    fireEvent.change(within(peopleExplorer).getByLabelText(/search people/i), {
+      target: { value: "Cornelius" }
+    });
+
+    fireEvent.click(within(peopleExplorer).getByRole("button", { name: /cornelius/i }));
+
+    expect(within(peopleExplorer).getByRole("heading", { name: /cornelius/i }))
+      .toBeInTheDocument();
+    expect(within(peopleExplorer).getAllByText(/roman centurion/i).length).toBeGreaterThan(0);
+
+    fireEvent.click(
+      within(peopleExplorer).getByRole("button", { name: /conversion of cornelius/i })
+    );
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    expect(
+      within(inspector).getByRole("heading", { name: /conversion of cornelius/i })
+    ).toBeInTheDocument();
+    expect(within(peopleExplorer).getByRole("heading", { name: /cornelius/i }))
+      .toBeInTheDocument();
+
+    fireEvent.click(within(peopleExplorer).getByRole("button", { name: /open person focus/i }));
+
+    expect(within(peopleExplorer).getByRole("heading", { name: /^peter$/i }))
+      .toBeInTheDocument();
+    expect(within(peopleExplorer).getAllByText(/apostle/i).length).toBeGreaterThan(0);
   });
 
   it("filters the event rail by location and keeps filtering deterministic", () => {

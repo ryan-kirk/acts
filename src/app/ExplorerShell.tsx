@@ -98,8 +98,8 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
           <h1>Acts explorer with shared navigation, filtering, and a real chronology view.</h1>
           <p className="lede">
             The app now boots directly from the canonical Acts dataset and keeps a shared
-            event selection across a working timeline explorer, a place-aware map
-            explorer, and the remaining people and sources preview surfaces.
+            event selection across working timeline, map, and people explorers,
+            with the sources surface still queued for deeper expansion.
           </p>
         </div>
         <div className="status-cluster" aria-label="Dataset status">
@@ -155,6 +155,7 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
             focusedPlaceId={focusedPlaceId}
             focusedSourceId={focusedSourceId}
             timelineFilters={timelineFilters}
+            onFocusPerson={handleFocusPerson}
             onFocusPlace={handleFocusPlace}
             onSelectEvent={handleSelectEvent}
             onTimelineFiltersChange={setTimelineFilters}

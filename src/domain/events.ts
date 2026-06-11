@@ -49,7 +49,7 @@ export const explorerViews: ExplorerViewOption[] = [
   {
     id: "people",
     label: "People",
-    description: "Participant preview from the selected event."
+    description: "Searchable Acts people explorer with appearances, places, and relationship context."
   },
   {
     id: "sources",

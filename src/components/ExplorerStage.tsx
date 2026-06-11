@@ -1,14 +1,13 @@
 import type { JSX } from "react";
 
 import { MapView } from "../components/MapView";
+import { PeopleView } from "../components/PeopleView";
 import { TimelineView } from "../components/TimelineView";
 import type { CanonicalDataset, Event } from "../domain/dataset";
 import {
   explorerViews,
   formatSourceType,
-  getEventsForPerson,
   getEventsForSource,
-  getEventParticipants,
   type DatasetIndex,
   type ExplorerView
 } from "../domain/events";
@@ -24,6 +23,7 @@ interface ExplorerStageProps {
   focusedPlaceId: string | null;
   focusedSourceId: string | null;
   timelineFilters: TimelineFilters;
+  onFocusPerson: (personId: string) => void;
   onFocusPlace: (placeId: string) => void;
   onSelectEvent: (eventId: string) => void;
   onTimelineFiltersChange: (filters: TimelineFilters) => void;
@@ -39,14 +39,12 @@ export function ExplorerStage({
   focusedPlaceId,
   focusedSourceId,
   timelineFilters,
+  onFocusPerson,
   onFocusPlace,
   onSelectEvent,
   onTimelineFiltersChange
 }: ExplorerStageProps) {
   const selectedView = explorerViews.find((view) => view.id === activeView) ?? explorerViews[0]!;
-  const participants = getEventParticipants(event, index);
-  const focusedPerson =
-    (focusedPersonId ? index.peopleById.get(focusedPersonId) : null) ?? participants[0] ?? null;
   const defaultSourceId = event.source_refs[0]?.source_id ?? dataset.sources[0]?.id ?? null;
   const activeSourceId = focusedSourceId ?? defaultSourceId;
   const focusedSource = activeSourceId ? index.sourcesById.get(activeSourceId) ?? null : null;
@@ -84,59 +82,17 @@ export function ExplorerStage({
       );
       break;
     case "people":
-      if (focusedPerson === null) {
-        content = (
-          <div className="stage-stack">
-            <div className="stage-card">
-              <p className="stage-card-eyebrow">People Preview</p>
-              <h3>No person focus available</h3>
-              <p>The selected event does not currently resolve to any participant records.</p>
-            </div>
-          </div>
-        );
-        break;
-      }
-
       content = (
-        <div className="stage-stack">
-          <div className="stage-card">
-            <p className="stage-card-eyebrow">Person Focus</p>
-            <h3>{focusedPerson.name}</h3>
-            <p>{focusedPerson.summary ?? "No person summary has been modeled yet."}</p>
-
-            <dl className="preview-meta-grid">
-              <div>
-                <dt>Role</dt>
-                <dd>{focusedPerson.role ?? "Role not specified"}</dd>
-              </div>
-              <div>
-                <dt>Aliases</dt>
-                <dd>
-                  {focusedPerson.aliases.length > 0
-                    ? focusedPerson.aliases.join(", ")
-                    : "No aliases recorded"}
-                </dd>
-              </div>
-            </dl>
-          </div>
-          <div className="stage-card stage-card-compact">
-            <h3>Acts appearances</h3>
-            <ul className="linked-record-list">
-              {getEventsForPerson(focusedPerson.id, events).map((appearance) => (
-                <li key={appearance.id}>
-                  <button
-                    type="button"
-                    className="linked-record-button"
-                    onClick={() => onSelectEvent(appearance.id)}
-                  >
-                    <strong>{appearance.title}</strong>
-                    <span>{appearance.source_refs[0]?.citation ?? "Citation pending"}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <PeopleView
+          dataset={dataset}
+          event={event}
+          focusedPersonId={focusedPersonId}
+          index={index}
+          onFocusPerson={onFocusPerson}
+          onFocusPlace={onFocusPlace}
+          onSelectEvent={onSelectEvent}
+          selectedEventId={event.id}
+        />
       );
       break;
     case "sources":

@@ -1130,6 +1130,298 @@ body {
   margin-top: 1rem;
 }
 
+.people-view {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.people-toolbar,
+.people-counts,
+.people-badge-row,
+.people-record-meta {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.people-toolbar,
+.people-counts,
+.people-badge-row {
+  flex-wrap: wrap;
+}
+
+.people-count-pill,
+.people-stat-badge,
+.people-record-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.people-count-pill,
+.people-stat-badge {
+  padding: 0.42rem 0.72rem;
+  border: 1px solid rgba(85, 103, 80, 0.14);
+}
+
+.people-count-pill {
+  background: rgba(255, 251, 243, 0.92);
+  color: #314132;
+}
+
+.people-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.people-list-panel,
+.people-detail-card,
+.people-relationship-card {
+  border-radius: 1.3rem;
+}
+
+.people-list-panel {
+  padding: 1rem;
+  border: 1px solid rgba(72, 56, 34, 0.18);
+  background:
+    linear-gradient(180deg, rgba(53, 40, 25, 0.96), rgba(76, 56, 33, 0.92)),
+    rgba(52, 39, 24, 0.92);
+  box-shadow: inset 0 1px 0 rgba(255, 245, 222, 0.08);
+}
+
+.people-search-field {
+  display: grid;
+  gap: 0.45rem;
+  color: #f3e5c2;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.people-search-input {
+  width: 100%;
+  padding: 0.82rem 0.95rem;
+  border: 1px solid rgba(226, 198, 146, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 245, 222, 0.08);
+  color: #f8ecd2;
+  font: inherit;
+  font-size: 0.96rem;
+}
+
+.people-search-input::placeholder {
+  color: rgba(240, 226, 196, 0.56);
+}
+
+.people-search-input:focus,
+.people-record-button:focus {
+  outline: 2px solid rgba(215, 188, 131, 0.36);
+  outline-offset: 2px;
+}
+
+.people-record-list {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.people-record-button {
+  width: 100%;
+  padding: 0.95rem;
+  border: 1px solid rgba(232, 211, 174, 0.12);
+  border-radius: 1.1rem;
+  background: rgba(255, 245, 222, 0.06);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.people-record-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(239, 211, 160, 0.28);
+  box-shadow: 0 12px 22px rgba(27, 20, 12, 0.16);
+}
+
+.people-record-button.is-selected {
+  border-color: rgba(247, 228, 191, 0.34);
+  background: rgba(229, 191, 125, 0.16);
+  box-shadow: 0 16px 28px rgba(27, 20, 12, 0.22);
+}
+
+.people-record-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.people-record-header strong {
+  font-family: "Iowan Old Style", "Palatino Linotype", serif;
+  font-size: 1.15rem;
+  color: #f6ebd1;
+}
+
+.people-record-badge {
+  min-height: auto;
+  padding: 0.3rem 0.58rem;
+  border: 1px solid rgba(237, 214, 171, 0.22);
+  background: rgba(29, 22, 14, 0.32);
+  color: #edc97b;
+}
+
+.people-record-role,
+.people-record-aliases,
+.people-record-meta {
+  display: block;
+}
+
+.people-record-role {
+  margin-top: 0.35rem;
+  color: #dbc08b;
+  font-size: 0.92rem;
+}
+
+.people-record-aliases {
+  margin-top: 0.28rem;
+  color: rgba(236, 222, 192, 0.72);
+  font-size: 0.88rem;
+}
+
+.people-record-meta {
+  margin-top: 0.55rem;
+  flex-wrap: wrap;
+  color: rgba(242, 231, 206, 0.72);
+  font-size: 0.82rem;
+}
+
+.people-detail-panel {
+  min-width: 0;
+}
+
+.people-detail-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.people-detail-card {
+  padding: 1.15rem 1.2rem;
+  border: 1px solid rgba(78, 98, 73, 0.14);
+  background:
+    radial-gradient(circle at top right, rgba(201, 146, 42, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 252, 246, 0.96), rgba(248, 243, 233, 0.94));
+}
+
+.people-detail-eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7a5f34;
+}
+
+.people-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.people-detail-header h3 {
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", serif;
+  font-size: 1.9rem;
+  color: #2b392f;
+}
+
+.people-detail-aliases {
+  margin: 0.35rem 0 0;
+  color: #5a6558;
+}
+
+.people-badge-row {
+  margin-top: 1rem;
+}
+
+.people-stat-badge {
+  background: rgba(252, 246, 234, 0.92);
+  color: #40503f;
+}
+
+.people-detail-summary {
+  margin: 1rem 0 0;
+  color: #4b564a;
+  font-size: 1.02rem;
+}
+
+.people-section {
+  margin-top: 0;
+}
+
+.people-hidden-note {
+  margin: 0 0 1rem;
+}
+
+.people-empty-list {
+  margin-top: 1rem;
+  border-color: rgba(237, 214, 171, 0.16);
+  background: rgba(255, 245, 222, 0.08);
+  color: #f4ead1;
+}
+
+.people-relationship-list {
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.people-relationship-card {
+  padding: 0.95rem;
+  border: 1px solid rgba(79, 96, 75, 0.14);
+  background: rgba(255, 250, 241, 0.72);
+}
+
+.people-relationship-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.people-relationship-direction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.58rem;
+  border-radius: 999px;
+  border: 1px solid rgba(85, 103, 80, 0.14);
+  background: rgba(252, 246, 234, 0.92);
+  color: #5d6859;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.people-relationship-citation {
+  margin: 0.65rem 0 0;
+  color: #546152;
+  font-size: 0.92rem;
+}
+
 .timeline-event-card.category-governance .timeline-event-marker {
   background: #496a56;
 }
@@ -1214,6 +1506,10 @@ body {
     width: min(300px, calc(100% - 3.7rem));
   }
 
+  .people-layout {
+    grid-template-columns: 1fr;
+  }
+
   .preview-meta-grid {
     grid-template-columns: 1fr;
   }
@@ -1288,7 +1584,10 @@ body {
   .section-header-row,
   .entity-card-header,
   .citation-header,
-  .map-place-header {
+  .map-place-header,
+  .people-detail-header,
+  .people-record-header,
+  .people-relationship-header {
     flex-direction: column;
   }
 }
@@ -1326,6 +1625,13 @@ body {
 
   .map-canvas {
     min-height: 22rem;
+  }
+
+  .people-list-panel,
+  .people-detail-card,
+  .people-relationship-card {
+    padding-left: 0.95rem;
+    padding-right: 0.95rem;
   }
 
   .preview-meta-grid {

@@ -6,7 +6,7 @@ Bible Time & Place Explorer is a source-grounded application for exploring bibli
 
 ## Current Development Status
 
-The repository now has a working Phase 7 map explorer and place-interaction layer on top of the scaffold, delivery baseline, validation layer, canonical Acts dataset, timeline explorer, and event inspector.
+The repository now has a working Phase 8 people explorer and entity-context layer on top of the scaffold, delivery baseline, validation layer, canonical Acts dataset, timeline explorer, map explorer, and event inspector.
 
 - Core planning documents are in place in `AGENTS.md`, `STRATEGY.md`, and `BACKLOG.md`.
 - A strict TypeScript `React + Vite + Vitest` frontend scaffold is in place.
@@ -19,10 +19,11 @@ The repository now has a working Phase 7 map explorer and place-interaction laye
 - The explorer shell now includes top-level `Overview`, `Timeline`, `Map`, `People`, and `Sources` navigation, a searchable Acts event rail, a responsive detail panel, and a real timeline explorer.
 - The timeline view now renders canonical Acts events in chronological order with era bands, certainty legend cards, category-toned styling, and first-pass filters for category, person, place, certainty, and date range.
 - The map view now renders validated Acts places with Leaflet, basemap switching, location-certainty styling, journey overlay toggles, attribution, and a place interaction panel tied to canonical records.
+- The people view now renders a searchable Acts biographical catalog with person summaries, aliases, appearance lists, related places, normalized relationship context, and source-backed record support.
 - The event inspector now renders source-grounded record detail with chronology explanations, place context, participant summaries, source-type distinctions, journey context, and related-event navigation.
 - People, place, and source actions from the inspector now open focused preview surfaces without losing the selected Acts event.
-- People and sources are still preview surfaces rather than their full dedicated explorer implementations.
-- The next major work is Phase 8 in `BACKLOG.md`: people explorer and entity context.
+- The sources view is still a preview surface rather than its full dedicated explorer implementation.
+- The next major work is Phase 9 in `BACKLOG.md`: journey overlays and route exploration.
 
 ## Setup
 
@@ -72,22 +73,23 @@ npm run build
 
 ## Current App Scope
 
-The current app is now a small but real explorer shell with a working timeline, map explorer, and source-grounded event detail surface.
+The current app is now a small but real explorer shell with working timeline, map, and people explorers plus a source-grounded event detail surface.
 
 - It proves the repository can build and test successfully.
 - It boots directly from the validated canonical Acts dataset in `data/acts.yaml`.
-- It provides shared view navigation for overview, a working timeline explorer, a working map explorer, and the remaining people and sources previews.
+- It provides shared view navigation for overview, a working timeline explorer, a working map explorer, a working people explorer, and the remaining sources preview.
 - It includes a searchable Acts event rail with deterministic filtering and active selection styling.
 - It includes a chronological Acts timeline grouped into era bands and styled by category and certainty.
 - It includes first-pass timeline filters for category, person, place, certainty, and date range.
 - It includes a map explorer with validated place markers, basemap controls, journey overlay toggles, location-certainty legend, attribution, and a place interaction panel with related event links.
+- It includes a people explorer with searchable biographical records, alias and role metadata, linked Acts appearances, place navigation, normalized relationship context, and source support for person records.
 - It includes a responsive event detail surface with chronology explanation, place context, participant summaries, journey context, related-event navigation, and source-support details.
 - It includes linked person, place, and source focus actions that open the corresponding preview surfaces while preserving the current selected event.
 - It includes baseline CI verification and Fly.io deployment configuration for the static frontend.
 - It now includes canonical schema types, dataset loading utilities, and validation rules for normalized YAML or JSON datasets.
 - It now tracks source usage-rights metadata in the schema so licensing and terms information can be captured per source record.
 - It now includes a validated canonical Acts dataset in `data/acts.yaml`.
-- It does not yet include the dedicated people explorer, sources explorer, URL persistence, relationship-driven detail extensions, or later multi-book and external-source phases.
+- It does not yet include the dedicated sources explorer, URL persistence, journey-selection detail, relationship-driven inspector extensions, or later multi-book and external-source phases.
 
 ## Environment Policy
 
