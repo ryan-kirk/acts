@@ -32,8 +32,26 @@ describe("App", () => {
 
     expect(within(inspector).getByRole("heading", { name: /shipwreck on malta/i }))
       .toBeInTheDocument();
-    expect(screen.getByText(/phase 11 will widen this into a source explorer/i))
+    expect(screen.getByText(/source-backed acts events/i))
       .toBeInTheDocument();
+  });
+
+  it("renders source-grounded inspector context for the selected event", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /shipwreck on malta/i }));
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    expect(within(inspector).getByRole("heading", { name: /chronology note/i }))
+      .toBeInTheDocument();
+    expect(within(inspector).getByText(/best-fit year or short range/i)).toBeInTheDocument();
+    expect(within(inspector).getByRole("heading", { name: /place context/i }))
+      .toBeInTheDocument();
+    expect(within(inspector).getAllByText(/traditional/i).length).toBeGreaterThan(0);
+    expect(within(inspector).getByRole("heading", { name: /source support/i }))
+      .toBeInTheDocument();
+    expect(within(inspector).getAllByText(/scripture/i).length).toBeGreaterThan(0);
   });
 
   it("renders the Acts timeline in chronological order", () => {
@@ -92,6 +110,48 @@ describe("App", () => {
     expect(
       within(inspector).getByRole("heading", { name: /philippian jailer converted/i })
     ).toBeInTheDocument();
+    expect(within(inspector).getByText(/acts 16:22-34/i)).toBeInTheDocument();
+  });
+
+  it("lets related event links update the inspector", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /shipwreck on malta/i }));
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    fireEvent.click(
+      within(inspector).getByRole("button", { name: /paul under house arrest in rome/i })
+    );
+
+    expect(
+      within(inspector).getByRole("heading", { name: /paul under house arrest in rome/i })
+    ).toBeInTheDocument();
+    expect(within(inspector).getByText(/acts 28:16-31/i)).toBeInTheDocument();
+  });
+
+  it("lets person, place, and source actions open focused preview surfaces", () => {
+    render(<App />);
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    fireEvent.click(
+      within(inspector).getByRole("button", { name: /open person focus for jesus christ/i })
+    );
+    expect(screen.getAllByText(/risen lord/i).length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole("button", { name: /shipwreck on malta/i }));
+
+    fireEvent.click(
+      within(inspector).getByRole("button", { name: /open place focus for malta/i })
+    );
+    expect(screen.getAllByText(/mediterranean/i).length).toBeGreaterThan(0);
+
+    fireEvent.click(
+      within(inspector).getByRole("button", { name: /open source focus for book of acts/i })
+    );
+    expect(screen.getByText(/source-backed acts events/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/not_applicable/i)[0]).toBeInTheDocument();
   });
 
   it("filters the event rail by location and keeps filtering deterministic", async () => {

@@ -385,9 +385,126 @@ body {
   color: #2e3b31;
 }
 
+.detail-section,
 .pill-section,
 .citation-block {
   margin-top: 1rem;
+}
+
+.section-header-row,
+.entity-card-header,
+.citation-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.section-header-row h3 {
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", serif;
+  font-size: 1.2rem;
+  color: #2b392f;
+}
+
+.detail-action-button {
+  padding: 0.48rem 0.78rem;
+  border: 1px solid rgba(76, 95, 66, 0.16);
+  border-radius: 999px;
+  background: rgba(236, 246, 235, 0.94);
+  color: #24402d;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.detail-action-button:focus,
+.linked-record-button:focus {
+  outline: 2px solid rgba(87, 123, 91, 0.42);
+  outline-offset: 2px;
+}
+
+.context-note,
+.entity-meta,
+.entity-summary {
+  color: #4b564a;
+}
+
+.context-note,
+.entity-summary {
+  margin: 0.7rem 0 0;
+}
+
+.entity-meta {
+  margin: 0.5rem 0 0;
+  font-size: 0.92rem;
+}
+
+.entity-card,
+.linked-record-button {
+  border: 1px solid rgba(79, 96, 75, 0.14);
+  border-radius: 1.1rem;
+  background: rgba(255, 250, 241, 0.72);
+}
+
+.entity-card {
+  padding: 0.95rem;
+}
+
+.entity-card-list,
+.linked-record-list {
+  margin: 0.85rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.entity-subtitle {
+  display: block;
+  margin-top: 0.2rem;
+  color: #5a6558;
+  font-size: 0.9rem;
+}
+
+.entity-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(86, 103, 80, 0.14);
+  background: rgba(255, 251, 243, 0.92);
+  color: #314132;
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+.preview-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.preview-meta-grid div {
+  padding: 0.82rem;
+  border-radius: 1rem;
+  background: rgba(252, 247, 236, 0.88);
+}
+
+.preview-meta-grid dt {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #7a5f34;
+}
+
+.preview-meta-grid dd {
+  margin: 0.35rem 0 0;
+  color: #2e3b31;
 }
 
 .pill-row {
@@ -425,6 +542,34 @@ body {
 .citation-list span {
   margin-top: 0.3rem;
   color: #4d594c;
+}
+
+.linked-record-button {
+  width: 100%;
+  padding: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.linked-record-button:hover,
+.detail-action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(66, 58, 40, 0.08);
+}
+
+.linked-record-button strong,
+.linked-record-button span {
+  display: block;
+}
+
+.linked-record-button span {
+  margin-top: 0.3rem;
+  color: #566254;
+  font-size: 0.92rem;
 }
 
 .timeline-view {
@@ -828,6 +973,10 @@ body {
   .timeline-filter-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .preview-meta-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 860px) {
@@ -877,6 +1026,12 @@ body {
     max-width: none;
     text-align: left;
   }
+
+  .section-header-row,
+  .entity-card-header,
+  .citation-header {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 600px) {
@@ -908,5 +1063,9 @@ body {
 
   .timeline-event-card {
     padding: 0.9rem;
+  }
+
+  .preview-meta-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -23,6 +23,9 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
   const [activeView, setActiveView] = useState<ExplorerView>("overview");
   const [selectedEventId, setSelectedEventId] = useState(sortedEvents[0]?.id ?? "");
   const [searchQuery, setSearchQuery] = useState("");
+  const [focusedPersonId, setFocusedPersonId] = useState<string | null>(null);
+  const [focusedPlaceId, setFocusedPlaceId] = useState<string | null>(null);
+  const [focusedSourceId, setFocusedSourceId] = useState<string | null>(null);
   const [timelineFilters, setTimelineFilters] = useState({
     ...defaultTimelineFilters
   });
@@ -34,6 +37,43 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
   const filteredEvents = filterEventsByQuery(sortedEvents, deferredSearchQuery, datasetIndex);
   const selectedEventHidden =
     selectedEvent !== null && !filteredEvents.some((event) => event.id === selectedEvent.id);
+
+  function clearEntityFocus(): void {
+    setFocusedPersonId(null);
+    setFocusedPlaceId(null);
+    setFocusedSourceId(null);
+  }
+
+  function handleSelectEvent(eventId: string): void {
+    setSelectedEventId(eventId);
+    clearEntityFocus();
+    setIsRailOpen(false);
+    setIsInspectorOpen(true);
+  }
+
+  function handleFocusPlace(placeId: string): void {
+    setFocusedPlaceId(placeId);
+    setFocusedPersonId(null);
+    setFocusedSourceId(null);
+    setActiveView("map");
+    setIsInspectorOpen(true);
+  }
+
+  function handleFocusPerson(personId: string): void {
+    setFocusedPersonId(personId);
+    setFocusedPlaceId(null);
+    setFocusedSourceId(null);
+    setActiveView("people");
+    setIsInspectorOpen(true);
+  }
+
+  function handleFocusSource(sourceId: string): void {
+    setFocusedSourceId(sourceId);
+    setFocusedPersonId(null);
+    setFocusedPlaceId(null);
+    setActiveView("sources");
+    setIsInspectorOpen(true);
+  }
 
   if (selectedEvent === null) {
     return (
@@ -100,11 +140,7 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
             selectedEventHidden={selectedEventHidden}
             index={datasetIndex}
             onQueryChange={setSearchQuery}
-            onSelectEvent={(eventId) => {
-              setSelectedEventId(eventId);
-              setIsRailOpen(false);
-              setIsInspectorOpen(true);
-            }}
+            onSelectEvent={handleSelectEvent}
           />
         </aside>
 
@@ -115,14 +151,25 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
             event={selectedEvent}
             events={sortedEvents}
             index={datasetIndex}
+            focusedPersonId={focusedPersonId}
+            focusedPlaceId={focusedPlaceId}
+            focusedSourceId={focusedSourceId}
             timelineFilters={timelineFilters}
-            onSelectEvent={(eventId) => setSelectedEventId(eventId)}
+            onSelectEvent={handleSelectEvent}
             onTimelineFiltersChange={setTimelineFilters}
           />
         </section>
 
         <aside className={`surface inspector-surface ${isInspectorOpen ? "is-open" : ""}`}>
-          <EventInspector event={selectedEvent} index={datasetIndex} />
+          <EventInspector
+            event={selectedEvent}
+            events={sortedEvents}
+            index={datasetIndex}
+            onSelectEvent={handleSelectEvent}
+            onFocusPerson={handleFocusPerson}
+            onFocusPlace={handleFocusPlace}
+            onFocusSource={handleFocusSource}
+          />
         </aside>
       </div>
     </main>
