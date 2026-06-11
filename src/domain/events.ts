@@ -39,7 +39,7 @@ export const explorerViews: ExplorerViewOption[] = [
   {
     id: "timeline",
     label: "Timeline",
-    description: "Chronology preview anchored to the selected Acts event."
+    description: "Chronological Acts explorer with filters, era bands, and shared selection."
   },
   {
     id: "map",
@@ -91,7 +91,7 @@ export function sortEventsChronologically(events: Event[]): Event[] {
       return endYearDifference;
     }
 
-    return collator.compare(leftEvent.title, rightEvent.title);
+    return collator.compare(leftEvent.id, rightEvent.id);
   });
 }
 

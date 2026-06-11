@@ -6,7 +6,7 @@ Bible Time & Place Explorer is a source-grounded application for exploring bibli
 
 ## Current Development Status
 
-The repository now has a working Phase 4 explorer shell on top of the scaffold, delivery baseline, validation layer, and canonical Acts dataset.
+The repository now has a working Phase 5 timeline explorer on top of the scaffold, delivery baseline, validation layer, and canonical Acts dataset.
 
 - Core planning documents are in place in `AGENTS.md`, `STRATEGY.md`, and `BACKLOG.md`.
 - A strict TypeScript `React + Vite + Vitest` frontend scaffold is in place.
@@ -16,9 +16,10 @@ The repository now has a working Phase 4 explorer shell on top of the scaffold, 
 - Source records now support structured usage-rights metadata so terms of use, licensing, and attribution requirements can be tracked as data work continues.
 - A validated canonical Acts dataset now exists in [data/acts.yaml](/Users/rakirk/dev/acts/data/acts.yaml), covering 17 events, 14 places, 14 people, 3 journeys, 5 relationships, and tracked source-rights metadata.
 - `ACTS_TIMELINE.md` remains in the repository as the original source draft, while `data/acts.yaml` is now the canonical machine-parseable dataset.
-- The explorer shell now includes top-level `Overview`, `Timeline`, `Map`, `People`, and `Sources` navigation, a searchable Acts event rail, and a responsive detail panel.
-- Timeline, map, people, and sources are still shell-level previews rather than their full dedicated explorer implementations.
-- The next major work is Phase 5 in `BACKLOG.md`: timeline explorer.
+- The explorer shell now includes top-level `Overview`, `Timeline`, `Map`, `People`, and `Sources` navigation, a searchable Acts event rail, a responsive detail panel, and a real timeline explorer.
+- The timeline view now renders canonical Acts events in chronological order with era bands, certainty legend cards, category-toned styling, and first-pass filters for category, person, place, certainty, and date range.
+- Map, people, and sources are still preview surfaces rather than their full dedicated explorer implementations.
+- The next major work is Phase 6 in `BACKLOG.md`: event inspector and record detail.
 
 ## Setup
 
@@ -68,18 +69,20 @@ npm run build
 
 ## Current App Scope
 
-The current app is now a small but real explorer shell.
+The current app is now a small but real explorer shell with its first primary data view.
 
 - It proves the repository can build and test successfully.
 - It boots directly from the validated canonical Acts dataset in `data/acts.yaml`.
-- It provides shared view navigation for overview, timeline, map, people, and sources previews.
+- It provides shared view navigation for overview, a working timeline explorer, and the remaining map, people, and sources previews.
 - It includes a searchable Acts event rail with deterministic filtering and active selection styling.
+- It includes a chronological Acts timeline grouped into era bands and styled by category and certainty.
+- It includes first-pass timeline filters for category, person, place, certainty, and date range.
 - It includes a responsive event detail surface so mobile and desktop layouts preserve the same core selection flow.
 - It includes baseline CI verification and Fly.io deployment configuration for the static frontend.
 - It now includes canonical schema types, dataset loading utilities, and validation rules for normalized YAML or JSON datasets.
 - It now tracks source usage-rights metadata in the schema so licensing and terms information can be captured per source record.
 - It now includes a validated canonical Acts dataset in `data/acts.yaml`.
-- It does not yet include the dedicated interactive timeline, map, people explorer, or sources explorer that later phases will add.
+- It does not yet include the dedicated map explorer, people explorer, sources explorer, or the deeper inspector/navigation work planned for later phases.
 
 ## Environment Policy
 

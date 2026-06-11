@@ -1,27 +1,36 @@
 import type { JSX } from "react";
 
+import { TimelineView } from "../components/TimelineView";
 import type { CanonicalDataset, Event } from "../domain/dataset";
 import {
   explorerViews,
   formatCoordinate,
-  formatDateRange,
   getEventParticipants,
   type DatasetIndex,
   type ExplorerView
 } from "../domain/events";
+import type { TimelineFilters } from "../domain/timeline";
 
 interface ExplorerStageProps {
   activeView: ExplorerView;
   dataset: CanonicalDataset;
   event: Event;
+  events: Event[];
   index: DatasetIndex;
+  timelineFilters: TimelineFilters;
+  onSelectEvent: (eventId: string) => void;
+  onTimelineFiltersChange: (filters: TimelineFilters) => void;
 }
 
 export function ExplorerStage({
   activeView,
   dataset,
   event,
-  index
+  events,
+  index,
+  timelineFilters,
+  onSelectEvent,
+  onTimelineFiltersChange
 }: ExplorerStageProps) {
   const selectedView = explorerViews.find((view) => view.id === activeView) ?? explorerViews[0]!;
   const place = index.placesById.get(event.location_id) ?? null;
@@ -35,21 +44,15 @@ export function ExplorerStage({
   switch (activeView) {
     case "timeline":
       content = (
-        <div className="stage-stack">
-          <div className="stage-card">
-            <p className="stage-card-eyebrow">Chronology Preview</p>
-            <h3>{event.title}</h3>
-            <p>
-              The full timeline lands in Phase 5. The shell already keeps a shared event
-              selection, so the upcoming chronology view can stay synchronized without
-              reworking navigation.
-            </p>
-          </div>
-          <div className="stage-card stage-card-compact">
-            <h3>Selected chronology anchor</h3>
-            <p>{formatDateRange(event)}</p>
-          </div>
-        </div>
+        <TimelineView
+          dataset={dataset}
+          events={events}
+          filters={timelineFilters}
+          index={index}
+          selectedEventId={event.id}
+          onFiltersChange={onTimelineFiltersChange}
+          onSelectEvent={onSelectEvent}
+        />
       );
       break;
     case "map":

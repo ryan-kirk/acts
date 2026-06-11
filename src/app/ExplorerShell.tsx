@@ -11,6 +11,7 @@ import {
   sortEventsChronologically,
   type ExplorerView
 } from "../domain/events";
+import { defaultTimelineFilters } from "../domain/timeline";
 
 interface ExplorerShellProps {
   dataset: CanonicalDataset;
@@ -22,6 +23,9 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
   const [activeView, setActiveView] = useState<ExplorerView>("overview");
   const [selectedEventId, setSelectedEventId] = useState(sortedEvents[0]?.id ?? "");
   const [searchQuery, setSearchQuery] = useState("");
+  const [timelineFilters, setTimelineFilters] = useState({
+    ...defaultTimelineFilters
+  });
   const [isRailOpen, setIsRailOpen] = useState(false);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -51,10 +55,11 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
       <header className="hero-banner">
         <div>
           <p className="eyebrow">Bible Time &amp; Place Explorer</p>
-          <h1>Acts explorer shell with shared navigation and validated data bootstrap.</h1>
+          <h1>Acts explorer with shared navigation, filtering, and a real chronology view.</h1>
           <p className="lede">
             The app now boots directly from the canonical Acts dataset and keeps a shared
-            event selection across overview, timeline, map, people, and source previews.
+            event selection across a working timeline explorer plus the remaining map,
+            people, and sources preview surfaces.
           </p>
         </div>
         <div className="status-cluster" aria-label="Dataset status">
@@ -108,7 +113,11 @@ export function ExplorerShell({ dataset }: ExplorerShellProps) {
             activeView={activeView}
             dataset={dataset}
             event={selectedEvent}
+            events={sortedEvents}
             index={datasetIndex}
+            timelineFilters={timelineFilters}
+            onSelectEvent={(eventId) => setSelectedEventId(eventId)}
+            onTimelineFiltersChange={setTimelineFilters}
           />
         </section>
 
