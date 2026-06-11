@@ -44,7 +44,7 @@ export const explorerViews: ExplorerViewOption[] = [
   {
     id: "map",
     label: "Map",
-    description: "Place preview using the selected event's validated location."
+    description: "Geographic Acts explorer with validated places, journey overlays, and shared selection."
   },
   {
     id: "people",

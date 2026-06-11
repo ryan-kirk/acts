@@ -1,17 +1,14 @@
 import type { JSX } from "react";
 
+import { MapView } from "../components/MapView";
 import { TimelineView } from "../components/TimelineView";
 import type { CanonicalDataset, Event } from "../domain/dataset";
 import {
   explorerViews,
-  formatCoordinate,
-  formatLocationCertainty,
   formatSourceType,
   getEventsForPerson,
-  getEventsForPlace,
   getEventsForSource,
   getEventParticipants,
-  getPlaceForEvent,
   type DatasetIndex,
   type ExplorerView
 } from "../domain/events";
@@ -27,6 +24,7 @@ interface ExplorerStageProps {
   focusedPlaceId: string | null;
   focusedSourceId: string | null;
   timelineFilters: TimelineFilters;
+  onFocusPlace: (placeId: string) => void;
   onSelectEvent: (eventId: string) => void;
   onTimelineFiltersChange: (filters: TimelineFilters) => void;
 }
@@ -41,13 +39,12 @@ export function ExplorerStage({
   focusedPlaceId,
   focusedSourceId,
   timelineFilters,
+  onFocusPlace,
   onSelectEvent,
   onTimelineFiltersChange
 }: ExplorerStageProps) {
   const selectedView = explorerViews.find((view) => view.id === activeView) ?? explorerViews[0]!;
-  const place = getPlaceForEvent(event, index);
   const participants = getEventParticipants(event, index);
-  const focusedPlace = (focusedPlaceId ? index.placesById.get(focusedPlaceId) : null) ?? place;
   const focusedPerson =
     (focusedPersonId ? index.peopleById.get(focusedPersonId) : null) ?? participants[0] ?? null;
   const defaultSourceId = event.source_refs[0]?.source_id ?? dataset.sources[0]?.id ?? null;
@@ -74,66 +71,16 @@ export function ExplorerStage({
       );
       break;
     case "map":
-      if (focusedPlace === null) {
-        content = (
-          <div className="stage-stack">
-            <div className="stage-card">
-              <p className="stage-card-eyebrow">Place Preview</p>
-              <h3>No place focus available</h3>
-              <p>The selected event does not currently resolve to a known place record.</p>
-            </div>
-          </div>
-        );
-        break;
-      }
-
       content = (
-        <div className="stage-stack">
-          <div className="stage-card">
-            <p className="stage-card-eyebrow">Place Focus</p>
-            <h3>{focusedPlace.name}</h3>
-            <p>{focusedPlace.summary ?? "No place summary has been modeled yet."}</p>
-
-            <dl className="preview-meta-grid">
-              <div>
-                <dt>Region</dt>
-                <dd>{focusedPlace.region}</dd>
-              </div>
-              <div>
-                <dt>Modern Country</dt>
-                <dd>{focusedPlace.modern_country}</dd>
-              </div>
-              <div>
-                <dt>Coordinates</dt>
-                <dd>
-                  {formatCoordinate(focusedPlace.latitude)},{" "}
-                  {formatCoordinate(focusedPlace.longitude)}
-                </dd>
-              </div>
-              <div>
-                <dt>Location Certainty</dt>
-                <dd>{formatLocationCertainty(focusedPlace.location_certainty)}</dd>
-              </div>
-            </dl>
-          </div>
-          <div className="stage-card stage-card-compact">
-            <h3>Events at this place</h3>
-            <ul className="linked-record-list">
-              {getEventsForPlace(focusedPlace.id, events).map((relatedEvent) => (
-                <li key={relatedEvent.id}>
-                  <button
-                    type="button"
-                    className="linked-record-button"
-                    onClick={() => onSelectEvent(relatedEvent.id)}
-                  >
-                    <strong>{relatedEvent.title}</strong>
-                    <span>{relatedEvent.source_refs[0]?.citation ?? "Citation pending"}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <MapView
+          dataset={dataset}
+          events={events}
+          focusedPlaceId={focusedPlaceId}
+          index={index}
+          onFocusPlace={onFocusPlace}
+          onSelectEvent={onSelectEvent}
+          selectedEventId={event.id}
+        />
       );
       break;
     case "people":
