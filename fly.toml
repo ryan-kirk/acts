@@ -1,4 +1,4 @@
-app = "acts-bible-time-place-explorer"
+app = "bible-explorer"
 primary_region = "ord"
 kill_signal = "SIGTERM"
 
