@@ -53,6 +53,12 @@ function createCertaintyVisibilityState(): VisibilityMap<Place["location_certain
   };
 }
 
+function getCompactJourneyLabel(title: string): string {
+  return title
+    .replace(" Missionary Journey", "")
+    .replace("Voyage to Rome", "Rome Voyage");
+}
+
 export function MapView({
   activeBookLabel,
   dataset,
@@ -93,6 +99,7 @@ export function MapView({
   const [selectedJourneyId, setSelectedJourneyId] = useState<string | null>(
     selectedEventJourneyId ?? journeyOverlays[0]?.id ?? null
   );
+  const visibleJourneyOverlays = journeyOverlays.filter((overlay) => journeyVisibility[overlay.id]);
 
   const activeJourneyOverlay = getMapJourneyOverlayById(selectedJourneyId, journeyOverlays);
   const activeJourneyPlaceIds = new Set(
@@ -139,6 +146,14 @@ export function MapView({
       return;
     }
 
+    setJourneyVisibility((currentVisibility) =>
+      currentVisibility[selectedEventJourneyId]
+        ? currentVisibility
+        : {
+            ...currentVisibility,
+            [selectedEventJourneyId]: true
+          }
+    );
     setSelectedJourneyId(selectedEventJourneyId);
   }, [selectedEventJourneyId]);
 
@@ -150,30 +165,34 @@ export function MapView({
       return;
     }
 
-    if (!selectedJourneyId) {
-      setSelectedJourneyId(journeyOverlays[0]?.id ?? null);
+    const selectedJourneyVisible = selectedJourneyId
+      ? journeyOverlays.some(
+          (journeyOverlay) =>
+            journeyOverlay.id === selectedJourneyId && journeyVisibility[journeyOverlay.id]
+        )
+      : false;
+
+    if (selectedJourneyVisible) {
       return;
     }
 
-    const selectedJourneyExists = journeyOverlays.some(
-      (journeyOverlay) => journeyOverlay.id === selectedJourneyId
-    );
+    const selectedEventVisibleJourneyId =
+      selectedEventJourneyId && journeyVisibility[selectedEventJourneyId]
+        ? selectedEventJourneyId
+        : null;
+    const nextSelectedJourneyId =
+      selectedEventVisibleJourneyId ?? visibleJourneyOverlays[0]?.id ?? null;
 
-    if (!selectedJourneyExists) {
-      setSelectedJourneyId(journeyOverlays[0]?.id ?? null);
+    if (nextSelectedJourneyId !== selectedJourneyId) {
+      setSelectedJourneyId(nextSelectedJourneyId);
     }
-  }, [journeyOverlays, selectedJourneyId]);
-
-  useEffect(() => {
-    if (!selectedJourneyId || journeyVisibility[selectedJourneyId]) {
-      return;
-    }
-
-    setJourneyVisibility((currentVisibility) => ({
-      ...currentVisibility,
-      [selectedJourneyId]: true
-    }));
-  }, [journeyVisibility, selectedJourneyId]);
+  }, [
+    journeyOverlays,
+    journeyVisibility,
+    selectedEventJourneyId,
+    selectedJourneyId,
+    visibleJourneyOverlays
+  ]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) {
@@ -387,6 +406,25 @@ export function MapView({
     });
   }, [activePlaceRecord]);
 
+  function handleToggleJourneyVisibility(journeyId: string): void {
+    setJourneyVisibility((currentVisibility) => ({
+      ...currentVisibility,
+      [journeyId]: !currentVisibility[journeyId]
+    }));
+  }
+
+  function handleFocusJourney(journeyId: string): void {
+    setJourneyVisibility((currentVisibility) =>
+      currentVisibility[journeyId]
+        ? currentVisibility
+        : {
+            ...currentVisibility,
+            [journeyId]: true
+          }
+    );
+    setSelectedJourneyId(journeyId);
+  }
+
   return (
     <section className="map-view" aria-label="Scripture map explorer">
       <div className="map-toolbar">
@@ -407,21 +445,22 @@ export function MapView({
         </div>
 
         <div className="map-toolbar-group map-toolbar-group-compact">
-          <span className="map-toolbar-label">Journey Visibility</span>
+          <div className="map-toolbar-header">
+            <span className="map-toolbar-label">Journey Routes</span>
+            <span className="map-toolbar-note">
+              {visibleJourneyOverlays.length} visible
+            </span>
+          </div>
           <div className="map-chip-row">
             {journeyOverlays.map((overlay) => (
               <button
                 key={overlay.id}
                 type="button"
                 className={`map-chip ${journeyVisibility[overlay.id] ? "is-active" : ""}`}
-                onClick={() =>
-                  setJourneyVisibility((currentVisibility) => ({
-                    ...currentVisibility,
-                    [overlay.id]: !currentVisibility[overlay.id]
-                  }))
-                }
+                aria-pressed={journeyVisibility[overlay.id]}
+                onClick={() => handleToggleJourneyVisibility(overlay.id)}
               >
-                {overlay.journey.title.replace(" Missionary Journey", "")}
+                {getCompactJourneyLabel(overlay.journey.title)}
               </button>
             ))}
           </div>
@@ -459,7 +498,8 @@ export function MapView({
         <div className="map-overlay map-status-card">
           <strong>{visiblePlaceRecords.length} validated places visible</strong>
           <span>
-            {journeyOverlays.length} journey overlay{journeyOverlays.length === 1 ? "" : "s"} loaded
+            {visibleJourneyOverlays.length} active overlay
+            {visibleJourneyOverlays.length === 1 ? "" : "s"} of {journeyOverlays.length}
           </span>
           <span>Book focus: {activeBookLabel}</span>
           <span>
@@ -497,11 +537,13 @@ export function MapView({
           activeBookLabel={activeBookLabel}
           eventBookLabels={eventBookLabels}
           index={index}
+          journeyOverlays={journeyOverlays}
+          journeyVisibility={journeyVisibility}
           onFocusPlace={onFocusPlace}
+          onFocusJourney={handleFocusJourney}
           onSelectEvent={onSelectEvent}
-          onSelectJourney={setSelectedJourneyId}
+          onToggleJourneyVisibility={handleToggleJourneyVisibility}
           selectedEventId={selectedEventId}
-          visibleJourneyOverlays={journeyOverlays}
         />
 
         {activePlaceRecord ? (
@@ -583,7 +625,7 @@ export function MapView({
                         key={journeyId}
                         type="button"
                         className={`map-inline-button ${isSelected ? "is-selected" : ""}`}
-                        onClick={() => setSelectedJourneyId(journeyId)}
+                        onClick={() => handleFocusJourney(journeyId)}
                       >
                         {journey?.title ?? journeyId}
                       </button>

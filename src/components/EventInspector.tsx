@@ -14,6 +14,8 @@ import {
   type DatasetIndex
 } from "../domain/events";
 import {
+  type ClaimConfidenceFilter,
+  filterClaimExplorerRecords,
   formatClaimConfidence,
   formatClaimType,
   getClaimRecordsForEvent
@@ -21,6 +23,7 @@ import {
 
 interface EventInspectorProps {
   activeBookLabel: string;
+  claimConfidenceFilter: ClaimConfidenceFilter;
   dataset: CanonicalDataset;
   event: Event;
   eventBookLabel: string;
@@ -34,6 +37,7 @@ interface EventInspectorProps {
 
 export function EventInspector({
   activeBookLabel,
+  claimConfidenceFilter,
   dataset,
   event,
   eventBookLabel,
@@ -49,7 +53,8 @@ export function EventInspector({
   const tags = getEventTags(event, index);
   const journey = getEventJourney(event, index);
   const relatedEvents = getRelatedEvents(event, index);
-  const claimRecords = getClaimRecordsForEvent(event.id, dataset, index);
+  const allClaimRecords = getClaimRecordsForEvent(event.id, dataset, index);
+  const claimRecords = filterClaimExplorerRecords(allClaimRecords, claimConfidenceFilter);
   const chronologyExplanation = getDateCertaintyDescription(event.date.certainty);
   const sourceEntries = event.source_refs.flatMap((sourceRef) => {
     const source = index.sourcesById.get(sourceRef.source_id);
@@ -242,65 +247,76 @@ export function EventInspector({
         )}
       </section>
 
-      {claimRecords.length > 0 ? (
+      {allClaimRecords.length > 0 ? (
         <section className="detail-section">
           <div className="section-header-row">
             <h3>External Attestation & Claims</h3>
+            {claimConfidenceFilter !== "all" ? (
+              <span className="entity-type-badge">
+                {formatClaimConfidence(claimConfidenceFilter)} confidence
+              </span>
+            ) : null}
           </div>
-          <ul className="sources-claim-list inspector-claim-list">
-            {claimRecords.map((claimRecord) => {
-              const additionalEvents = claimRecord.relatedEvents.filter(
-                (relatedEvent) => relatedEvent.id !== event.id
-              );
+          {claimRecords.length === 0 ? (
+            <p className="muted-copy">
+              No external claims for this event match the current confidence lens.
+            </p>
+          ) : (
+            <ul className="sources-claim-list inspector-claim-list">
+              {claimRecords.map((claimRecord) => {
+                const additionalEvents = claimRecord.relatedEvents.filter(
+                  (relatedEvent) => relatedEvent.id !== event.id
+                );
 
-              return (
-                <li key={claimRecord.claim.id} className="sources-claim-card">
-                  <div className="sources-claim-header">
-                    <strong>{formatClaimType(claimRecord.claim.claim_type)}</strong>
-                    <span
-                      className={`sources-confidence-badge confidence-${claimRecord.claim.confidence}`}
-                    >
-                      {formatClaimConfidence(claimRecord.claim.confidence)}
-                    </span>
-                  </div>
-                  <p className="sources-claim-statement">{claimRecord.claim.statement}</p>
-
-                  <div className="sources-citation-row">
-                    {claimRecord.sourceEntries.map((sourceEntry) => (
-                      <button
-                        key={`${claimRecord.claim.id}-${sourceEntry.source.id}-${sourceEntry.citation}`}
-                        type="button"
-                        className="sources-citation-badge"
-                        onClick={() => onFocusSource(sourceEntry.source.id)}
+                return (
+                  <li key={claimRecord.claim.id} className="sources-claim-card">
+                    <div className="sources-claim-header">
+                      <strong>{formatClaimType(claimRecord.claim.claim_type)}</strong>
+                      <span
+                        className={`sources-confidence-badge confidence-${claimRecord.claim.confidence}`}
                       >
-                        {sourceEntry.source.name} • {sourceEntry.citation}
-                      </button>
-                    ))}
-                  </div>
+                        {formatClaimConfidence(claimRecord.claim.confidence)}
+                      </span>
+                    </div>
+                    <p className="sources-claim-statement">{claimRecord.claim.statement}</p>
 
-                  {additionalEvents.length > 0 ? (
-                    <ul className="linked-record-list">
-                      {additionalEvents.map((relatedEvent) => (
-                        <li key={relatedEvent.id}>
-                          <button
-                            type="button"
-                            className="linked-record-button"
-                            onClick={() => onSelectEvent(relatedEvent.id)}
-                          >
-                            <strong>{relatedEvent.title}</strong>
-                            <span>
-                              {formatDateRange(relatedEvent)} •{" "}
-                              {relatedEvent.source_refs[0]?.citation ?? "Citation pending"}
-                            </span>
-                          </button>
-                        </li>
+                    <div className="sources-citation-row">
+                      {claimRecord.sourceEntries.map((sourceEntry) => (
+                        <button
+                          key={`${claimRecord.claim.id}-${sourceEntry.source.id}-${sourceEntry.citation}`}
+                          type="button"
+                          className="sources-citation-badge"
+                          onClick={() => onFocusSource(sourceEntry.source.id)}
+                        >
+                          {sourceEntry.source.name} • {sourceEntry.citation}
+                        </button>
                       ))}
-                    </ul>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
+                    </div>
+
+                    {additionalEvents.length > 0 ? (
+                      <ul className="linked-record-list">
+                        {additionalEvents.map((relatedEvent) => (
+                          <li key={relatedEvent.id}>
+                            <button
+                              type="button"
+                              className="linked-record-button"
+                              onClick={() => onSelectEvent(relatedEvent.id)}
+                            >
+                              <strong>{relatedEvent.title}</strong>
+                              <span>
+                                {formatDateRange(relatedEvent)} •{" "}
+                                {relatedEvent.source_refs[0]?.citation ?? "Citation pending"}
+                              </span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </section>
       ) : null}
 

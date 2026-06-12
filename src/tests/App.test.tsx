@@ -22,7 +22,9 @@ describe("App", () => {
 
     expect(screen.getByRole("heading", { name: /event rail/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /ascension of jesus/i })).toBeInTheDocument();
-    expect(screen.getByText(/luke-acts canonical library/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/scope: acts/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/luke preview: 9 events/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /focus luke/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^luke$/i })).toBeInTheDocument();
   });
 
@@ -216,7 +218,7 @@ describe("App", () => {
   it("switches the explorer to Luke and updates the rail, timeline, and inspector context", () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole("button", { name: /^luke$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /focus luke/i }));
 
     expect(screen.getByRole("button", { name: /annunciation to mary/i })).toBeInTheDocument();
     expect(
@@ -316,7 +318,57 @@ describe("App", () => {
       .toBeInTheDocument();
 
     expect(getLeafletMockState().markers.length).toBeGreaterThan(0);
-    expect(getLeafletMockState().polylines).toHaveLength(3);
+    expect(getLeafletMockState().polylines).toHaveLength(4);
+  });
+
+  it("lets overview claim-confidence controls filter shared claim surfaces", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /low \(2\)/i }));
+    fireEvent.click(screen.getByRole("button", { name: /arrest of paul in jerusalem/i }));
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    expect(
+      within(inspector).getByText(/no external claims for this event match the current confidence lens/i)
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: /sources/i }));
+
+    const sourcesExplorer = screen.getByLabelText(/scripture sources explorer/i);
+
+    expect(within(sourcesExplorer).getByText(/2 claims in view/i)).toBeInTheDocument();
+    expect(
+      within(sourcesExplorer).queryByText(
+        /the gallio inscription provides the strongest fixed chronological anchor/i
+      )
+    ).not.toBeInTheDocument();
+  });
+
+  it("lets journey visibility toggles hide unrelated routes without breaking the active focus", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: /map/i }));
+
+    const mapExplorer = screen.getByLabelText(/scripture map explorer/i);
+    const romeVoyageToggle = within(mapExplorer).getByRole("button", { name: /rome voyage/i });
+    const map = getLeafletMockState().maps[0]!;
+    const romeVoyageOverlay = getLeafletMockState().polylines[3]!;
+
+    expect(romeVoyageToggle).toHaveAttribute("aria-pressed", "true");
+    expect(within(mapExplorer).getByRole("heading", { name: /first missionary journey/i }))
+      .toBeInTheDocument();
+
+    fireEvent.click(romeVoyageToggle);
+
+    expect(romeVoyageToggle).toHaveAttribute("aria-pressed", "false");
+    expect(map.hasLayer(romeVoyageOverlay)).toBe(false);
+    expect(within(mapExplorer).getByRole("heading", { name: /first missionary journey/i }))
+      .toBeInTheDocument();
+
+    fireEvent.click(romeVoyageToggle);
+
+    expect(romeVoyageToggle).toHaveAttribute("aria-pressed", "true");
   });
 
   it("lets route selection drive journey detail, place focus, and shared event selection", () => {

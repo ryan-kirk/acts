@@ -193,6 +193,35 @@ places:
       - source_id: acts
         citation: Acts 10:1
 
+  - id: sidon
+    name: Sidon
+    latitude: 33.5606
+    longitude: 35.3756
+    region: Phoenicia
+    modern_country: Lebanon
+    location_certainty: exact
+    summary: >
+      Sidon is the early stop on Paul's custody voyage where the centurion
+      allows him to receive care from friends before the longer Mediterranean
+      crossing continues.
+    source_refs:
+      - source_id: acts
+        citation: Acts 27:3
+
+  - id: myra
+    name: Myra
+    latitude: 36.2417
+    longitude: 29.985
+    region: Lycia
+    modern_country: Turkey
+    location_certainty: approximate
+    summary: >
+      Myra in Lycia is where Paul's party transfers to an Alexandrian grain
+      ship bound westward during the voyage narrative to Rome.
+    source_refs:
+      - source_id: acts
+        citation: Acts 27:5-6
+
   - id: antioch
     name: Antioch
     latitude: 36.2021
@@ -319,6 +348,20 @@ places:
       - source_id: acts
         citation: Acts 20:17-38
 
+  - id: fair_havens
+    name: Fair Havens
+    latitude: 35.0044
+    longitude: 24.7736
+    region: Crete
+    modern_country: Greece
+    location_certainty: approximate
+    summary: >
+      Fair Havens is the Cretan harbor near Lasea where Paul's warning about
+      the dangerous season goes unheeded before the storm-driven shipwreck.
+    source_refs:
+      - source_id: acts
+        citation: Acts 27:7-13
+
   - id: malta
     name: Malta
     latitude: 35.9375
@@ -333,6 +376,48 @@ places:
     source_refs:
       - source_id: acts
         citation: Acts 28:1
+
+  - id: syracuse
+    name: Syracuse
+    latitude: 37.0755
+    longitude: 15.2866
+    region: Sicily
+    modern_country: Italy
+    location_certainty: exact
+    summary: >
+      Syracuse in Sicily is one of the final staged ports on the journey from
+      Malta toward the Italian mainland in Acts 28.
+    source_refs:
+      - source_id: acts
+        citation: Acts 28:12
+
+  - id: rhegium
+    name: Rhegium
+    latitude: 38.1113
+    longitude: 15.6479
+    region: Italia
+    modern_country: Italy
+    location_certainty: approximate
+    summary: >
+      Rhegium marks the southern Italian harbor stop before the ship continues
+      north toward Puteoli and the overland approach to Rome.
+    source_refs:
+      - source_id: acts
+        citation: Acts 28:13
+
+  - id: puteoli
+    name: Puteoli
+    latitude: 40.8279
+    longitude: 14.1211
+    region: Campania
+    modern_country: Italy
+    location_certainty: approximate
+    summary: >
+      Puteoli is the Italian port where Paul meets believers before the final
+      approach to Rome in the closing movement of Acts.
+    source_refs:
+      - source_id: acts
+        citation: Acts 28:13-14
 
   - id: rome
     name: Rome
@@ -894,6 +979,7 @@ events:
     notes: >
       The island identification with Malta is traditional and widely accepted,
       while the exact landing bay remains debated.
+    journey_id: voyage_to_rome
 
   - id: acts_017
     title: Paul Under House Arrest in Rome
@@ -916,6 +1002,7 @@ events:
         citation: Acts 28:16-31
     related_event_ids:
       - acts_016
+    journey_id: voyage_to_rome
 
 journeys:
   - id: missionary_journey_1
@@ -996,6 +1083,43 @@ journeys:
       - acts_013
       - acts_014
       - acts_015
+
+  - id: voyage_to_rome
+    title: Voyage to Rome
+    summary: >
+      Paul's custody journey carries him from Caesarea across the eastern and
+      central Mediterranean, through storm, shipwreck, and final arrival in
+      Rome under imperial guard.
+    date:
+      start_year: 59
+      end_year: 61
+      certainty: estimated
+    source_refs:
+      - source_id: acts
+        citation: Acts 27:1-28:16
+    route:
+      - sequence: 1
+        place_id: caesarea
+      - sequence: 2
+        place_id: sidon
+      - sequence: 3
+        place_id: myra
+      - sequence: 4
+        place_id: fair_havens
+      - sequence: 5
+        place_id: malta
+      - sequence: 6
+        place_id: syracuse
+      - sequence: 7
+        place_id: rhegium
+      - sequence: 8
+        place_id: puteoli
+      - sequence: 9
+        place_id: rome
+    related_event_ids:
+      - acts_015
+      - acts_016
+      - acts_017
 
 relationships:
   - id: relationship_peter_john_ministry_partner

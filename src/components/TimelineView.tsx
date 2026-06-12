@@ -6,12 +6,13 @@ import {
   type DatasetIndex
 } from "../domain/events";
 import {
+  buildTimelineGridLayout,
   defaultTimelineFilters,
   filterTimelineEvents,
+  formatTimelineYearLabel,
   getPrimaryTimelineTag,
   getTimelineCategoryTone,
   getTimelineFilterOptions,
-  groupEventsByTimelineEra,
   timelineCertaintyLegend,
   type TimelineFilters
 } from "../domain/timeline";
@@ -50,7 +51,7 @@ export function TimelineView({
 }: TimelineViewProps) {
   const filterOptions = getTimelineFilterOptions(dataset);
   const filteredEvents = filterTimelineEvents(events, filters);
-  const groupedEvents = groupEventsByTimelineEra(filteredEvents);
+  const timelineLayout = buildTimelineGridLayout(filteredEvents);
   const selectedEventHidden = !filteredEvents.some((event) => event.id === selectedEventId);
 
   return (
@@ -185,23 +186,19 @@ export function TimelineView({
         </label>
       </div>
 
-      <section className="timeline-legend" aria-label="Timeline legend">
-        <div className="timeline-legend-copy">
-          <h3>Certainty legend</h3>
-          <p>
-            Date certainty stays explicit in the timeline so chronology communicates humility
-            as well as order.
-          </p>
+      <section className="timeline-inline-legend" aria-label="Timeline legend">
+        <div className="timeline-inline-copy">
+          <h3>Chronology Surface</h3>
+          <p>Scroll horizontally through the dated record bands and select a card to sync the inspector.</p>
         </div>
-        <div className="timeline-legend-items">
+        <div className="timeline-inline-badges">
           {timelineCertaintyLegend.map((entry) => (
-            <article
+            <div
               key={entry.certainty}
-              className={`timeline-legend-card certainty-${entry.certainty}`}
+              className={`timeline-certainty-inline certainty-${entry.certainty}`}
             >
               <strong>{entry.label}</strong>
-              <span>{entry.description}</span>
-            </article>
+            </div>
           ))}
         </div>
       </section>
@@ -212,51 +209,98 @@ export function TimelineView({
         </p>
       ) : null}
 
-      {groupedEvents.length === 0 ? (
+      {filteredEvents.length === 0 ? (
         <div className="empty-state" role="status">
           <h3>No events match these timeline filters</h3>
           <p>Clear or widen the filters to restore the full chronology.</p>
         </div>
       ) : (
-        <div className="timeline-era-stack">
-          {groupedEvents.map((group) => (
-            <section key={group.era.id} className="timeline-era-band">
-              <header className="timeline-era-header">
-                <div>
-                  <p className="section-eyebrow">Era Band</p>
-                  <h3>{group.era.title}</h3>
-                </div>
-                <div className="timeline-era-summary">
-                  <strong>
-                    {group.era.startYear !== null && group.era.endYear !== null
-                      ? `AD ${group.era.startYear}-${group.era.endYear}`
-                      : "Undated"}
-                  </strong>
-                  <span>{group.era.description}</span>
-                </div>
-              </header>
+        <div className="timeline-surface-stack">
+          {timelineLayout && timelineLayout.records.length > 0 ? (
+            <section className="timeline-board" aria-label="Chronology board">
+              <div className="timeline-scroll-shell">
+                <div
+                  className="timeline-axis-row"
+                  style={{
+                    gridTemplateColumns: `repeat(${timelineLayout.visibleYears.length}, minmax(5.25rem, 1fr))`
+                  }}
+                >
+                  {timelineLayout.visibleYears.map((year, yearIndex) => {
+                    const isMajorTick =
+                      yearIndex === 0 || year === timelineLayout.maxYear || year % 5 === 0;
 
-              <ol className="timeline-event-list">
-                {group.events.map((event) => {
-                  const place = index.placesById.get(event.location_id);
-                  const tags = getEventTags(event, index);
-                  const primaryTag = getPrimaryTimelineTag(event, index);
-                  const categoryTone = getTimelineCategoryTone(event, index);
-                  const bookLabel = eventBookLabels.get(event.id) ?? activeBookLabel;
-                  const isSelected = event.id === selectedEventId;
-
-                  return (
-                    <li key={event.id}>
-                      <button
-                        type="button"
-                        className={`timeline-event-card category-${categoryTone} ${
-                          isSelected ? "is-selected" : ""
-                        }`}
-                        aria-pressed={isSelected}
-                        onClick={() => onSelectEvent(event.id)}
+                    return (
+                      <div
+                        key={year}
+                        className={`timeline-axis-tick ${isMajorTick ? "is-major" : ""}`}
                       >
-                        <div className="timeline-event-marker" aria-hidden="true" />
-                        <div className="timeline-event-body">
+                        {isMajorTick ? formatTimelineYearLabel(year) : ""}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div
+                  className="timeline-band-row"
+                  aria-hidden="true"
+                  style={{
+                    gridTemplateColumns: `repeat(${timelineLayout.visibleYears.length}, minmax(5.25rem, 1fr))`
+                  }}
+                >
+                  {timelineLayout.bands.map((band) => (
+                    <div
+                      key={band.id}
+                      className="timeline-band-chip"
+                      style={{
+                        gridColumn: `${band.startYear - timelineLayout.minYear + 1} / span ${
+                          band.endYear - band.startYear + 1
+                        }`
+                      }}
+                    >
+                      {band.label}
+                    </div>
+                  ))}
+                </div>
+
+                <ol
+                  className="timeline-grid"
+                  style={{
+                    gridTemplateColumns: `repeat(${timelineLayout.visibleYears.length}, minmax(5.25rem, 1fr))`,
+                    gridTemplateRows: `repeat(${timelineLayout.totalTracks}, minmax(9rem, auto))`
+                  }}
+                >
+                  {timelineLayout.records.map((record) => {
+                    const event = record.event;
+                    const place = index.placesById.get(event.location_id);
+                    const tags = getEventTags(event, index);
+                    const primaryTag = getPrimaryTimelineTag(event, index);
+                    const categoryTone = getTimelineCategoryTone(event, index);
+                    const bookLabel = eventBookLabels.get(event.id) ?? activeBookLabel;
+                    const isSelected = event.id === selectedEventId;
+
+                    return (
+                      <li
+                        key={event.id}
+                        className="timeline-grid-item"
+                        style={{
+                          gridColumn: `${record.yearOffset} / span ${record.columnSpan}`,
+                          gridRow: `${record.track + 1}`
+                        }}
+                      >
+                        <span
+                          className={`timeline-grid-anchor category-${categoryTone} ${
+                            isSelected ? "is-selected" : ""
+                          }`}
+                          aria-hidden="true"
+                        />
+                        <button
+                          type="button"
+                          className={`timeline-event-card timeline-grid-card category-${categoryTone} ${
+                            isSelected ? "is-selected" : ""
+                          }`}
+                          aria-pressed={isSelected}
+                          onClick={() => onSelectEvent(event.id)}
+                        >
                           <div className="timeline-event-topline">
                             <span className="timeline-event-date">{formatDateRange(event)}</span>
                             <span
@@ -271,11 +315,10 @@ export function TimelineView({
                             {bookLabel} • {place?.name ?? "Unknown place"} •{" "}
                             {primaryTag?.label ?? "Uncategorized event"}
                           </p>
-                          <p className="timeline-event-summary">{event.summary}</p>
 
                           <div className="timeline-event-footer">
                             <div className="timeline-tag-row">
-                              {tags.map((tag) => (
+                              {tags.slice(0, 2).map((tag) => (
                                 <span key={tag.id} className="timeline-tag-pill">
                                   {tag.label}
                                 </span>
@@ -285,14 +328,45 @@ export function TimelineView({
                               {event.source_refs[0]?.citation ?? "Citation pending"}
                             </span>
                           </div>
-                        </div>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            </section>
+          ) : null}
+
+          {timelineLayout?.undatedEvents.length ? (
+            <section className="timeline-undated-panel">
+              <div className="section-header-row">
+                <h3>Undated Records</h3>
+              </div>
+              <ol className="timeline-undated-list">
+                {timelineLayout.undatedEvents.map((event) => {
+                  const place = index.placesById.get(event.location_id);
+                  const bookLabel = eventBookLabels.get(event.id) ?? activeBookLabel;
+                  const isSelected = event.id === selectedEventId;
+
+                  return (
+                    <li key={event.id}>
+                      <button
+                        type="button"
+                        className={`linked-record-button ${isSelected ? "is-selected" : ""}`}
+                        onClick={() => onSelectEvent(event.id)}
+                      >
+                        <strong>{event.title}</strong>
+                        <span>
+                          {bookLabel} • {place?.name ?? "Unknown place"} •{" "}
+                          {event.source_refs[0]?.citation ?? "Citation pending"}
+                        </span>
                       </button>
                     </li>
                   );
                 })}
               </ol>
             </section>
-          ))}
+          ) : null}
         </div>
       )}
     </section>

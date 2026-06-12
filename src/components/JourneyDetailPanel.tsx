@@ -12,11 +12,13 @@ interface JourneyDetailPanelProps {
   activePlaceId: string | null;
   eventBookLabels: Map<string, string>;
   index: DatasetIndex;
+  journeyOverlays: MapJourneyOverlay[];
+  journeyVisibility: Record<string, boolean>;
   onFocusPlace: (placeId: string) => void;
+  onFocusJourney: (journeyId: string) => void;
   onSelectEvent: (eventId: string) => void;
-  onSelectJourney: (journeyId: string) => void;
+  onToggleJourneyVisibility: (journeyId: string) => void;
   selectedEventId: string;
-  visibleJourneyOverlays: MapJourneyOverlay[];
 }
 
 export function JourneyDetailPanel({
@@ -25,17 +27,23 @@ export function JourneyDetailPanel({
   activePlaceId,
   eventBookLabels,
   index,
+  journeyOverlays,
+  journeyVisibility,
   onFocusPlace,
+  onFocusJourney,
   onSelectEvent,
-  onSelectJourney,
+  onToggleJourneyVisibility,
   selectedEventId,
-  visibleJourneyOverlays
 }: JourneyDetailPanelProps) {
-  if (visibleJourneyOverlays.length === 0) {
+  const visibleJourneyOverlays = journeyOverlays.filter(
+    (journeyOverlay) => journeyVisibility[journeyOverlay.id]
+  );
+
+  if (journeyOverlays.length === 0) {
     return (
       <div className="empty-state">
-        <h3>No journey overlays are currently visible</h3>
-        <p>Re-enable a route toggle to inspect the visible journey records in this book focus.</p>
+        <h3>No journey overlays are modeled in this scope</h3>
+        <p>Switch books or widen the scope to inspect route-based travel records.</p>
       </div>
     );
   }
@@ -47,37 +55,74 @@ export function JourneyDetailPanel({
           <p className="section-eyebrow">Journey Focus</p>
           <h3>{activeJourneyOverlay?.journey.title ?? "Select a journey route"}</h3>
         </div>
-        {activeJourneyOverlay ? (
+        <div className="journey-panel-badges">
           <span className="entity-type-badge">
-            {formatDateCertainty(activeJourneyOverlay.journey.date.certainty)}
+            {visibleJourneyOverlays.length} of {journeyOverlays.length} visible
           </span>
-        ) : null}
+          {activeJourneyOverlay ? (
+            <span className="entity-type-badge">
+              {formatDateCertainty(activeJourneyOverlay.journey.date.certainty)}
+            </span>
+          ) : null}
+        </div>
       </div>
 
-      <div className="journey-selector-row">
-        {visibleJourneyOverlays.map((journeyOverlay) => {
+      <ul className="journey-selector-row">
+        {journeyOverlays.map((journeyOverlay) => {
           const isSelected = activeJourneyOverlay?.id === journeyOverlay.id;
+          const isVisible = journeyVisibility[journeyOverlay.id];
 
           return (
-            <button
+            <li
               key={journeyOverlay.id}
-              type="button"
-              className={`journey-selector-card ${isSelected ? "is-selected" : ""}`}
-              onClick={() => onSelectJourney(journeyOverlay.id)}
+              className={`journey-selector-card ${
+                isSelected ? "is-selected" : ""
+              } ${isVisible ? "" : "is-hidden"}`}
             >
-              <strong>{journeyOverlay.journey.title}</strong>
-              <span>
-                {journeyOverlay.stopRecords.length} stop
-                {journeyOverlay.stopRecords.length === 1 ? "" : "s"} •{" "}
-                {journeyOverlay.relatedEvents.length} linked event
-                {journeyOverlay.relatedEvents.length === 1 ? "" : "s"}
-              </span>
-            </button>
+              <div className="journey-selector-card-header">
+                <div>
+                  <strong>{journeyOverlay.journey.title}</strong>
+                  <span>
+                    {journeyOverlay.stopRecords.length} stop
+                    {journeyOverlay.stopRecords.length === 1 ? "" : "s"} •{" "}
+                    {journeyOverlay.relatedEvents.length} linked event
+                    {journeyOverlay.relatedEvents.length === 1 ? "" : "s"}
+                  </span>
+                </div>
+                <span className="entity-type-badge">
+                  {isVisible ? "Visible" : "Hidden"}
+                </span>
+              </div>
+              <div className="journey-selector-card-actions">
+                <button
+                  type="button"
+                  className={`map-inline-button ${isSelected ? "is-selected" : ""}`}
+                  onClick={() => onFocusJourney(journeyOverlay.id)}
+                >
+                  {isSelected ? "Focused route" : "Focus route"}
+                </button>
+                <button
+                  type="button"
+                  className={`map-inline-button ${isVisible ? "is-selected" : ""}`}
+                  aria-pressed={isVisible}
+                  onClick={() => onToggleJourneyVisibility(journeyOverlay.id)}
+                >
+                  {isVisible ? "Hide route" : "Show route"}
+                </button>
+              </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
 
-      {activeJourneyOverlay ? (
+      {visibleJourneyOverlays.length === 0 ? (
+        <div className="empty-state journey-empty-state">
+          <h3>No journey overlays are currently visible</h3>
+          <p>Re-enable a route above to inspect the mapped travel sequence in this scope.</p>
+        </div>
+      ) : null}
+
+      {activeJourneyOverlay && visibleJourneyOverlays.length > 0 ? (
         <>
           <p className="journey-summary">
             {activeJourneyOverlay.journey.summary ?? "No journey summary has been modeled yet."}
@@ -203,7 +248,7 @@ export function JourneyDetailPanel({
           </div>
         </>
       ) : (
-        <div className="empty-state">
+        <div className="empty-state journey-empty-state">
           <h3>No journey is currently selected</h3>
           <p>Choose a visible route card or click a route line on the map to inspect it.</p>
         </div>

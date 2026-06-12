@@ -27,11 +27,14 @@ export function EventRail({
   return (
     <section className="rail-panel">
       <div className="section-heading-block">
-        <p className="section-eyebrow">Scripture Library</p>
+        <p className="section-eyebrow">
+          {activeBookLabel === "Luke-Acts" ? "Canonical Library" : `${activeBookLabel} Dataset`}
+        </p>
         <h2>Event Rail</h2>
         <p className="section-copy">
-          Search by title, location, participant, summary, or citation to keep the
-          explorer anchored to normalized Luke and Acts records.
+          {activeBookLabel === "Luke"
+            ? "Search the current Luke preview by title, location, participant, summary, or citation while the broader Luke-Acts library continues to expand."
+            : "Search by title, location, participant, summary, or citation to keep the explorer anchored to normalized Luke and Acts records."}
         </p>
       </div>
 
@@ -90,7 +93,7 @@ export function EventRail({
       </div>
 
       <footer className="rail-footer">
-        <span>{activeBookLabel} focus · normalized scripture records</span>
+        <span>Active scope: {activeBookLabel}</span>
         <span>Shared entities merge by stable IDs across the Luke-Acts library</span>
       </footer>
     </section>

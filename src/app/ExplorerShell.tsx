@@ -18,6 +18,7 @@ import {
   getEventBookLabelMap,
   type BookFilterId
 } from "../domain/library";
+import { type ClaimConfidenceFilter, formatClaimConfidence } from "../domain/sources";
 import { defaultTimelineFilters } from "../domain/timeline";
 
 interface ExplorerShellProps {
@@ -38,12 +39,15 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
   const [focusedPersonId, setFocusedPersonId] = useState<string | null>(null);
   const [focusedPlaceId, setFocusedPlaceId] = useState<string | null>(null);
   const [focusedSourceId, setFocusedSourceId] = useState<string | null>(null);
+  const [claimConfidenceFilter, setClaimConfidenceFilter] =
+    useState<ClaimConfidenceFilter>("all");
   const [timelineFilters, setTimelineFilters] = useState({
     ...defaultTimelineFilters
   });
   const [isRailOpen, setIsRailOpen] = useState(false);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const deferredSearchQuery = useDeferredValue(searchQuery);
+  const lukeBook = dataset.books.find((book) => book.id === "luke") ?? null;
 
   const selectedEvent = datasetIndex.eventsById.get(selectedEventId) ?? sortedEvents[0] ?? null;
   const filteredEvents = filterEventsByQuery(sortedEvents, deferredSearchQuery, datasetIndex);
@@ -141,9 +145,18 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
           </p>
         </div>
         <div className="status-cluster" aria-label="Dataset status">
+          <span className="status-pill">Scope: {activeBookLabel}</span>
           <span className="status-pill">{dataset.events.length} events</span>
-          <span className="status-pill">{dataset.books.length} books</span>
           <span className="status-pill">{dataset.journeys.length} journeys</span>
+          <span className="status-pill">
+            Claim lens:{" "}
+            {claimConfidenceFilter === "all"
+              ? "All confidences"
+              : formatClaimConfidence(claimConfidenceFilter)}
+          </span>
+          {activeBookId === "acts" && lukeBook ? (
+            <span className="status-pill">Luke preview: {lukeBook.eventCount} events</span>
+          ) : null}
           <span className="status-pill">Version {dataset.metadata.version}</span>
         </div>
       </header>
@@ -207,8 +220,11 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
         <section className="surface stage-surface">
           <ExplorerStage
             activeView={activeView}
+            activeBookId={activeBookId}
             activeBookLabel={activeBookLabel}
+            claimConfidenceFilter={claimConfidenceFilter}
             dataset={filteredDataset}
+            library={dataset}
             event={selectedEvent}
             eventBookLabels={eventBookLabels}
             events={sortedEvents}
@@ -217,17 +233,21 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
             focusedPlaceId={focusedPlaceId}
             focusedSourceId={focusedSourceId}
             timelineFilters={timelineFilters}
+            onBookFilterChange={handleBookFilterChange}
+            onClaimConfidenceFilterChange={setClaimConfidenceFilter}
             onFocusPerson={handleFocusPerson}
             onFocusPlace={handleFocusPlace}
             onFocusSource={handleFocusSource}
             onSelectEvent={handleSelectEvent}
             onTimelineFiltersChange={setTimelineFilters}
+            onViewChange={setActiveView}
           />
         </section>
 
         <aside className={`surface inspector-surface ${isInspectorOpen ? "is-open" : ""}`}>
           <EventInspector
             activeBookLabel={activeBookLabel}
+            claimConfidenceFilter={claimConfidenceFilter}
             dataset={filteredDataset}
             event={selectedEvent}
             eventBookLabel={

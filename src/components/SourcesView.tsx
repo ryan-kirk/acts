@@ -6,6 +6,8 @@ import { formatDateRange, formatSourceType, type DatasetIndex } from "../domain/
 import {
   buildClaimExplorerRecords,
   buildSourceExplorerRecords,
+  type ClaimConfidenceFilter,
+  filterClaimExplorerRecords,
   formatClaimConfidence,
   formatClaimType,
   formatRightsStatus,
@@ -16,6 +18,7 @@ import {
 
 interface SourcesViewProps {
   activeBookLabel: string;
+  claimConfidenceFilter: ClaimConfidenceFilter;
   dataset: ExplorerDataset;
   eventBookLabels: Map<string, string>;
   events: Event[];
@@ -28,6 +31,7 @@ interface SourcesViewProps {
 
 export function SourcesView({
   activeBookLabel,
+  claimConfidenceFilter,
   dataset,
   eventBookLabels,
   events,
@@ -37,7 +41,8 @@ export function SourcesView({
   onSelectEvent,
   selectedEvent
 }: SourcesViewProps) {
-  const claimRecords = buildClaimExplorerRecords(dataset, index, events);
+  const allClaimRecords = buildClaimExplorerRecords(dataset, index, events);
+  const claimRecords = filterClaimExplorerRecords(allClaimRecords, claimConfidenceFilter);
   const sourceRecords = buildSourceExplorerRecords(dataset, events, claimRecords);
   const groupedSourceRecords = groupSourceExplorerRecords(sourceRecords);
   const preferredSourceId = getPreferredSourceId(sourceRecords, focusedSourceId, selectedEvent);
@@ -71,6 +76,12 @@ export function SourcesView({
           <span className="people-count-pill">{claimRecords.length} claims in view</span>
           <span className="people-count-pill">{externalSourceCount} external witnesses</span>
           <span className="people-count-pill">{activeBookLabel} attestation scope</span>
+          <span className="people-count-pill">
+            Claim lens:{" "}
+            {claimConfidenceFilter === "all"
+              ? "All confidences"
+              : `${formatClaimConfidence(claimConfidenceFilter)} only`}
+          </span>
         </div>
       </div>
 
@@ -110,6 +121,14 @@ export function SourcesView({
               <dd>{claimRecords.length}</dd>
             </div>
           </dl>
+
+          {claimConfidenceFilter !== "all" && allClaimRecords.length !== claimRecords.length ? (
+            <p className="muted-copy">
+              {allClaimRecords.length - claimRecords.length} claim
+              {allClaimRecords.length - claimRecords.length === 1 ? "" : "s"} are hidden by the
+              current confidence lens.
+            </p>
+          ) : null}
 
           {activeSourceRecord ? (
             <div className="sources-active-card">

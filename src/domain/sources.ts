@@ -41,6 +41,8 @@ export interface SourceExplorerRecord {
   source: Source;
 }
 
+export type ClaimConfidenceFilter = Claim["confidence"] | "all";
+
 const collator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: "base"
@@ -185,6 +187,17 @@ function buildClaimExplorerRecord(
   };
 }
 
+function claimMatchesConfidenceFilter(
+  claim: Claim,
+  confidenceFilter: ClaimConfidenceFilter
+): boolean {
+  if (confidenceFilter === "all") {
+    return true;
+  }
+
+  return claim.confidence === confidenceFilter;
+}
+
 export function buildClaimExplorerRecords(
   dataset: CanonicalDataset,
   index: DatasetIndex,
@@ -196,6 +209,15 @@ export function buildClaimExplorerRecords(
     .filter((claim) => claimIsVisible(claim, scope))
     .sort(compareClaims)
     .map((claim) => buildClaimExplorerRecord(claim, index));
+}
+
+export function filterClaimExplorerRecords(
+  claimRecords: ClaimExplorerRecord[],
+  confidenceFilter: ClaimConfidenceFilter
+): ClaimExplorerRecord[] {
+  return claimRecords.filter((claimRecord) =>
+    claimMatchesConfidenceFilter(claimRecord.claim, confidenceFilter)
+  );
 }
 
 export function getClaimRecordsForEvent(

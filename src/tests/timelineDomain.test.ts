@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { Event } from "../domain/dataset";
 import {
+  buildTimelineGridLayout,
   defaultTimelineFilters,
   filterTimelineEvents,
   getTimelineEraForEvent,
@@ -132,5 +133,55 @@ describe("timeline domain helpers", () => {
     });
 
     expect(getTimelineEraForEvent(boundaryEvent).id).toBe("jerusalem_witness");
+  });
+
+  it("builds a horizontal chronology layout with stable tracks and undated records", () => {
+    const layout = buildTimelineGridLayout([
+      createEvent({
+        id: "acts_001",
+        title: "Early Event",
+        date: {
+          start_year: 30,
+          end_year: 30,
+          certainty: "estimated"
+        }
+      }),
+      createEvent({
+        id: "acts_002",
+        title: "Overlap Event",
+        date: {
+          start_year: 30,
+          end_year: 31,
+          certainty: "estimated"
+        }
+      }),
+      createEvent({
+        id: "acts_003",
+        title: "Later Event",
+        date: {
+          start_year: 33,
+          end_year: 33,
+          certainty: "estimated"
+        }
+      }),
+      createEvent({
+        id: "acts_004",
+        title: "Undated Event",
+        date: {
+          start_year: null,
+          end_year: null,
+          certainty: "unknown"
+        }
+      })
+    ]);
+
+    expect(layout).not.toBeNull();
+    expect(layout?.records.map((record) => [record.event.id, record.track])).toEqual([
+      ["acts_001", 0],
+      ["acts_002", 1],
+      ["acts_003", 0]
+    ]);
+    expect(layout?.undatedEvents.map((event) => event.id)).toEqual(["acts_004"]);
+    expect(layout?.bands.length).toBeGreaterThan(0);
   });
 });
