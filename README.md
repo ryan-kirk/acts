@@ -19,7 +19,8 @@ The repository now has a working Phase 12 Luke-Acts explorer layer on top of the
 - The explorer shell now includes top-level `Overview`, `Timeline`, `Map`, `People`, and `Sources` navigation, a searchable scripture event rail, book filters for `All Books`, `Acts`, and `Luke`, explicit scope messaging, and a responsive detail panel.
 - The overview now acts as a control hub for book scope and shared claim-confidence filtering so Luke discoverability and source-layer context are visible from first load.
 - The timeline view now renders a denser horizontal chronology board with scrollable year bands, compact event cards, and preserved filters for category, person, place, certainty, and date range.
-- The map view now renders validated places with Leaflet, basemap switching, location-certainty styling, compact legends, attribution, and synchronized place and journey context panels tied to canonical records.
+- The timeline now collapses long empty chronology spans automatically so sparse Luke-era ranges no longer expand into mostly blank horizontal scroll space.
+- The map view now renders validated places with Leaflet, basemap switching, location-certainty styling, compact legends, attribution, synchronized place and journey context panels tied to canonical records, and stable in-place updates when the selected event changes.
 - The journey route surface now lets users focus and hide routes independently, inspect ordered stops, and jump into linked events without leaving the map explorer, including a newly modeled `Voyage to Rome` overlay in Acts.
 - The people view now renders a searchable scripture biographical catalog with person summaries, aliases, appearance lists, related places, normalized relationship context, and source-backed record support.
 - The event inspector now renders source-grounded record detail with chronology explanations, place context, participant summaries, source-type distinctions, journey context, related-event navigation, and a separate external-attestation claims section.
@@ -91,8 +92,10 @@ The current app is now a small but real Luke-Acts explorer shell with working ti
 - It provides shared view navigation for overview, a working timeline explorer, a working map explorer, a working people explorer, and a dedicated sources explorer.
 - It includes a searchable scripture event rail with deterministic filtering and active selection styling.
 - It includes a chronological book-aware timeline rendered as a dense horizontal board with year bands, category styling, and certainty visibility.
+- It now compresses long empty year runs into explicit gap markers so Luke and future sparse books remain compact and easier to navigate.
 - It includes first-pass timeline filters for category, person, place, certainty, and date range.
 - It includes a map explorer with validated place markers, basemap controls, journey overlay toggles, compact certainty and event-type legends, attribution, and a place interaction panel with related event links.
+- It keeps the active Leaflet surface mounted while event selection changes, so the map no longer tears down and rebuilds during ordinary cross-view interaction.
 - It includes a journey focus panel with independent route visibility, richer route cards, ordered stop lists, linked events, source support, and synchronized place highlighting on the map.
 - It includes four modeled Acts journey overlays, now including the Rome voyage sequence through intermediate Mediterranean and Italian ports.
 - It includes a people explorer with searchable biographical records, alias and role metadata, linked appearances, place navigation, normalized relationship context, and source support for person records.

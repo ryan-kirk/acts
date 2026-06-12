@@ -40,26 +40,36 @@ export interface TimelineEraGroup {
 }
 
 export interface TimelineGridBand {
+  columnSpan: number;
+  columnStart: number;
   endYear: number;
   id: string;
   label: string;
   startYear: number;
 }
 
+export interface TimelineGridColumn {
+  endYear: number;
+  id: string;
+  kind: "gap" | "year";
+  label: string;
+  startYear: number;
+}
+
 export interface TimelineGridRecord {
   columnSpan: number;
+  columnStart: number;
   event: Event;
   track: number;
-  yearOffset: number;
 }
 
 export interface TimelineGridLayout {
   bands: TimelineGridBand[];
+  columns: TimelineGridColumn[];
   maxYear: number;
   minYear: number;
   totalTracks: number;
   undatedEvents: Event[];
-  visibleYears: number[];
   records: TimelineGridRecord[];
 }
 
@@ -84,6 +94,7 @@ const collator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: "base"
 });
+const collapsedGapThreshold = 3;
 
 export const defaultTimelineFilters: TimelineFilters = {
   tagId: "all",
@@ -233,6 +244,146 @@ function formatTimelineBandLabel(startYear: number, endYear: number): string {
   return `${formatTimelineYearLabel(startYear)} - ${formatTimelineYearLabel(endYear)}`;
 }
 
+function formatTimelineGapLabel(startYear: number, endYear: number): string {
+  const totalYears = endYear - startYear + 1;
+  return `${totalYears}-year gap`;
+}
+
+function buildTimelineColumns(minYear: number, maxYear: number, events: Event[]): TimelineGridColumn[] {
+  const occupiedYears = new Set<number>();
+
+  events.forEach((event) => {
+    const startYear = event.date.start_year;
+    const endYear = event.date.end_year;
+
+    if (startYear === null || endYear === null) {
+      return;
+    }
+
+    for (let year = startYear; year <= endYear; year += 1) {
+      occupiedYears.add(year);
+    }
+  });
+
+  const columns: TimelineGridColumn[] = [];
+  let emptyRunStart: number | null = null;
+
+  function flushEmptyRun(endYear: number): void {
+    if (emptyRunStart === null) {
+      return;
+    }
+
+    const totalYears = endYear - emptyRunStart + 1;
+
+    if (totalYears >= collapsedGapThreshold) {
+      columns.push({
+        id: `gap_${emptyRunStart}_${endYear}`,
+        kind: "gap",
+        startYear: emptyRunStart,
+        endYear,
+        label: formatTimelineGapLabel(emptyRunStart, endYear)
+      });
+    } else {
+      for (let year = emptyRunStart; year <= endYear; year += 1) {
+        columns.push({
+          id: `year_${year}`,
+          kind: "year",
+          startYear: year,
+          endYear: year,
+          label: formatTimelineYearLabel(year)
+        });
+      }
+    }
+
+    emptyRunStart = null;
+  }
+
+  for (let year = minYear; year <= maxYear; year += 1) {
+    if (occupiedYears.has(year)) {
+      flushEmptyRun(year - 1);
+      columns.push({
+        id: `year_${year}`,
+        kind: "year",
+        startYear: year,
+        endYear: year,
+        label: formatTimelineYearLabel(year)
+      });
+      continue;
+    }
+
+    if (emptyRunStart === null) {
+      emptyRunStart = year;
+    }
+  }
+
+  flushEmptyRun(maxYear);
+
+  return columns;
+}
+
+function buildTimelineBands(columns: TimelineGridColumn[], bandSize: number): TimelineGridBand[] {
+  const bands: TimelineGridBand[] = [];
+  let bandStartColumn: number | null = null;
+  let bandStartYear: number | null = null;
+  let bandEndYear: number | null = null;
+  let bandYearCount = 0;
+  let previousYear: number | null = null;
+
+  function flushBand(endColumn: number): void {
+    if (bandStartColumn === null || bandStartYear === null || bandEndYear === null) {
+      return;
+    }
+
+    bands.push({
+      id: `band_${bandStartYear}_${bandEndYear}`,
+      startYear: bandStartYear,
+      endYear: bandEndYear,
+      label: formatTimelineBandLabel(bandStartYear, bandEndYear),
+      columnStart: bandStartColumn,
+      columnSpan: endColumn - bandStartColumn + 1
+    });
+
+    bandStartColumn = null;
+    bandStartYear = null;
+    bandEndYear = null;
+    bandYearCount = 0;
+    previousYear = null;
+  }
+
+  columns.forEach((column, columnIndex) => {
+    const visibleColumn = columnIndex + 1;
+
+    if (column.kind === "gap") {
+      flushBand(visibleColumn - 1);
+      return;
+    }
+
+    const startsNewBand =
+      bandStartColumn === null ||
+      previousYear === null ||
+      column.startYear !== previousYear + 1 ||
+      bandYearCount >= bandSize;
+
+    if (startsNewBand) {
+      flushBand(visibleColumn - 1);
+      bandStartColumn = visibleColumn;
+      bandStartYear = column.startYear;
+      bandEndYear = column.endYear;
+      bandYearCount = 1;
+      previousYear = column.endYear;
+      return;
+    }
+
+    bandEndYear = column.endYear;
+    bandYearCount += 1;
+    previousYear = column.endYear;
+  });
+
+  flushBand(columns.length);
+
+  return bands;
+}
+
 export function getTimelineFilterOptions(
   dataset: CanonicalDataset
 ): TimelineFilterOptions {
@@ -366,7 +517,7 @@ export function buildTimelineGridLayout(events: Event[]): TimelineGridLayout | n
       ? {
           minYear: 0,
           maxYear: 0,
-          visibleYears: [],
+          columns: [],
           totalTracks: 0,
           records: [],
           bands: [],
@@ -377,56 +528,60 @@ export function buildTimelineGridLayout(events: Event[]): TimelineGridLayout | n
 
   const rawMinYear = Math.min(...datedEvents.map((event) => event.date.start_year!));
   const rawMaxYear = Math.max(...datedEvents.map((event) => event.date.end_year!));
-  const minYear = rawMinYear - 1;
-  const maxYear = rawMaxYear + 1;
-  const visibleYears = Array.from({ length: maxYear - minYear + 1 }, (_, index) => minYear + index);
-  const trackEndYears: number[] = [];
+  const minYear = rawMinYear;
+  const maxYear = rawMaxYear;
+  const columns = buildTimelineColumns(minYear, maxYear, datedEvents);
+  const yearToColumnIndex = new Map<number, number>();
+
+  columns.forEach((column, columnIndex) => {
+    for (let year = column.startYear; year <= column.endYear; year += 1) {
+      yearToColumnIndex.set(year, columnIndex);
+    }
+  });
+
+  const trackEndColumns: number[] = [];
   const records: TimelineGridRecord[] = [];
 
   datedEvents.forEach((event) => {
     const startYear = event.date.start_year!;
     const endYear = event.date.end_year!;
-    const baseSpan = Math.max(endYear - startYear + 1, 1);
-    const columnSpan = Math.max(baseSpan, 2);
-    const visibleEndYear = startYear + columnSpan - 1;
-    let track = trackEndYears.findIndex((trackEndYear) => trackEndYear < startYear);
+    const startColumnIndex = yearToColumnIndex.get(startYear);
+    const endColumnIndex = yearToColumnIndex.get(endYear);
+
+    if (startColumnIndex === undefined || endColumnIndex === undefined) {
+      return;
+    }
+
+    const columnStart = startColumnIndex + 1;
+    const baseSpan = endColumnIndex - startColumnIndex + 1;
+    const maxAvailableSpan = columns.length - startColumnIndex;
+    const columnSpan = Math.min(Math.max(baseSpan, 2), maxAvailableSpan);
+    const visibleEndColumn = columnStart + columnSpan - 1;
+    let track = trackEndColumns.findIndex((trackEndColumn) => trackEndColumn < columnStart);
 
     if (track === -1) {
-      track = trackEndYears.length;
-      trackEndYears.push(visibleEndYear);
+      track = trackEndColumns.length;
+      trackEndColumns.push(visibleEndColumn);
     } else {
-      trackEndYears[track] = visibleEndYear;
+      trackEndColumns[track] = visibleEndColumn;
     }
 
     records.push({
       event,
       track,
       columnSpan,
-      yearOffset: startYear - minYear + 1
+      columnStart
     });
   });
 
   const bandSize = maxYear - minYear > 36 ? 10 : 5;
-  const bandStartYear = Math.floor(minYear / bandSize) * bandSize;
-  const bands: TimelineGridBand[] = [];
-
-  for (let currentYear = bandStartYear; currentYear <= maxYear; currentYear += bandSize) {
-    const startYear = Math.max(currentYear, minYear);
-    const endYear = Math.min(currentYear + bandSize - 1, maxYear);
-
-    bands.push({
-      id: `band_${startYear}_${endYear}`,
-      startYear,
-      endYear,
-      label: formatTimelineBandLabel(startYear, endYear)
-    });
-  }
+  const bands = buildTimelineBands(columns, bandSize);
 
   return {
     minYear,
     maxYear,
-    visibleYears,
-    totalTracks: Math.max(trackEndYears.length, 1),
+    columns,
+    totalTracks: Math.max(trackEndColumns.length, 1),
     records,
     bands,
     undatedEvents

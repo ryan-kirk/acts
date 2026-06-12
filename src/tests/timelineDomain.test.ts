@@ -183,5 +183,44 @@ describe("timeline domain helpers", () => {
     ]);
     expect(layout?.undatedEvents.map((event) => event.id)).toEqual(["acts_004"]);
     expect(layout?.bands.length).toBeGreaterThan(0);
+    expect(layout?.records.map((record) => [record.event.id, record.columnStart])).toEqual([
+      ["acts_001", 1],
+      ["acts_002", 1],
+      ["acts_003", 4]
+    ]);
+  });
+
+  it("collapses long empty year runs into explicit gap columns for sparse chronologies", () => {
+    const layout = buildTimelineGridLayout([
+      createEvent({
+        id: "luke_001",
+        title: "Infancy Event",
+        date: {
+          start_year: -5,
+          end_year: -5,
+          certainty: "estimated"
+        }
+      }),
+      createEvent({
+        id: "luke_002",
+        title: "Ministry Event",
+        date: {
+          start_year: 27,
+          end_year: 27,
+          certainty: "estimated"
+        }
+      })
+    ]);
+
+    expect(layout).not.toBeNull();
+    expect(layout?.columns.map((column) => [column.kind, column.label])).toEqual([
+      ["year", "5 BC"],
+      ["gap", "31-year gap"],
+      ["year", "AD 27"]
+    ]);
+    expect(layout?.records.map((record) => [record.event.id, record.columnStart])).toEqual([
+      ["luke_001", 1],
+      ["luke_002", 3]
+    ]);
   });
 });

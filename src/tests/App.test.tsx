@@ -450,6 +450,26 @@ describe("App", () => {
     });
   });
 
+  it("keeps the same map instance when event selection changes on the map view", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("tab", { name: /map/i }));
+
+    const firstMapInstance = getLeafletMockState().maps[0];
+
+    expect(getLeafletMockState().maps).toHaveLength(1);
+    expect(firstMapInstance).toBeDefined();
+
+    fireEvent.click(screen.getByRole("button", { name: /shipwreck on malta/i }));
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    expect(within(inspector).getByRole("heading", { name: /shipwreck on malta/i }))
+      .toBeInTheDocument();
+    expect(getLeafletMockState().maps).toHaveLength(1);
+    expect(firstMapInstance?.removed).toBe(false);
+  });
+
   it("shows a clear failure state when dataset bootstrap fails", () => {
     render(
       <App

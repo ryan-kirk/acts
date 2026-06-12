@@ -24,7 +24,9 @@ import {
   getPreferredEventForPlace,
   locationCertaintyConfig,
   mapBaseLayers,
-  type MapBaseLayerId
+  type MapBaseLayerId,
+  type MapJourneyOverlay,
+  type MapPlaceRecord
 } from "../domain/map";
 import { JourneyDetailPanel } from "./JourneyDetailPanel";
 
@@ -114,6 +116,43 @@ export function MapView({
       (event) => getTimelineCategoryTone(event, index) === legendEntry.tone
     );
   });
+
+  function createPlaceMarker(placeRecord: MapPlaceRecord): L.CircleMarker {
+    const certaintyTone = locationCertaintyConfig[placeRecord.place.location_certainty];
+    const marker = L.circleMarker([placeRecord.place.latitude, placeRecord.place.longitude], {
+      radius: getMarkerRadius(placeRecord.eventCount, false),
+      fillColor: certaintyTone.color,
+      fillOpacity: 0.82,
+      color: certaintyTone.stroke,
+      weight: 2
+    });
+
+    marker.on("click", () => {
+      const preferredEvent = getPreferredEventForPlace(placeRecord, selectedEventIdRef.current);
+
+      if (preferredEvent) {
+        callbacksRef.current.onFocusPlace(placeRecord.place.id);
+        callbacksRef.current.onSelectEvent(preferredEvent.id);
+      }
+    });
+
+    return marker;
+  }
+
+  function createJourneyOverlayLayer(overlay: MapJourneyOverlay): L.Polyline {
+    const polyline = L.polyline(overlay.points, {
+      color: overlay.color,
+      weight: 2.4,
+      opacity: 0.7,
+      dashArray: "8 5"
+    });
+
+    polyline.on("click", () => {
+      setSelectedJourneyId(overlay.id);
+    });
+
+    return polyline;
+  }
 
   useEffect(() => {
     selectedEventIdRef.current = selectedEventId;
@@ -219,60 +258,6 @@ export function MapView({
       tilePane.style.filter = activeBaseLayer.filter;
     }
 
-    placeRecords.forEach((placeRecord) => {
-      const certaintyTone = locationCertaintyConfig[placeRecord.place.location_certainty];
-      const marker = L.circleMarker([placeRecord.place.latitude, placeRecord.place.longitude], {
-        radius: getMarkerRadius(placeRecord.eventCount, false),
-        fillColor: certaintyTone.color,
-        fillOpacity: 0.82,
-        color: certaintyTone.stroke,
-        weight: 2
-      });
-
-      marker.on("click", () => {
-        const preferredEvent = getPreferredEventForPlace(
-          placeRecord,
-          selectedEventIdRef.current
-        );
-
-        if (preferredEvent) {
-          callbacksRef.current.onFocusPlace(placeRecord.place.id);
-          callbacksRef.current.onSelectEvent(preferredEvent.id);
-        }
-      });
-
-      marker.addTo(map);
-      markerRefs.current[placeRecord.place.id] = marker;
-    });
-
-    journeyOverlays.forEach((overlay) => {
-      const polyline = L.polyline(overlay.points, {
-        color: overlay.color,
-        weight: 2.4,
-        opacity: 0.7,
-        dashArray: "8 5"
-      });
-
-      polyline.on("click", () => {
-        setSelectedJourneyId(overlay.id);
-      });
-
-      polyline.addTo(map);
-      journeyLayerRefs.current[overlay.id] = polyline;
-    });
-
-    if (placeRecords.length > 0) {
-      map.fitBounds(
-        placeRecords.map((placeRecord) => [
-          placeRecord.place.latitude,
-          placeRecord.place.longitude
-        ]),
-        {
-          padding: [24, 24]
-        }
-      );
-    }
-
     map.invalidateSize();
 
     return () => {
@@ -282,7 +267,79 @@ export function MapView({
       markerRefs.current = {};
       journeyLayerRefs.current = {};
     };
-  }, [activeBaseLayer.filter, activeBaseLayer.url, journeyOverlays, placeRecords]);
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    const nextPlaceIds = new Set(placeRecords.map((placeRecord) => placeRecord.place.id));
+
+    Object.entries(markerRefs.current).forEach(([placeId, marker]) => {
+      if (nextPlaceIds.has(placeId)) {
+        return;
+      }
+
+      if (map.hasLayer(marker)) {
+        map.removeLayer(marker);
+      }
+
+      delete markerRefs.current[placeId];
+    });
+
+    placeRecords.forEach((placeRecord) => {
+      if (markerRefs.current[placeRecord.place.id]) {
+        return;
+      }
+
+      const marker = createPlaceMarker(placeRecord);
+
+      markerRefs.current[placeRecord.place.id] = marker;
+
+      if (certaintyVisibility[placeRecord.place.location_certainty]) {
+        marker.addTo(map);
+      }
+    });
+  }, [certaintyVisibility, placeRecords]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    const nextJourneyIds = new Set(journeyOverlays.map((overlay) => overlay.id));
+
+    Object.entries(journeyLayerRefs.current).forEach(([journeyId, layer]) => {
+      if (nextJourneyIds.has(journeyId)) {
+        return;
+      }
+
+      if (map.hasLayer(layer)) {
+        map.removeLayer(layer);
+      }
+
+      delete journeyLayerRefs.current[journeyId];
+    });
+
+    journeyOverlays.forEach((overlay) => {
+      if (journeyLayerRefs.current[overlay.id]) {
+        return;
+      }
+
+      const polyline = createJourneyOverlayLayer(overlay);
+
+      journeyLayerRefs.current[overlay.id] = polyline;
+
+      if (journeyVisibility[overlay.id] ?? true) {
+        polyline.addTo(map);
+      }
+    });
+  }, [journeyOverlays, journeyVisibility]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -381,6 +438,21 @@ export function MapView({
       });
     });
   }, [activeJourneyOverlay, journeyOverlays, journeyVisibility]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!map || placeRecords.length === 0 || activeJourneyOverlay || activePlaceRecord) {
+      return;
+    }
+
+    map.fitBounds(
+      placeRecords.map((placeRecord) => [placeRecord.place.latitude, placeRecord.place.longitude]),
+      {
+        padding: [24, 24]
+      }
+    );
+  }, [activeJourneyOverlay, activePlaceRecord, placeRecords]);
 
   useEffect(() => {
     const map = mapRef.current;

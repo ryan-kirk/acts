@@ -53,6 +53,13 @@ export function TimelineView({
   const filteredEvents = filterTimelineEvents(events, filters);
   const timelineLayout = buildTimelineGridLayout(filteredEvents);
   const selectedEventHidden = !filteredEvents.some((event) => event.id === selectedEventId);
+  const timelineGridTemplateColumns = timelineLayout
+    ? timelineLayout.columns
+        .map((column) =>
+          column.kind === "gap" ? "minmax(7.25rem, 0.82fr)" : "minmax(5.25rem, 1fr)"
+        )
+        .join(" ")
+    : "";
 
   return (
     <section className="timeline-view" aria-label="Scripture timeline">
@@ -189,7 +196,10 @@ export function TimelineView({
       <section className="timeline-inline-legend" aria-label="Timeline legend">
         <div className="timeline-inline-copy">
           <h3>Chronology Surface</h3>
-          <p>Scroll horizontally through the dated record bands and select a card to sync the inspector.</p>
+          <p>
+            Scroll horizontally through the dated record bands. Long empty periods
+            collapse automatically so sparse books stay readable.
+          </p>
         </div>
         <div className="timeline-inline-badges">
           {timelineCertaintyLegend.map((entry) => (
@@ -222,19 +232,26 @@ export function TimelineView({
                 <div
                   className="timeline-axis-row"
                   style={{
-                    gridTemplateColumns: `repeat(${timelineLayout.visibleYears.length}, minmax(5.25rem, 1fr))`
+                    gridTemplateColumns: timelineGridTemplateColumns
                   }}
                 >
-                  {timelineLayout.visibleYears.map((year, yearIndex) => {
+                  {timelineLayout.columns.map((column, columnIndex) => {
+                    const year = column.startYear;
+                    const isGap = column.kind === "gap";
                     const isMajorTick =
-                      yearIndex === 0 || year === timelineLayout.maxYear || year % 5 === 0;
+                      isGap ||
+                      columnIndex === 0 ||
+                      column.endYear === timelineLayout.maxYear ||
+                      year % 5 === 0;
 
                     return (
                       <div
-                        key={year}
-                        className={`timeline-axis-tick ${isMajorTick ? "is-major" : ""}`}
+                        key={column.id}
+                        className={`timeline-axis-tick ${isMajorTick ? "is-major" : ""} ${
+                          isGap ? "is-gap" : ""
+                        }`}
                       >
-                        {isMajorTick ? formatTimelineYearLabel(year) : ""}
+                        {isGap ? column.label : isMajorTick ? formatTimelineYearLabel(year) : ""}
                       </div>
                     );
                   })}
@@ -244,7 +261,7 @@ export function TimelineView({
                   className="timeline-band-row"
                   aria-hidden="true"
                   style={{
-                    gridTemplateColumns: `repeat(${timelineLayout.visibleYears.length}, minmax(5.25rem, 1fr))`
+                    gridTemplateColumns: timelineGridTemplateColumns
                   }}
                 >
                   {timelineLayout.bands.map((band) => (
@@ -252,9 +269,7 @@ export function TimelineView({
                       key={band.id}
                       className="timeline-band-chip"
                       style={{
-                        gridColumn: `${band.startYear - timelineLayout.minYear + 1} / span ${
-                          band.endYear - band.startYear + 1
-                        }`
+                        gridColumn: `${band.columnStart} / span ${band.columnSpan}`
                       }}
                     >
                       {band.label}
@@ -265,7 +280,7 @@ export function TimelineView({
                 <ol
                   className="timeline-grid"
                   style={{
-                    gridTemplateColumns: `repeat(${timelineLayout.visibleYears.length}, minmax(5.25rem, 1fr))`,
+                    gridTemplateColumns: timelineGridTemplateColumns,
                     gridTemplateRows: `repeat(${timelineLayout.totalTracks}, minmax(9rem, auto))`
                   }}
                 >
@@ -283,7 +298,7 @@ export function TimelineView({
                         key={event.id}
                         className="timeline-grid-item"
                         style={{
-                          gridColumn: `${record.yearOffset} / span ${record.columnSpan}`,
+                          gridColumn: `${record.columnStart} / span ${record.columnSpan}`,
                           gridRow: `${record.track + 1}`
                         }}
                       >
