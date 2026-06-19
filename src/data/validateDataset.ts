@@ -2,10 +2,12 @@ import { ZodIssue } from "zod";
 
 import {
   datasetSchema,
+  type BookSchema,
   type ClaimSchema,
   type DatasetSchema,
   type EventSchema,
   type JourneySchema,
+  type LiteraryUnitSchema,
   type PlaceSchema,
   type RelationshipSchema,
   type SourceRefSchema
@@ -84,6 +86,101 @@ function assertOptionalSourceRefsResolve(
   if (sourceRefs) {
     assertSourceRefsResolve(issues, pathPrefix, sourceRefs, knownSourceIds);
   }
+}
+
+function assertBookReferencesResolve(
+  issues: ValidationIssue[],
+  dataset: DatasetSchema,
+  knownPersonIds: Set<string>,
+  knownPlaceIds: Set<string>,
+  knownSourceIds: Set<string>
+): void {
+  const sourceTypeById = new Map(dataset.sources.map((source) => [source.id, source.type]));
+  const knownBookIds = new Set(dataset.books.map((book) => book.id));
+
+  if (!knownBookIds.has(dataset.metadata.dataset_id)) {
+    addIssue(
+      issues,
+      "metadata.dataset_id",
+      `No book record matches dataset_id '${dataset.metadata.dataset_id}'.`
+    );
+  }
+
+  dataset.books.forEach((book: BookSchema, index: number) => {
+    const path = `books.${index}`;
+
+    if (!knownSourceIds.has(book.primary_source_id)) {
+      addIssue(
+        issues,
+        `${path}.primary_source_id`,
+        `Unknown primary_source_id '${book.primary_source_id}'.`
+      );
+    } else if (sourceTypeById.get(book.primary_source_id) !== "scripture") {
+      addIssue(
+        issues,
+        `${path}.primary_source_id`,
+        `Book primary_source_id '${book.primary_source_id}' must reference a scripture source.`
+      );
+    }
+
+    if (book.composition_place_id && !knownPlaceIds.has(book.composition_place_id)) {
+      addIssue(
+        issues,
+        `${path}.composition_place_id`,
+        `Unknown composition_place_id '${book.composition_place_id}'.`
+      );
+    }
+
+    if (book.destination_place_id && !knownPlaceIds.has(book.destination_place_id)) {
+      addIssue(
+        issues,
+        `${path}.destination_place_id`,
+        `Unknown destination_place_id '${book.destination_place_id}'.`
+      );
+    }
+
+    book.sender_ids.forEach((personId, personIndex) => {
+      if (!knownPersonIds.has(personId)) {
+        addIssue(
+          issues,
+          `${path}.sender_ids.${personIndex}`,
+          `Unknown sender_id '${personId}'.`
+        );
+      }
+    });
+
+    book.co_sender_ids.forEach((personId, personIndex) => {
+      if (!knownPersonIds.has(personId)) {
+        addIssue(
+          issues,
+          `${path}.co_sender_ids.${personIndex}`,
+          `Unknown co_sender_id '${personId}'.`
+        );
+      }
+    });
+
+    book.recipient_person_ids.forEach((personId, personIndex) => {
+      if (!knownPersonIds.has(personId)) {
+        addIssue(
+          issues,
+          `${path}.recipient_person_ids.${personIndex}`,
+          `Unknown recipient_person_id '${personId}'.`
+        );
+      }
+    });
+
+    book.recipient_place_ids.forEach((placeId, placeIndex) => {
+      if (!knownPlaceIds.has(placeId)) {
+        addIssue(
+          issues,
+          `${path}.recipient_place_ids.${placeIndex}`,
+          `Unknown recipient_place_id '${placeId}'.`
+        );
+      }
+    });
+
+    assertSourceRefsResolve(issues, path, book.source_refs, knownSourceIds);
+  });
 }
 
 function assertEventReferencesResolve(
@@ -198,6 +295,54 @@ function assertJourneyReferencesResolve(
   });
 }
 
+function assertLiteraryUnitReferencesResolve(
+  issues: ValidationIssue[],
+  literaryUnits: LiteraryUnitSchema[],
+  knownBookIds: Set<string>,
+  knownPlaceIds: Set<string>,
+  knownPersonIds: Set<string>,
+  knownEventIds: Set<string>,
+  knownSourceIds: Set<string>
+): void {
+  literaryUnits.forEach((literaryUnit, index) => {
+    const path = `literary_units.${index}`;
+
+    if (!knownBookIds.has(literaryUnit.book_id)) {
+      addIssue(issues, `${path}.book_id`, `Unknown book_id '${literaryUnit.book_id}'.`);
+    }
+
+    if (literaryUnit.location_id && !knownPlaceIds.has(literaryUnit.location_id)) {
+      addIssue(
+        issues,
+        `${path}.location_id`,
+        `Unknown literary unit location_id '${literaryUnit.location_id}'.`
+      );
+    }
+
+    literaryUnit.participant_ids.forEach((personId, personIndex) => {
+      if (!knownPersonIds.has(personId)) {
+        addIssue(
+          issues,
+          `${path}.participant_ids.${personIndex}`,
+          `Unknown literary unit participant_id '${personId}'.`
+        );
+      }
+    });
+
+    literaryUnit.related_event_ids.forEach((eventId, eventIndex) => {
+      if (!knownEventIds.has(eventId)) {
+        addIssue(
+          issues,
+          `${path}.related_event_ids.${eventIndex}`,
+          `Unknown literary unit related_event_id '${eventId}'.`
+        );
+      }
+    });
+
+    assertSourceRefsResolve(issues, path, literaryUnit.source_refs, knownSourceIds);
+  });
+}
+
 function entityExists(
   type: RelationshipSchema["from_type"],
   id: string,
@@ -297,18 +442,23 @@ export function validateDataset(input: unknown): DatasetSchema {
   checkDuplicateIds(issues, "sources", dataset.sources);
   checkDuplicateIds(issues, "places", dataset.places);
   checkDuplicateIds(issues, "people", dataset.people);
+  checkDuplicateIds(issues, "books", dataset.books);
   checkDuplicateIds(issues, "events", dataset.events);
   checkDuplicateIds(issues, "journeys", dataset.journeys);
   checkDuplicateIds(issues, "relationships", dataset.relationships);
   checkDuplicateIds(issues, "tags", dataset.tags);
+  checkDuplicateIds(issues, "literary_units", dataset.literary_units);
   checkDuplicateIds(issues, "claims", dataset.claims);
 
   const knownSourceIds = new Set(dataset.sources.map((source) => source.id));
   const knownPlaceIds = new Set(dataset.places.map((place) => place.id));
   const knownPersonIds = new Set(dataset.people.map((person) => person.id));
+  const knownBookIds = new Set(dataset.books.map((book) => book.id));
   const knownEventIds = new Set(dataset.events.map((event) => event.id));
   const knownJourneyIds = new Set(dataset.journeys.map((journey) => journey.id));
   const knownTagIds = new Set(dataset.tags.map((tag) => tag.id));
+
+  assertBookReferencesResolve(issues, dataset, knownPersonIds, knownPlaceIds, knownSourceIds);
 
   dataset.places.forEach((place: PlaceSchema, index: number) => {
     assertOptionalSourceRefsResolve(issues, `places.${index}`, place.source_refs, knownSourceIds);
@@ -338,18 +488,30 @@ export function validateDataset(input: unknown): DatasetSchema {
   );
 
   const knownIdsByType: Record<RelationshipSchema["from_type"], Set<string>> = {
+    book: knownBookIds,
     person: knownPersonIds,
     place: knownPlaceIds,
     event: knownEventIds,
     journey: knownJourneyIds,
     source: knownSourceIds,
-    tag: knownTagIds
+    tag: knownTagIds,
+    literary_unit: new Set(dataset.literary_units.map((literaryUnit) => literaryUnit.id))
   };
 
   assertRelationshipReferencesResolve(
     issues,
     dataset.relationships,
     knownIdsByType,
+    knownSourceIds
+  );
+
+  assertLiteraryUnitReferencesResolve(
+    issues,
+    dataset.literary_units,
+    knownBookIds,
+    knownPlaceIds,
+    knownPersonIds,
+    knownEventIds,
     knownSourceIds
   );
 

@@ -1,5 +1,14 @@
 import { useDeferredValue, useEffect, useState } from "react";
 
+import {
+  formatBookCorpus,
+  getBookCoSenders,
+  getBookRecipientPeople,
+  getBookRecipientPlaces,
+  getBookSenders,
+  getPrimaryScopeBook,
+  isLetterLikeBook
+} from "../domain/books";
 import type { CanonicalDataset, Event, Relationship } from "../domain/dataset";
 import {
   formatDateRange,
@@ -59,6 +68,15 @@ export function PeopleView({
 }: PeopleViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const deferredSearchQuery = useDeferredValue(searchQuery);
+  const activeScopeBook = getPrimaryScopeBook(dataset);
+  const activeScopeSenders = activeScopeBook ? getBookSenders(activeScopeBook, index) : [];
+  const activeScopeCoSenders = activeScopeBook ? getBookCoSenders(activeScopeBook, index) : [];
+  const activeScopeRecipients = activeScopeBook
+    ? getBookRecipientPeople(activeScopeBook, index)
+    : [];
+  const activeScopeRecipientPlaces = activeScopeBook
+    ? getBookRecipientPlaces(activeScopeBook, index)
+    : [];
   const peopleRecords = buildPeopleExplorerRecords(dataset, index);
   const filteredPeopleRecords = filterPeopleExplorerRecords(peopleRecords, deferredSearchQuery);
   const fallbackPersonId =
@@ -209,6 +227,118 @@ export function PeopleView({
             <p className="helper-note people-hidden-note" role="status">
               The selected person is outside the active people search results.
             </p>
+          ) : null}
+
+          {activeScopeBook ? (
+            <section className="people-detail-card people-book-context-card">
+              <p className="people-detail-eyebrow">Book Context</p>
+              <div className="people-detail-header">
+                <div>
+                  <h3>{activeScopeBook.title}</h3>
+                  <p className="people-detail-aliases">
+                    {formatBookCorpus(activeScopeBook.corpus)} •{" "}
+                    {isLetterLikeBook(activeScopeBook)
+                      ? "Sender and recipient context modeled"
+                      : "Narrative participant context"}
+                  </p>
+                </div>
+                <span className="entity-type-badge">
+                  {activeScopeBook.genre.join(", ")}
+                </span>
+              </div>
+
+              <p className="people-detail-summary">
+                {activeScopeBook.summary ??
+                  "No book-level participant summary has been modeled yet."}
+              </p>
+
+              {activeScopeSenders.length ||
+              activeScopeCoSenders.length ||
+              activeScopeRecipients.length ||
+              activeScopeRecipientPlaces.length ||
+              activeScopeBook.recipient_group ? (
+                <div className="people-book-context-grid">
+                  {activeScopeSenders.length > 0 ? (
+                    <div>
+                      <h4>Senders</h4>
+                      <div className="map-journey-pill-row">
+                        {activeScopeSenders.map((sender) => (
+                          <button
+                            key={sender.id}
+                            type="button"
+                            className="map-inline-button"
+                            onClick={() => handleSelectPerson(sender.id)}
+                          >
+                            {sender.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {activeScopeCoSenders.length > 0 ? (
+                    <div>
+                      <h4>Co-senders</h4>
+                      <div className="map-journey-pill-row">
+                        {activeScopeCoSenders.map((sender) => (
+                          <button
+                            key={sender.id}
+                            type="button"
+                            className="map-inline-button"
+                            onClick={() => handleSelectPerson(sender.id)}
+                          >
+                            {sender.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {activeScopeRecipients.length > 0 ? (
+                    <div>
+                      <h4>Recipients</h4>
+                      <div className="map-journey-pill-row">
+                        {activeScopeRecipients.map((recipient) => (
+                          <button
+                            key={recipient.id}
+                            type="button"
+                            className="map-inline-button"
+                            onClick={() => handleSelectPerson(recipient.id)}
+                          >
+                            {recipient.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {activeScopeRecipientPlaces.length > 0 ? (
+                    <div>
+                      <h4>Destination Places</h4>
+                      <div className="map-journey-pill-row">
+                        {activeScopeRecipientPlaces.map((place) => (
+                          <button
+                            key={place.id}
+                            type="button"
+                            className="map-inline-button"
+                            onClick={() => onFocusPlace(place.id)}
+                          >
+                            {place.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {activeScopeBook.recipient_group ? (
+                    <div>
+                      <h4>Recipient Group</h4>
+                      <p className="muted-copy">{activeScopeBook.recipient_group}</p>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </section>
           ) : null}
 
           {selectedProfile ? (

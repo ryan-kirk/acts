@@ -14,7 +14,7 @@ function App({ loadState = explorerDatasetLoadState }: AppProps) {
       <main className="app-shell">
         <section className="error-panel">
           <p className="eyebrow">Dataset Unavailable</p>
-          <h1>The Luke-Acts explorer could not start from the canonical datasets.</h1>
+          <h1>The explorer could not start from the canonical datasets.</h1>
           <p className="lede">
             Validation failed before rendering, so the app is showing the problem
             directly instead of silently dropping records or crashing in the UI.

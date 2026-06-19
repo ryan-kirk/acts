@@ -48,6 +48,7 @@ export function EventInspector({
   onFocusPlace,
   onFocusSource
 }: EventInspectorProps) {
+  const isSynopticContinuityClaim = (claimType: string) => claimType.startsWith("synoptic_");
   const place = getPlaceForEvent(event, index);
   const participants = getEventParticipants(event, index);
   const tags = getEventTags(event, index);
@@ -55,6 +56,18 @@ export function EventInspector({
   const relatedEvents = getRelatedEvents(event, index);
   const allClaimRecords = getClaimRecordsForEvent(event.id, dataset, index);
   const claimRecords = filterClaimExplorerRecords(allClaimRecords, claimConfidenceFilter);
+  const allContinuityClaimRecords = allClaimRecords.filter((claimRecord) =>
+    isSynopticContinuityClaim(claimRecord.claim.claim_type)
+  );
+  const continuityClaimRecords = claimRecords.filter((claimRecord) =>
+    isSynopticContinuityClaim(claimRecord.claim.claim_type)
+  );
+  const allExternalClaimRecords = allClaimRecords.filter(
+    (claimRecord) => !isSynopticContinuityClaim(claimRecord.claim.claim_type)
+  );
+  const externalClaimRecords = claimRecords.filter(
+    (claimRecord) => !isSynopticContinuityClaim(claimRecord.claim.claim_type)
+  );
   const chronologyExplanation = getDateCertaintyDescription(event.date.certainty);
   const sourceEntries = event.source_refs.flatMap((sourceRef) => {
     const source = index.sourcesById.get(sourceRef.source_id);
@@ -247,7 +260,83 @@ export function EventInspector({
         )}
       </section>
 
-      {allClaimRecords.length > 0 ? (
+      {allContinuityClaimRecords.length > 0 ? (
+        <section className="detail-section">
+          <div className="section-header-row">
+            <h3>Synoptic Continuity</h3>
+            {claimConfidenceFilter !== "all" ? (
+              <span className="entity-type-badge">
+                {formatClaimConfidence(claimConfidenceFilter)} confidence
+              </span>
+            ) : null}
+          </div>
+          {continuityClaimRecords.length === 0 ? (
+            <p className="muted-copy">
+              No synoptic continuity cues for this event match the current confidence lens.
+            </p>
+          ) : (
+            <ul className="sources-claim-list inspector-claim-list">
+              {continuityClaimRecords.map((claimRecord) => {
+                const parallelEvents = claimRecord.relatedEvents.filter(
+                  (relatedEvent) => relatedEvent.id !== event.id
+                );
+
+                return (
+                  <li key={claimRecord.claim.id} className="sources-claim-card">
+                    <div className="sources-claim-header">
+                      <strong>{formatClaimType(claimRecord.claim.claim_type)}</strong>
+                      <span
+                        className={`sources-confidence-badge confidence-${claimRecord.claim.confidence}`}
+                      >
+                        {formatClaimConfidence(claimRecord.claim.confidence)}
+                      </span>
+                    </div>
+                    <p className="sources-claim-statement">{claimRecord.claim.statement}</p>
+                    <div className="sources-citation-row">
+                      {claimRecord.sourceEntries.map((sourceEntry) => (
+                        <button
+                          key={`${claimRecord.claim.id}-${sourceEntry.source.id}-${sourceEntry.citation}`}
+                          type="button"
+                          className="sources-citation-badge"
+                          onClick={() => onFocusSource(sourceEntry.source.id)}
+                        >
+                          {sourceEntry.source.name} • {sourceEntry.citation}
+                        </button>
+                      ))}
+                    </div>
+                    {parallelEvents.length > 0 ? (
+                      <ul className="linked-record-list">
+                        {parallelEvents.map((relatedEvent) => (
+                          <li key={relatedEvent.id}>
+                            <button
+                              type="button"
+                              className="linked-record-button"
+                              onClick={() => onSelectEvent(relatedEvent.id)}
+                            >
+                              <strong>{relatedEvent.title}</strong>
+                              <span>
+                                {formatDateRange(relatedEvent)} •{" "}
+                                {relatedEvent.source_refs[0]?.citation ?? "Citation pending"}
+                              </span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="muted-copy">
+                        No parallel event cards are currently available outside this active
+                        selection.
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+      ) : null}
+
+      {allExternalClaimRecords.length > 0 ? (
         <section className="detail-section">
           <div className="section-header-row">
             <h3>External Attestation & Claims</h3>
@@ -257,13 +346,13 @@ export function EventInspector({
               </span>
             ) : null}
           </div>
-          {claimRecords.length === 0 ? (
+          {externalClaimRecords.length === 0 ? (
             <p className="muted-copy">
               No external claims for this event match the current confidence lens.
             </p>
           ) : (
             <ul className="sources-claim-list inspector-claim-list">
-              {claimRecords.map((claimRecord) => {
+              {externalClaimRecords.map((claimRecord) => {
                 const additionalEvents = claimRecord.relatedEvents.filter(
                   (relatedEvent) => relatedEvent.id !== event.id
                 );
@@ -365,8 +454,8 @@ export function EventInspector({
           <h3>Record Scope</h3>
         </div>
         <p className="muted-copy">
-          This view is grounded in normalized {activeBookLabel} data within the Luke-Acts
-          library. It currently resolves{" "}
+          This view is grounded in normalized {activeBookLabel} data within the canonical
+          scripture library. It currently resolves{" "}
           {participants.length} participant{participants.length === 1 ? "" : "s"},{" "}
           {relatedEvents.length} related event{relatedEvents.length === 1 ? "" : "s"}, and{" "}
           {events.filter((candidateEvent) => candidateEvent.id === event.id).length} selected

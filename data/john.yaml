@@ -1,0 +1,869 @@
+metadata:
+  dataset_id: john
+  title: Gospel of John Canonical Dataset
+  version: "1.0.0"
+  schema_version: "1.0.0"
+  description: >
+    Canonical John dataset for Bible Time & Place Explorer, modeled with
+    signs, discourses, feast-linked chronology, and source-backed claims that
+    preserve Johannine distinctiveness within the shared library.
+  created: "2026-06-17"
+  updated: "2026-06-17"
+
+books:
+  - id: john
+    label: John
+    title: Gospel of John
+    testament: new_testament
+    canonical_order: 4
+    corpus: gospel
+    genre:
+      - gospel
+      - narrative
+      - discourse
+    summary: >
+      John presents Jesus through selected signs, extended discourses, and a
+      tightly framed feast cycle that reveals identity, conflict, witness, and
+      glory in a distinctive narrative voice.
+    authorship_note: >
+      Traditionally associated with John, while the Gospel's narrative voice
+      and later authorship discussions remain matters for source-backed claims
+      rather than canonical summary.
+    primary_source_id: john
+    source_refs:
+      - source_id: john
+        citation: John 1:1-21:25
+
+sources:
+  - id: john
+    name: Gospel of John
+    type: scripture
+    citation: New Testament, John 1-21
+    author: Traditionally associated with John
+    publication_date: 1st century AD
+    usage_rights:
+      status: not_applicable
+      attribution_text: >
+        This dataset stores canonical scripture citations to John and does not
+        reproduce licensed Bible translation text.
+      usage_notes: >
+        Event, place, person, and literary-unit records remain citation based
+        only. Any future embedded translation text will require separate rights
+        review.
+      trademark_usage_note: >
+        If ESV-branded scripture text is added later, the ESV name and logo
+        must not be used as product branding without permission.
+      commercial_use_note: >
+        Any future commercial Bible-reference workflow that embeds direct ESV
+        text will require written permission and explicit release review.
+      requires_written_permission_for_commercial_use: true
+  - id: carson_john_commentary
+    name: The Gospel According to John
+    type: commentary
+    author: D. A. Carson
+    citation: Pillar New Testament Commentary
+    publication_date: "1991"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Commentary references support interpretive claims without embedding
+        copyrighted prose.
+      usage_notes: >
+        Any future quotations or extended excerpts require publisher-specific
+        rights review and attribution.
+
+places:
+  - id: cana
+    name: Cana
+    latitude: 32.7569
+    longitude: 35.3439
+    region: Galilee
+    modern_country: Israel
+    location_certainty: traditional
+    summary: >
+      Cana is remembered in John's Gospel as the setting of the first sign,
+      where water becomes wine and Jesus's glory is revealed to the disciples.
+    source_refs:
+      - source_id: john
+        citation: John 2:1-11
+
+  - id: jerusalem
+    name: Jerusalem
+    latitude: 31.7683
+    longitude: 35.2137
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    source_refs:
+      - source_id: john
+        citation: John 2:13-22
+
+  - id: sychar
+    name: Sychar
+    latitude: 32.2127
+    longitude: 35.2816
+    region: Samaria
+    modern_country: Palestine
+    location_certainty: traditional
+    summary: >
+      Sychar in Samaria is linked to the well-side encounter where Jesus's
+      conversation with a Samaritan woman opens into wider witness among the
+      townspeople.
+    source_refs:
+      - source_id: john
+        citation: John 4:4-42
+
+  - id: sea_of_galilee
+    name: Sea of Galilee
+    latitude: 32.8333
+    longitude: 35.5833
+    region: Galilee
+    modern_country: Israel
+    location_certainty: exact
+    source_refs:
+      - source_id: john
+        citation: John 6:1-21
+
+  - id: capernaum
+    name: Capernaum
+    latitude: 32.8803
+    longitude: 35.5736
+    region: Galilee
+    modern_country: Israel
+    location_certainty: approximate
+    source_refs:
+      - source_id: john
+        citation: John 6:22-71
+
+  - id: bethany
+    name: Bethany
+    latitude: 31.7717
+    longitude: 35.2656
+    region: Judea
+    modern_country: Palestine
+    location_certainty: traditional
+    source_refs:
+      - source_id: john
+        citation: John 11:1-46
+
+people:
+  - id: jesus
+    name: Jesus Christ
+    aliases: []
+    source_refs:
+      - source_id: john
+        citation: John 2:1-21:25
+
+  - id: mary_mother_of_jesus
+    name: Mary
+    aliases:
+      - Mother of Jesus
+    source_refs:
+      - source_id: john
+        citation: John 2:1-5
+
+  - id: nicodemus
+    name: Nicodemus
+    aliases: []
+    role: Pharisee and later sympathetic witness
+    summary: >
+      Nicodemus appears in John's Gospel as a Pharisee who comes by night,
+      engages Jesus about new birth, later speaks cautiously in Jesus's
+      defense, and participates in burial care.
+    source_refs:
+      - source_id: john
+        citation: John 3:1-21
+
+  - id: samaritan_woman
+    name: Samaritan Woman
+    aliases:
+      - Woman at the well
+    role: Samaritan witness
+    summary: >
+      The unnamed Samaritan woman at the well becomes a key witness figure in
+      John as private conversation opens into public testimony among her town.
+    source_refs:
+      - source_id: john
+        citation: John 4:4-42
+
+  - id: martha
+    name: Martha
+    aliases: []
+    source_refs:
+      - source_id: john
+        citation: John 11:20-27
+
+  - id: mary_of_bethany
+    name: Mary of Bethany
+    aliases: []
+    source_refs:
+      - source_id: john
+        citation: John 11:28-32
+
+  - id: lazarus
+    name: Lazarus
+    aliases: []
+    role: Bethany brother raised by Jesus
+    summary: >
+      Lazarus of Bethany stands at the center of one of John's climactic signs,
+      where his death and restoration intensify both belief and opposition.
+    source_refs:
+      - source_id: john
+        citation: John 11:1-46
+
+  - id: peter
+    name: Peter
+    aliases:
+      - Simon Peter
+      - Cephas
+    source_refs:
+      - source_id: john
+        citation: John 6:68-69
+
+  - id: thomas
+    name: Thomas
+    aliases:
+      - Didymus
+    role: Disciple and resurrection witness
+    summary: >
+      Thomas moves from doubt to confession in John's resurrection narrative
+      and becomes a focal witness to the risen Jesus's identity.
+    source_refs:
+      - source_id: john
+        citation: John 20:24-29
+
+  - id: mary_magdalene
+    name: Mary Magdalene
+    aliases: []
+    source_refs:
+      - source_id: john
+        citation: John 20:1-18
+
+events:
+  - id: john_001
+    title: Water into Wine at Cana
+    summary: >
+      At a wedding in Cana, Jesus turns water into wine, revealing glory in a
+      sign that marks the opening public disclosure of his identity in John.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: cana
+    participants:
+      - jesus
+      - mary_mother_of_jesus
+    tag_ids:
+      - sign
+      - identity
+    source_refs:
+      - source_id: john
+        citation: John 2:1-11
+    related_event_ids:
+      - john_002
+
+  - id: john_002
+    title: Temple Cleansing at Passover
+    summary: >
+      Jesus drives merchants from the temple courts at Jerusalem and frames the
+      sign in relation to his Father's house and the raising of the temple of
+      his body.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+    tag_ids:
+      - passover
+      - identity
+    source_refs:
+      - source_id: john
+        citation: John 2:13-22
+    related_event_ids:
+      - john_001
+      - john_003
+
+  - id: john_003
+    title: Nicodemus and the New Birth Discourse
+    summary: >
+      Jesus tells Nicodemus that entry into the kingdom requires birth from
+      above, placing witness, Spirit, and belief at the center of the
+      conversation.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+      - nicodemus
+    tag_ids:
+      - discourse
+      - identity
+    source_refs:
+      - source_id: john
+        citation: John 3:1-21
+    related_event_ids:
+      - john_002
+      - john_004
+
+  - id: john_004
+    title: Samaritan Woman and Many Believe at Sychar
+    summary: >
+      Jesus speaks with a Samaritan woman at the well, and her testimony helps
+      draw many in Sychar toward belief.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: sychar
+    participants:
+      - jesus
+      - samaritan_woman
+    tag_ids:
+      - discourse
+      - witness
+    source_refs:
+      - source_id: john
+        citation: John 4:4-42
+    related_event_ids:
+      - john_003
+      - john_005
+
+  - id: john_005
+    title: Healing at Bethesda during a Feast
+    summary: >
+      Jesus heals a disabled man in Jerusalem on a Sabbath within a feast
+      setting, escalating conflict around authority, work, and divine agency.
+    date:
+      start_year: 28
+      end_year: 28
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+    tag_ids:
+      - sign
+      - feast
+    source_refs:
+      - source_id: john
+        citation: John 5:1-18
+    related_event_ids:
+      - john_004
+      - john_006
+
+  - id: john_006
+    title: Feeding of the Five Thousand near Passover
+    summary: >
+      Near Passover, Jesus feeds the crowd across the Sea of Galilee and the
+      sign becomes the narrative gateway into later discourse about true bread.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: sea_of_galilee
+    participants:
+      - jesus
+      - peter
+    tag_ids:
+      - passover
+      - sign
+    source_refs:
+      - source_id: john
+        citation: John 6:1-15
+    related_event_ids:
+      - john_005
+      - john_007
+
+  - id: john_007
+    title: Bread of Life Discourse at Capernaum
+    summary: >
+      In Capernaum Jesus interprets the bread sign through extended teaching on
+      life, belief, and abiding, forcing a sharper divide among hearers.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: capernaum
+    participants:
+      - jesus
+      - peter
+    tag_ids:
+      - discourse
+      - passover
+    source_refs:
+      - source_id: john
+        citation: John 6:22-71
+    related_event_ids:
+      - john_006
+      - john_008
+
+  - id: john_008
+    title: Healing of the Man Born Blind
+    summary: >
+      Jesus restores sight to a man born blind, and the sign develops into a
+      sustained conflict over light, testimony, and true seeing.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+    tag_ids:
+      - tabernacles
+      - sign
+    source_refs:
+      - source_id: john
+        citation: John 9:1-41
+    related_event_ids:
+      - john_007
+      - john_009
+
+  - id: john_009
+    title: Raising of Lazarus at Bethany
+    summary: >
+      Jesus raises Lazarus in Bethany, revealing life-giving authority in a
+      sign that sharpens both belief and the movement toward lethal opposition.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: bethany
+    participants:
+      - jesus
+      - lazarus
+      - martha
+      - mary_of_bethany
+    tag_ids:
+      - sign
+      - identity
+    source_refs:
+      - source_id: john
+        citation: John 11:1-46
+    related_event_ids:
+      - john_008
+      - john_010
+
+  - id: john_010
+    title: Triumphal Entry before Passover
+    summary: >
+      Jesus enters Jerusalem publicly as the crowd interprets the moment
+      through royal and scriptural expectation on the threshold of Passover.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+    tag_ids:
+      - passover
+      - witness
+    source_refs:
+      - source_id: john
+        citation: John 12:12-19
+    related_event_ids:
+      - john_009
+      - john_011
+
+  - id: john_011
+    title: Farewell Discourse and Footwashing
+    summary: >
+      On the eve of the passion, Jesus washes the disciples' feet and frames
+      the farewell through abiding, love, witness, and promised help from the
+      Spirit.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+      - peter
+      - thomas
+    tag_ids:
+      - discourse
+      - passover
+    source_refs:
+      - source_id: john
+        citation: John 13:1-17:26
+    related_event_ids:
+      - john_010
+      - john_012
+
+  - id: john_012
+    title: Thomas Confesses the Risen Jesus
+    summary: >
+      The risen Jesus invites Thomas to see and believe, and Thomas responds
+      with a confession that becomes one of the Gospel's clearest identity
+      declarations.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+      - thomas
+    tag_ids:
+      - resurrection
+      - identity
+    source_refs:
+      - source_id: john
+        citation: John 20:24-29
+    related_event_ids:
+      - john_011
+      - john_013
+
+  - id: john_013
+    title: Breakfast by the Sea and Restoration of Peter
+    summary: >
+      Jesus meets the disciples by the sea, provides breakfast, and restores
+      Peter to shepherding responsibility through repeated questioning and
+      commission.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: sea_of_galilee
+    participants:
+      - jesus
+      - peter
+      - thomas
+    tag_ids:
+      - resurrection
+      - leadership
+    source_refs:
+      - source_id: john
+        citation: John 21:1-19
+    related_event_ids:
+      - john_012
+
+journeys: []
+
+relationships:
+  - id: relationship_john_martha_lazarus_siblings
+    from_type: person
+    from_id: martha
+    to_type: person
+    to_id: lazarus
+    relationship_type: sibling
+    source_refs:
+      - source_id: john
+        citation: John 11:1-3
+
+  - id: relationship_john_mary_lazarus_siblings
+    from_type: person
+    from_id: mary_of_bethany
+    to_type: person
+    to_id: lazarus
+    relationship_type: sibling
+    source_refs:
+      - source_id: john
+        citation: John 11:1-3
+
+  - id: relationship_john_jesus_peter_restores
+    from_type: person
+    from_id: jesus
+    to_type: person
+    to_id: peter
+    relationship_type: restores_to_shepherding
+    source_refs:
+      - source_id: john
+        citation: John 21:15-19
+
+tags:
+  - id: sign
+    label: Sign
+    description: >
+      Events where Jesus's works are presented as revelatory signs tied to
+      identity and belief.
+    group: sign
+
+  - id: discourse
+    label: Discourse
+    description: >
+      Extended teaching scenes that carry Johannine theological and narrative
+      argument.
+    group: discourse
+
+  - id: identity
+    label: Identity
+    description: >
+      Events that foreground revelation about who Jesus is and how he should
+      be understood.
+    group: theology
+
+  - id: witness
+    label: Witness
+    description: >
+      Events centered on testimony, confession, proclamation, or public
+      recognition.
+    group: proclamation
+
+  - id: passover
+    label: Passover
+    description: >
+      Events explicitly tied to Passover chronology or symbolism in John's
+      narrative.
+    group: feast
+
+  - id: feast
+    label: Festival
+    description: >
+      Events linked to a major feast setting that shapes chronology or public
+      conflict.
+    group: feast
+
+  - id: tabernacles
+    label: Tabernacles
+    description: >
+      Events linked to the Festival of Tabernacles and its light or water
+      symbolism.
+    group: feast
+
+  - id: resurrection
+    label: Resurrection
+    description: Events centered on post-resurrection witness and recognition.
+    group: theology
+
+  - id: leadership
+    label: Leadership
+    description: Events focused on communal leadership and apostolic direction.
+    group: governance
+
+literary_units:
+  - id: john_unit_001
+    book_id: john
+    title: First Sign, Temple Challenge, And New Birth Witness
+    unit_type: prologue
+    passage:
+      start_chapter: 1
+      start_verse: 19
+      end_chapter: 4
+      end_verse: 42
+    summary: >
+      John's opening narrative moves from witness to first sign, Jerusalem
+      challenge, new-birth discourse, and Samaritan testimony.
+    location_id: cana
+    participant_ids:
+      - jesus
+      - mary_mother_of_jesus
+      - nicodemus
+      - samaritan_woman
+    related_event_ids:
+      - john_001
+      - john_002
+      - john_003
+      - john_004
+    source_refs:
+      - source_id: john
+        citation: John 1:19-4:42
+
+  - id: john_unit_002
+    book_id: john
+    title: Festival Signs And Bread Discourse
+    unit_type: miracle_cycle
+    passage:
+      start_chapter: 5
+      start_verse: 1
+      end_chapter: 10
+      end_verse: 42
+    summary: >
+      Festival-linked signs and escalating debate shape the public ministry
+      through healing, bread, light, and shepherd imagery.
+    location_id: jerusalem
+    participant_ids:
+      - jesus
+      - peter
+    related_event_ids:
+      - john_005
+      - john_006
+      - john_007
+      - john_008
+    source_refs:
+      - source_id: john
+        citation: John 5:1-10:42
+
+  - id: john_unit_003
+    book_id: john
+    title: Bethany Sign And Passover Approach
+    unit_type: narrative
+    passage:
+      start_chapter: 11
+      start_verse: 1
+      end_chapter: 12
+      end_verse: 36
+    summary: >
+      The Lazarus sign and the Jerusalem approach intensify both witness and
+      opposition on the way to the passion.
+    location_id: bethany
+    participant_ids:
+      - jesus
+      - lazarus
+      - martha
+      - mary_of_bethany
+    related_event_ids:
+      - john_009
+      - john_010
+    source_refs:
+      - source_id: john
+        citation: John 11:1-12:36
+
+  - id: john_unit_004
+    book_id: john
+    title: Farewell, Resurrection, And Sea Epilogue
+    unit_type: epilogue
+    passage:
+      start_chapter: 13
+      start_verse: 1
+      end_chapter: 21
+      end_verse: 25
+    summary: >
+      John's final movement combines farewell discourse, passion, resurrection
+      witness, and the Sea of Galilee restoration epilogue.
+    location_id: jerusalem
+    participant_ids:
+      - jesus
+      - peter
+      - thomas
+      - mary_magdalene
+    related_event_ids:
+      - john_011
+      - john_012
+      - john_013
+    source_refs:
+      - source_id: john
+        citation: John 13:1-21:25
+
+claims:
+  - id: claim_john_signs_structure
+    statement: >
+      Many interpreters read John's narrative as organized around a selective
+      pattern of signs that reveal Jesus's identity and interpret belief.
+    claim_type: literary_structure
+    confidence: medium
+    related_event_ids:
+      - john_001
+      - john_009
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - cana
+      - bethany
+    source_refs:
+      - source_id: john
+        citation: John 2:1-11; 11:1-46
+      - source_id: carson_john_commentary
+        citation: Carson, John, on 2:1-11 and 11:1-46
+
+  - id: claim_john_passover_chronology
+    statement: >
+      John's explicit feast notices, especially the repeated Passover markers,
+      are often used to model a longer public ministry chronology than the
+      compressed reading one might infer without them.
+    claim_type: chronology_model
+    confidence: medium
+    related_event_ids:
+      - john_002
+      - john_006
+      - john_010
+      - john_011
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - jerusalem
+      - sea_of_galilee
+    source_refs:
+      - source_id: john
+        citation: John 2:13; 6:4; 12:1; 13:1
+      - source_id: carson_john_commentary
+        citation: Carson, John, on feast chronology
+
+  - id: claim_john_temple_sequence_distinct
+    statement: >
+      John's placement of the temple action near the Gospel's opening is often
+      treated as a deliberate compositional framing choice rather than a detail
+      that should be silently merged into Synoptic sequencing.
+    claim_type: compositional_sequence
+    confidence: medium
+    related_event_ids:
+      - john_002
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - jerusalem
+    source_refs:
+      - source_id: john
+        citation: John 2:13-22
+      - source_id: carson_john_commentary
+        citation: Carson, John, on 2:13-22
+
+  - id: claim_john_discourse_sign_interplay
+    statement: >
+      John regularly pairs a sign with extended discourse so the act and the
+      teaching interpret one another rather than functioning as isolated
+      episodes.
+    claim_type: narrative_structure
+    confidence: medium
+    related_event_ids:
+      - john_006
+      - john_007
+      - john_011
+    related_person_ids:
+      - jesus
+      - peter
+    related_place_ids:
+      - sea_of_galilee
+      - capernaum
+      - jerusalem
+    source_refs:
+      - source_id: john
+        citation: John 6:1-71; 13:1-17:26
+      - source_id: carson_john_commentary
+        citation: Carson, John, on discourse framing
+
+  - id: claim_john_samaria_witness_scope
+    statement: >
+      The Samaritan mission scene in John broadens witness beyond Judea and
+      anticipates a larger harvest theme through testimony rather than formal
+      travel narrative.
+    claim_type: narrative_structure
+    confidence: medium
+    related_event_ids:
+      - john_004
+    related_person_ids:
+      - jesus
+      - samaritan_woman
+    related_place_ids:
+      - sychar
+    source_refs:
+      - source_id: john
+        citation: John 4:4-42
+      - source_id: carson_john_commentary
+        citation: Carson, John, on 4:4-42
+
+  - id: claim_john_lazarus_conflict_catalyst
+    statement: >
+      John's Lazarus sign functions not only as a revelation of life-giving
+      power but also as a narrative catalyst that intensifies official plans
+      against Jesus.
+    claim_type: narrative_structure
+    confidence: medium
+    related_event_ids:
+      - john_009
+      - john_010
+    related_person_ids:
+      - jesus
+      - lazarus
+    related_place_ids:
+      - bethany
+      - jerusalem
+    source_refs:
+      - source_id: john
+        citation: John 11:1-12:19
+      - source_id: carson_john_commentary
+        citation: Carson, John, on 11:1-12:19

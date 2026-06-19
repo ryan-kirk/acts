@@ -1,0 +1,652 @@
+metadata:
+  dataset_id: mark
+  title: Gospel of Mark Canonical Dataset
+  version: "1.0.0"
+  schema_version: "1.0.0"
+  description: >
+    Canonical Mark dataset for Bible Time & Place Explorer, modeled with
+    normalized places, people, events, literary units, and a first-pass
+    synoptic continuity layer.
+  created: "2026-06-12"
+  updated: "2026-06-12"
+
+books:
+  - id: mark
+    label: Mark
+    title: Gospel of Mark
+    testament: new_testament
+    canonical_order: 2
+    corpus: gospel
+    genre:
+      - gospel
+      - narrative
+    summary: >
+      Mark presents a fast-moving Gospel witness focused on proclamation,
+      conflict, misunderstood discipleship, the road to Jerusalem, and the
+      unsettling urgency of resurrection witness.
+    authorship_note: Traditionally associated with John Mark and Petrine memory.
+    primary_source_id: mark
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:1-16:8
+
+sources:
+  - id: mark
+    name: Gospel of Mark
+    type: scripture
+    citation: New Testament, Mark 1-16
+    author: Traditionally associated with Mark
+    publication_date: 1st century AD
+    usage_rights:
+      status: not_applicable
+      attribution_text: >
+        This dataset stores canonical scripture citations to Mark and does not
+        reproduce licensed Bible translation text.
+      usage_notes: >
+        Event, place, person, and literary-unit records remain citation-based
+        only. Any future embedded translation text will require separate rights
+        review.
+      trademark_usage_note: >
+        If ESV-branded scripture text is added later, the ESV name and logo
+        must not be used as product branding without permission.
+      commercial_use_note: >
+        Any future commercial Bible-reference workflow that embeds direct ESV
+        text will require written permission and explicit release review.
+      requires_written_permission_for_commercial_use: true
+  - id: edwards_mark_commentary
+    name: The Gospel According to Mark
+    type: commentary
+    author: James R. Edwards
+    citation: Pillar New Testament Commentary
+    publication_date: "2002"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Commentary references support interpretive claims without embedding
+        copyrighted prose.
+      usage_notes: >
+        Any future quotations or extended excerpts require publisher-specific
+        rights review and attribution.
+
+places:
+  - id: jordan_river
+    name: Jordan River
+    latitude: 31.8374
+    longitude: 35.555
+    region: Judean Wilderness
+    modern_country: Jordan
+    location_certainty: approximate
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:4-11
+
+  - id: sea_of_galilee
+    name: Sea of Galilee
+    latitude: 32.8333
+    longitude: 35.5833
+    region: Galilee
+    modern_country: Israel
+    location_certainty: exact
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:16-20
+
+  - id: gerasa
+    name: Gerasa
+    latitude: 32.2747
+    longitude: 35.8917
+    region: Decapolis
+    modern_country: Jordan
+    location_certainty: traditional
+    summary: >
+      Gerasa represents the traditional regional identification attached to
+      Mark's demoniac scene, though the precise lakeshore locality remains
+      debated.
+    source_refs:
+      - source_id: mark
+        citation: Mark 5:1-20
+
+  - id: bethsaida
+    name: Bethsaida
+    latitude: 32.9019
+    longitude: 35.6134
+    region: Galilee
+    modern_country: Israel
+    location_certainty: traditional
+    summary: >
+      Bethsaida and its surrounding district form part of the northern lake
+      setting linked to feeding, healing, and disciple-oriented episodes in the
+      Synoptic tradition.
+    source_refs:
+      - source_id: mark
+        citation: Mark 6:30-45
+
+  - id: caesarea_philippi
+    name: Caesarea Philippi
+    latitude: 33.2486
+    longitude: 35.6964
+    region: Iturea
+    modern_country: Israel
+    location_certainty: approximate
+    source_refs:
+      - source_id: mark
+        citation: Mark 8:27-30
+
+  - id: jerusalem
+    name: Jerusalem
+    latitude: 31.7683
+    longitude: 35.2137
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    source_refs:
+      - source_id: mark
+        citation: Mark 11:1-11
+
+  - id: mount_of_olives
+    name: Mount of Olives
+    latitude: 31.778
+    longitude: 35.2444
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    summary: >
+      The Mount of Olives overlooks Jerusalem and serves as a threshold setting
+      for royal entry, lament, teaching, and eschatological discourse in the
+      Gospel tradition.
+    source_refs:
+      - source_id: mark
+        citation: Mark 13:3-37
+
+people:
+  - id: jesus
+    name: Jesus Christ
+    aliases: []
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:1-16:8
+
+  - id: john_the_baptist
+    name: John the Baptist
+    aliases:
+      - John
+      - John son of Zechariah
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:4-8
+
+  - id: peter
+    name: Peter
+    aliases:
+      - Simon Peter
+      - Cephas
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:16-18
+
+  - id: andrew
+    name: Andrew
+    aliases: []
+    role: Disciple
+    summary: >
+      Andrew is one of the first-following disciples in the Synoptic shoreline
+      call scenes and remains part of the close disciple circle around Jesus's
+      ministry.
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:16-18
+
+  - id: james_zebedee
+    name: James
+    aliases:
+      - James son of Zebedee
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:19
+
+  - id: john
+    name: John
+    aliases: []
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:19
+
+  - id: mary_magdalene
+    name: Mary Magdalene
+    aliases: []
+    role: Disciple and resurrection witness
+    summary: >
+      Mary Magdalene appears among the women who follow Jesus and becomes a key
+      resurrection witness in the closing scenes of the Gospels.
+    source_refs:
+      - source_id: mark
+        citation: Mark 15:40-16:8
+
+events:
+  - id: mark_001
+    title: Baptism of Jesus in the Jordan
+    summary: >
+      Mark opens Jesus's public ministry with baptism at the Jordan and the
+      heavenly declaration that identifies him immediately before the wilderness
+      testing and proclamation.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: jordan_river
+    participants:
+      - jesus
+      - john_the_baptist
+    tag_ids:
+      - holy_spirit
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:9-11
+    related_event_ids:
+      - mark_002
+
+  - id: mark_002
+    title: Call of the First Disciples
+    summary: >
+      Jesus calls Simon, Andrew, James, and John from the lakeshore, and Mark
+      emphasizes their immediate response as a defining mark of discipleship.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: sea_of_galilee
+    participants:
+      - jesus
+      - peter
+      - andrew
+      - james_zebedee
+      - john
+    tag_ids:
+      - apostles
+      - discipleship
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:16-20
+    related_event_ids:
+      - mark_001
+      - mark_003
+
+  - id: mark_003
+    title: Gerasene Demoniac Delivered
+    summary: >
+      Jesus delivers a tormented man in Gentile territory, and Mark uses the
+      scene to display liberating authority that crosses regional and ritual
+      boundaries.
+    date:
+      start_year: 28
+      end_year: 28
+      certainty: estimated
+    location_id: gerasa
+    participants:
+      - jesus
+    tag_ids:
+      - miracle
+    source_refs:
+      - source_id: mark
+        citation: Mark 5:1-20
+    related_event_ids:
+      - mark_002
+      - mark_004
+
+  - id: mark_004
+    title: Feeding of the Five Thousand near Bethsaida
+    summary: >
+      Mark presents the feeding sign near Bethsaida as both wilderness
+      provision and a disciple-testing moment that prepares for later
+      misunderstandings and recognitions.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: bethsaida
+    participants:
+      - jesus
+      - peter
+      - andrew
+      - james_zebedee
+      - john
+    tag_ids:
+      - miracle
+      - discipleship
+    source_refs:
+      - source_id: mark
+        citation: Mark 6:30-44
+    related_event_ids:
+      - mark_003
+      - mark_005
+
+  - id: mark_005
+    title: Peter Confesses Jesus at Caesarea Philippi
+    summary: >
+      Peter confesses Jesus as the Christ, and Mark positions the confession as
+      a critical hinge between Galilean ministry and the costly road toward
+      Jerusalem.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: caesarea_philippi
+    participants:
+      - jesus
+      - peter
+    tag_ids:
+      - discipleship
+      - leadership
+    source_refs:
+      - source_id: mark
+        citation: Mark 8:27-30
+    related_event_ids:
+      - mark_004
+      - mark_006
+
+  - id: mark_006
+    title: Triumphal Entry into Jerusalem
+    summary: >
+      Jesus enters Jerusalem amid public acclaim, and Mark frames the action as
+      a charged royal threshold before temple confrontation and passion.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    tag_ids:
+      - leadership
+      - preaching
+    source_refs:
+      - source_id: mark
+        citation: Mark 11:1-11
+    related_event_ids:
+      - mark_005
+      - mark_007
+
+  - id: mark_007
+    title: Olivet Discourse
+    summary: >
+      From the Mount of Olives Jesus teaches about watchfulness, upheaval, and
+      endurance, giving Mark's Jerusalem section a dense prophetic and
+      discipleship focus.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: mount_of_olives
+    participants:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    tag_ids:
+      - preaching
+      - discipleship
+    source_refs:
+      - source_id: mark
+        citation: Mark 13:3-37
+    related_event_ids:
+      - mark_006
+      - mark_008
+
+  - id: mark_008
+    title: Women Discover the Empty Tomb
+    summary: >
+      Mark closes with the empty tomb, angelic announcement, and the fearful
+      shock of the women, ending the Gospel with a resurrection witness that
+      presses outward toward response.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - mary_magdalene
+    tag_ids:
+      - resurrection
+    source_refs:
+      - source_id: mark
+        citation: Mark 16:1-8
+    related_event_ids:
+      - mark_007
+
+journeys: []
+
+relationships:
+  - id: relationship_mark_john_prepares_jesus
+    from_type: person
+    from_id: john_the_baptist
+    to_type: person
+    to_id: jesus
+    relationship_type: prepares_way_for
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:1-11
+
+  - id: relationship_mark_jesus_peter_calls
+    from_type: person
+    from_id: jesus
+    to_type: person
+    to_id: peter
+    relationship_type: calls_to_follow
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:16-18
+
+tags:
+  - id: holy_spirit
+    label: Holy Spirit
+    description: Events centered on the Spirit's empowering presence.
+    group: theology
+
+  - id: apostles
+    label: Apostles
+    description: Events centered on the apostolic witnesses.
+    group: people
+
+  - id: discipleship
+    label: Discipleship
+    description: Events focused on hearing, following, and responding to Jesus.
+    group: response
+
+  - id: miracle
+    label: Miracle
+    description: Events marked by extraordinary acts of divine power.
+    group: sign
+
+  - id: leadership
+    label: Leadership
+    description: Events focused on communal leadership and apostolic direction.
+    group: governance
+
+  - id: preaching
+    label: Preaching
+    description: Events centered on proclamation, speech, or public witness.
+    group: proclamation
+
+  - id: resurrection
+    label: Resurrection
+    description: Events centered on post-resurrection witness and recognition.
+    group: theology
+
+literary_units:
+  - id: mark_unit_001
+    book_id: mark
+    title: Opening Proclamation And Immediate Calling
+    unit_type: narrative
+    passage:
+      start_chapter: 1
+      start_verse: 1
+      end_chapter: 1
+      end_verse: 20
+    summary: >
+      Mark opens with baptism, proclamation, and the immediate call of the
+      first disciples, establishing the Gospel's urgent pace.
+    location_id: jordan_river
+    participant_ids:
+      - jesus
+      - john_the_baptist
+      - peter
+      - andrew
+      - james_zebedee
+      - john
+    related_event_ids:
+      - mark_001
+      - mark_002
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:1-20
+
+  - id: mark_unit_002
+    book_id: mark
+    title: Galilean Signs And Bread Provision
+    unit_type: narrative
+    passage:
+      start_chapter: 5
+      start_verse: 1
+      end_chapter: 6
+      end_verse: 44
+    summary: >
+      Mark gathers dramatic authority scenes and the feeding sign to sharpen
+      the Gospel's portrayal of power, compassion, and partial disciple
+      understanding.
+    location_id: bethsaida
+    participant_ids:
+      - jesus
+      - peter
+      - andrew
+      - james_zebedee
+      - john
+    related_event_ids:
+      - mark_003
+      - mark_004
+    source_refs:
+      - source_id: mark
+        citation: Mark 5:1-6:44
+
+  - id: mark_unit_003
+    book_id: mark
+    title: Confession And The Road To Jerusalem
+    unit_type: narrative
+    passage:
+      start_chapter: 8
+      start_verse: 27
+      end_chapter: 11
+      end_verse: 11
+    summary: >
+      Peter's confession and the entry into Jerusalem mark the hinge from
+      contested identity toward passion-focused movement.
+    location_id: caesarea_philippi
+    participant_ids:
+      - jesus
+      - peter
+    related_event_ids:
+      - mark_005
+      - mark_006
+    source_refs:
+      - source_id: mark
+        citation: Mark 8:27-11:11
+
+  - id: mark_unit_004
+    book_id: mark
+    title: Olivet Warning And Empty Tomb Witness
+    unit_type: epilogue
+    passage:
+      start_chapter: 13
+      start_verse: 1
+      end_chapter: 16
+      end_verse: 8
+    summary: >
+      Mark's final movement combines eschatological warning, passion, and the
+      empty tomb into a closing appeal for watchful witness.
+    location_id: mount_of_olives
+    participant_ids:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+      - mary_magdalene
+    related_event_ids:
+      - mark_007
+      - mark_008
+    source_refs:
+      - source_id: mark
+        citation: Mark 13:1-16:8
+
+claims:
+  - id: claim_synoptic_baptism_inaugural_witness
+    statement: >
+      Matthew, Mark, and Luke each preserve Jesus's baptism by John as an
+      inaugural public scene, though they frame the heavenly affirmation and
+      surrounding narrative differently.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - mark_001
+    related_person_ids:
+      - jesus
+      - john_the_baptist
+    related_place_ids:
+      - jordan_river
+    source_refs:
+      - source_id: mark
+        citation: Mark 1:9-11
+
+  - id: claim_synoptic_feeding_five_thousand
+    statement: >
+      Matthew, Mark, and Luke all preserve the feeding of the five thousand,
+      while retaining distinct geographic and narrative emphases.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - mark_004
+    related_person_ids:
+      - jesus
+      - peter
+      - andrew
+    related_place_ids:
+      - bethsaida
+    source_refs:
+      - source_id: mark
+        citation: Mark 6:30-44
+
+  - id: claim_synoptic_entry_jerusalem
+    statement: >
+      Matthew, Mark, and Luke each narrate Jesus's royal entry into Jerusalem
+      as a public threshold to the passion, while preserving witness-specific
+      details.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - mark_006
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - jerusalem
+    source_refs:
+      - source_id: mark
+        citation: Mark 11:1-11
+
+  - id: claim_mark_open_ending_witness
+    statement: >
+      Many interpreters read Mark's empty-tomb ending as an intentionally
+      unsettling summons to witness rather than a narrative oversight.
+    claim_type: literary_structure
+    confidence: medium
+    related_event_ids:
+      - mark_008
+    related_person_ids:
+      - mary_magdalene
+    related_place_ids:
+      - jerusalem
+    source_refs:
+      - source_id: mark
+        citation: Mark 16:1-8
+      - source_id: edwards_mark_commentary
+        citation: Edwards, Mark, on 16:1-8

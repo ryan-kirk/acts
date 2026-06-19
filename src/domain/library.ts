@@ -1,8 +1,10 @@
 import type {
+  Book,
   CanonicalDataset,
   Claim,
   Event,
   Journey,
+  LiteraryUnit,
   Metadata,
   Person,
   Place,
@@ -13,20 +15,19 @@ import type {
 
 export type BookFilterId = "all" | string;
 
-export interface BookDefinition {
-  description?: string;
+export interface ExplorerBook extends Book {
   eventCount: number;
   id: string;
   journeyCount: number;
-  label: string;
-  title: string;
+  literaryUnitCount: number;
 }
 
-export interface ExplorerDataset extends CanonicalDataset {
-  books: BookDefinition[];
-}
+export type ExplorerDataset = Omit<CanonicalDataset, "books"> & {
+  books: ExplorerBook[];
+};
 
 export interface ExplorerDatasetProvenance {
+  claimBookIds: Map<string, Set<string>>;
   eventBookIds: Map<string, string>;
   journeyBookIds: Map<string, string>;
   relationshipBookIds: Map<string, string>;
@@ -215,6 +216,73 @@ function mergeClaimRecord(leftClaim: Claim, rightClaim: Claim): Claim {
   };
 }
 
+function mergeBookRecord(leftBook: Book, rightBook: Book): Book {
+  assertMatchingValue("book label", leftBook.id, leftBook.label, rightBook.label);
+  assertMatchingValue("book title", leftBook.id, leftBook.title, rightBook.title);
+  assertMatchingValue("book testament", leftBook.id, leftBook.testament, rightBook.testament);
+  assertMatchingValue(
+    "book canonical_order",
+    leftBook.id,
+    leftBook.canonical_order,
+    rightBook.canonical_order
+  );
+  assertMatchingValue("book corpus", leftBook.id, leftBook.corpus, rightBook.corpus);
+  assertMatchingValue(
+    "book primary_source_id",
+    leftBook.id,
+    leftBook.primary_source_id,
+    rightBook.primary_source_id
+  );
+
+  return {
+    ...leftBook,
+    genre: dedupeStrings([...leftBook.genre, ...rightBook.genre]),
+    summary: mergeOptionalString("book summary", leftBook.id, leftBook.summary, rightBook.summary),
+    authorship_note: mergeOptionalString(
+      "book authorship_note",
+      leftBook.id,
+      leftBook.authorship_note,
+      rightBook.authorship_note
+    ),
+    composition_date: leftBook.composition_date ?? rightBook.composition_date,
+    composition_place_id: mergeOptionalString(
+      "book composition_place_id",
+      leftBook.id,
+      leftBook.composition_place_id,
+      rightBook.composition_place_id
+    ),
+    destination_place_id: mergeOptionalString(
+      "book destination_place_id",
+      leftBook.id,
+      leftBook.destination_place_id,
+      rightBook.destination_place_id
+    ),
+    sender_ids: dedupeStrings([...leftBook.sender_ids, ...rightBook.sender_ids]),
+    co_sender_ids: dedupeStrings([...leftBook.co_sender_ids, ...rightBook.co_sender_ids]),
+    recipient_person_ids: dedupeStrings([
+      ...leftBook.recipient_person_ids,
+      ...rightBook.recipient_person_ids
+    ]),
+    recipient_place_ids: dedupeStrings([
+      ...leftBook.recipient_place_ids,
+      ...rightBook.recipient_place_ids
+    ]),
+    recipient_group: mergeOptionalString(
+      "book recipient_group",
+      leftBook.id,
+      leftBook.recipient_group,
+      rightBook.recipient_group
+    ),
+    dispatch_note: mergeOptionalString(
+      "book dispatch_note",
+      leftBook.id,
+      leftBook.dispatch_note,
+      rightBook.dispatch_note
+    ),
+    source_refs: dedupeSourceRefs(leftBook.source_refs, rightBook.source_refs)
+  };
+}
+
 function mergeRecordMap<T extends { id: string }>(
   records: T[],
   mergeRecord: (leftRecord: T, rightRecord: T) => T
@@ -248,29 +316,15 @@ function buildLibraryMetadata(datasets: CanonicalDataset[]): Metadata {
   );
 
   return {
-    dataset_id: "luke_acts_library",
-    title: "Luke-Acts Canonical Library",
+    dataset_id: "scripture_library",
+    title: "Canonical Scripture Library",
     version,
     schema_version: schemaVersion,
     description:
-      "Merged canonical scripture library for the Gospel of Luke and the Book of Acts, with shared entities deduplicated by stable IDs.",
+      "Merged canonical scripture library with shared entities deduplicated by stable IDs.",
     created: createdValues[0],
     updated: updatedValues.at(-1)
   };
-}
-
-function getBookLabel(datasetId: string): string {
-  switch (datasetId) {
-    case "acts":
-      return "Acts";
-    case "luke":
-      return "Luke";
-    default:
-      return datasetId
-        .split("_")
-        .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-        .join(" ");
-  }
 }
 
 export function mergeCanonicalDatasets(
@@ -300,15 +354,27 @@ export function mergeCanonicalDatasets(
     datasets.flatMap((dataset) => dataset.claims),
     mergeClaimRecord
   );
+  const mergedBookRecords = mergeRecordMap(
+    datasets.flatMap((dataset) => dataset.books),
+    mergeBookRecord
+  );
 
   const eventBookIds = new Map<string, string>();
+  const claimBookIds = new Map<string, Set<string>>();
   const journeyBookIds = new Map<string, string>();
   const relationshipBookIds = new Map<string, string>();
   const mergedEvents: Event[] = [];
   const mergedJourneys: Journey[] = [];
   const mergedRelationships: Relationship[] = [];
+  const mergedLiteraryUnits: LiteraryUnit[] = [];
 
   datasets.forEach((dataset) => {
+    dataset.claims.forEach((claim) => {
+      const existingClaimBookIds = claimBookIds.get(claim.id) ?? new Set<string>();
+      existingClaimBookIds.add(dataset.metadata.dataset_id);
+      claimBookIds.set(claim.id, existingClaimBookIds);
+    });
+
     dataset.events.forEach((event) => {
       if (eventBookIds.has(event.id)) {
         throw new Error(`Duplicate event id '${event.id}' was found across multiple books.`);
@@ -337,22 +403,32 @@ export function mergeCanonicalDatasets(
       relationshipBookIds.set(relationship.id, dataset.metadata.dataset_id);
       mergedRelationships.push(relationship);
     });
+
+    mergedLiteraryUnits.push(...dataset.literary_units);
   });
 
-  const books: BookDefinition[] = datasets.map((dataset) => ({
-    id: dataset.metadata.dataset_id,
-    label: getBookLabel(dataset.metadata.dataset_id),
-    title: dataset.metadata.title,
-    ...(dataset.metadata.description
-      ? { description: dataset.metadata.description }
-      : {}),
-    eventCount: dataset.events.length,
-    journeyCount: dataset.journeys.length
-  }));
+  const books: ExplorerBook[] = mergedBookRecords
+    .map((book) => {
+      const bookDatasets = datasets.filter((dataset) =>
+        dataset.books.some((datasetBook) => datasetBook.id === book.id)
+      );
+
+      return {
+        ...book,
+        eventCount: bookDatasets.reduce((total, dataset) => total + dataset.events.length, 0),
+        journeyCount: bookDatasets.reduce((total, dataset) => total + dataset.journeys.length, 0),
+        literaryUnitCount: bookDatasets.reduce(
+          (total, dataset) => total + dataset.literary_units.length,
+          0
+        )
+      };
+    })
+    .sort((leftBook, rightBook) => leftBook.canonical_order - rightBook.canonical_order);
 
   return {
     dataset: {
       metadata: buildLibraryMetadata(datasets),
+      literary_units: mergedLiteraryUnits,
       sources: mergedSources,
       places: mergedPlaces,
       people: mergedPeople,
@@ -364,6 +440,7 @@ export function mergeCanonicalDatasets(
       books
     },
     provenance: {
+      claimBookIds,
       eventBookIds,
       journeyBookIds,
       relationshipBookIds
@@ -382,20 +459,25 @@ export function filterExplorerDatasetByBook(
 
   return {
     ...dataset,
+    books: dataset.books.filter((book) => book.id === activeBookId),
+    claims: dataset.claims.filter((claim) =>
+      provenance.claimBookIds.get(claim.id)?.has(activeBookId)
+    ),
     events: dataset.events.filter((event) => provenance.eventBookIds.get(event.id) === activeBookId),
     journeys: dataset.journeys.filter(
       (journey) => provenance.journeyBookIds.get(journey.id) === activeBookId
     ),
     relationships: dataset.relationships.filter(
       (relationship) => provenance.relationshipBookIds.get(relationship.id) === activeBookId
-    )
+    ),
+    literary_units: dataset.literary_units.filter((literaryUnit) => literaryUnit.book_id === activeBookId)
   };
 }
 
 export function getBookDefinition(
   dataset: ExplorerDataset,
   bookId: string
-): BookDefinition | null {
+): ExplorerBook | null {
   return dataset.books.find((book) => book.id === bookId) ?? null;
 }
 
@@ -404,7 +486,9 @@ export function getBookLabelForFilter(
   bookId: BookFilterId
 ): string {
   if (bookId === "all") {
-    return "Luke-Acts";
+    return dataset.books.length <= 3
+      ? dataset.books.map((book) => book.label).join(" + ")
+      : "All Books";
   }
 
   return getBookDefinition(dataset, bookId)?.label ?? bookId;

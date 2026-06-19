@@ -10,6 +10,29 @@ metadata:
   created: 2026-06-11
   updated: 2026-06-11
 
+books:
+  - id: luke
+    label: Luke
+    title: Gospel of Luke
+    testament: new_testament
+    canonical_order: 3
+    corpus: gospel
+    genre:
+      - gospel
+      - narrative
+    summary: >
+      Luke is a narrative Gospel witness that moves from annunciation and birth
+      through ministry, travel, passion, resurrection, and ascension while
+      emphasizing prayer, reversal, and Spirit-shaped mission.
+    authorship_note: Traditionally attributed to Luke, the companion of Paul.
+    primary_source_id: luke
+    recipient_group: >
+      Addressed to Theophilus and framed for a broader reading community
+      seeking confidence in the received apostolic account.
+    source_refs:
+      - source_id: luke
+        citation: Luke 1:1-4
+
 sources:
   - id: luke
     name: Gospel of Luke
@@ -24,6 +47,13 @@ sources:
         Event, place, person, and relationship records are grounded in passage
         references only. Any future translation text will require separate
         rights review.
+      trademark_usage_note: >
+        If ESV-branded scripture text is added later, the ESV name and logo
+        must not be used as product branding without permission.
+      commercial_use_note: >
+        Any future commercial Bible-reference workflow that embeds direct ESV
+        text will require written permission and explicit release review.
+      requires_written_permission_for_commercial_use: true
   - id: barrington_atlas
     name: Barrington Atlas of the Greek and Roman World
     type: atlas
@@ -117,11 +147,34 @@ places:
     modern_country: Israel
     location_certainty: approximate
     summary: >
-      Capernaum functions as a major Galilean ministry base in Luke and is tied
-      to the call of Simon Peter and other early disciples.
+      Capernaum functions as a major Galilean ministry base in the Synoptic
+      Gospels and is tied to teaching, healing, and the call of early
+      disciples.
     source_refs:
       - source_id: luke
         citation: Luke 4:31-5:11
+
+  - id: jordan_river
+    name: Jordan River
+    latitude: 31.8374
+    longitude: 35.555
+    region: Judean Wilderness
+    modern_country: Jordan
+    location_certainty: approximate
+    source_refs:
+      - source_id: luke
+        citation: Luke 3:3-22
+
+  - id: bethsaida
+    name: Bethsaida
+    latitude: 32.9019
+    longitude: 35.6134
+    region: Galilee
+    modern_country: Israel
+    location_certainty: traditional
+    source_refs:
+      - source_id: luke
+        citation: Luke 9:10-17
 
   - id: bethany
     name: Bethany
@@ -131,8 +184,9 @@ places:
     modern_country: Palestine
     location_certainty: traditional
     summary: >
-      Bethany is associated with Jesus's close circle, the hospitality of Mary
-      and Martha, and the ascension setting near the close of Luke.
+      Bethany is associated with Jesus's close circle, the household of Mary,
+      Martha, and Lazarus, and later ascension tradition near the close of
+      Luke.
     source_refs:
       - source_id: luke
         citation: Luke 10:38-42
@@ -173,8 +227,9 @@ places:
     modern_country: Israel
     location_certainty: exact
     summary: >
-      Jerusalem is the narrative starting point of Acts, the location of the
-      ascension, Pentecost, the Temple ministry, and the Jerusalem Council.
+      Jerusalem is the central Judean city where the Gospel passion and
+      resurrection scenes culminate and where Acts begins its expanding witness
+      narrative.
     source_refs:
       - source_id: luke
         citation: Luke 24:44-49
@@ -185,8 +240,10 @@ people:
     aliases: []
     role: Risen Lord
     summary: >
-      Jesus appears in the opening of Acts, commissions the apostles, and
-      ascends from the disciples' sight.
+      Jesus is the central figure of the Gospels and Acts, announced in the
+      birth narratives, active in Galilean and Judean ministry, crucified and
+      raised, and in Acts presented as the ascended Lord who commissions the
+      apostles.
     source_refs:
       - source_id: luke
         citation: Luke 24:36-53
@@ -198,8 +255,9 @@ people:
       - Cephas
     role: Apostle
     summary: >
-      Peter is a leading apostolic witness in the Jerusalem church and a key
-      figure in the Gentile-inclusion turning point with Cornelius.
+      Peter is a leading disciple in the Gospel tradition and a major apostolic
+      witness in Acts, appearing in call narratives, resurrection contexts, and
+      the early Jerusalem mission.
     source_refs:
       - source_id: luke
         citation: Luke 5:1-11
@@ -209,8 +267,8 @@ people:
     aliases: []
     role: Apostle
     summary: >
-      John appears alongside Peter in the early Jerusalem ministry, including
-      the Temple healing account.
+      John appears among Jesus's close disciples in the Gospel narratives and
+      later alongside Peter in the opening Jerusalem ministry of Acts.
     source_refs:
       - source_id: luke
         citation: Luke 5:10
@@ -221,11 +279,20 @@ people:
       - James son of Zebedee
     role: Apostle
     summary: >
-      James son of Zebedee is one of the Twelve and becomes an early martyr in
-      the apostolic period.
+      James son of Zebedee is one of Jesus's close disciples in the Gospels and
+      later becomes an early apostolic martyr in Acts.
     source_refs:
       - source_id: luke
         citation: Luke 5:10
+
+  - id: john_the_baptist
+    name: John the Baptist
+    aliases:
+      - John
+      - John son of Zechariah
+    source_refs:
+      - source_id: luke
+        citation: Luke 3:1-22
 
   - id: mary_mother_of_jesus
     name: Mary
@@ -256,8 +323,9 @@ people:
     aliases: []
     role: Host and disciple
     summary: >
-      Martha welcomes Jesus into her household in Luke and is remembered
-      alongside Mary in a scene centered on hospitality and discipleship.
+      Martha welcomes Jesus into her household in Luke and John and is
+      remembered alongside Mary and Lazarus in scenes centered on hospitality,
+      confession, grief, and discipleship.
     source_refs:
       - source_id: luke
         citation: Luke 10:38-42
@@ -267,8 +335,9 @@ people:
     aliases: []
     role: Disciple
     summary: >
-      Mary of Bethany is portrayed in Luke as a hearer of Jesus's teaching and
-      becomes a remembered figure of attentive discipleship.
+      Mary of Bethany is portrayed as a hearer of Jesus's teaching and a member
+      of the Bethany household remembered for attentive discipleship and grief
+      around Lazarus's death.
     source_refs:
       - source_id: luke
         citation: Luke 10:38-42
@@ -339,6 +408,28 @@ events:
         citation: Luke 2:1-20
     related_event_ids:
       - luke_001
+      - luke_010
+
+  - id: luke_010
+    title: Baptism of Jesus While Praying
+    summary: >
+      Luke frames Jesus's baptism with prayer, the descent of the Spirit, and
+      the heavenly voice that marks the transition into public ministry.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: jordan_river
+    participants:
+      - jesus
+      - john_the_baptist
+    tag_ids:
+      - holy_spirit
+    source_refs:
+      - source_id: luke
+        citation: Luke 3:21-22
+    related_event_ids:
+      - luke_002
       - luke_003
 
   - id: luke_003
@@ -385,6 +476,32 @@ events:
         citation: Luke 5:1-11
     related_event_ids:
       - luke_003
+      - luke_011
+
+  - id: luke_011
+    title: Feeding of the Five Thousand near Bethsaida
+    summary: >
+      Jesus feeds the gathered crowd near Bethsaida, and Luke presents the sign
+      as abundant provision that also forms the disciples for the mission to
+      come.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: bethsaida
+    participants:
+      - jesus
+      - peter
+      - john
+      - james_zebedee
+    tag_ids:
+      - miracle
+      - discipleship
+    source_refs:
+      - source_id: luke
+        citation: Luke 9:10-17
+    related_event_ids:
+      - luke_004
       - luke_005
 
   - id: luke_005
@@ -429,6 +546,29 @@ events:
       - source_id: luke
         citation: Luke 19:1-10
     related_event_ids:
+      - luke_012
+
+  - id: luke_012
+    title: Triumphal Entry into Jerusalem
+    summary: >
+      Jesus enters Jerusalem publicly as the king who comes in the name of the
+      Lord, and Luke frames the scene as a decisive threshold to the passion
+      narrative.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+    tag_ids:
+      - leadership
+      - preaching
+    source_refs:
+      - source_id: luke
+        citation: Luke 19:28-44
+    related_event_ids:
+      - luke_006
       - luke_007
 
   - id: luke_007
@@ -584,7 +724,154 @@ tags:
     description: Events centered on post-resurrection witness and recognition.
     group: theology
 
+literary_units:
+  - id: luke_unit_001
+    book_id: luke
+    title: Infancy And Preparation Narratives
+    unit_type: narrative
+    passage:
+      start_chapter: 1
+      start_verse: 5
+      end_chapter: 3
+      end_verse: 22
+    summary: >
+      Luke opens with temple, annunciation, nativity, and baptism material
+      that frames Jesus's mission within Israel's hopes and the Spirit's work.
+    related_event_ids:
+      - luke_001
+      - luke_002
+      - luke_010
+    source_refs:
+      - source_id: luke
+        citation: Luke 1:5-3:22
+  - id: luke_unit_002
+    book_id: luke
+    title: Galilean Ministry And Call Narratives
+    unit_type: narrative
+    passage:
+      start_chapter: 4
+      start_verse: 14
+      end_chapter: 9
+      end_verse: 50
+    summary: >
+      Early public ministry in Galilee establishes Jesus's proclamation,
+      healing, rejection, and disciple-forming authority.
+    related_event_ids:
+      - luke_003
+      - luke_004
+      - luke_011
+    source_refs:
+      - source_id: luke
+        citation: Luke 4:14-9:50
+  - id: luke_unit_003
+    book_id: luke
+    title: Journey Toward Jerusalem
+    unit_type: narrative
+    passage:
+      start_chapter: 9
+      start_verse: 51
+      end_chapter: 19
+      end_verse: 44
+    summary: >
+      The long travel narrative gathers teaching, encounters, hospitality, and
+      response scenes on the way toward Jerusalem.
+    related_event_ids:
+      - luke_005
+      - luke_006
+      - luke_012
+    source_refs:
+      - source_id: luke
+        citation: Luke 9:51-19:44
+  - id: luke_unit_004
+    book_id: luke
+    title: Resurrection Witness And Ascension
+    unit_type: epilogue
+    passage:
+      start_chapter: 24
+      start_verse: 13
+      end_chapter: 24
+      end_verse: 53
+    summary: >
+      Luke closes with Emmaus recognition, Jerusalem commissioning, and the
+      ascension near Bethany as the hinge into Acts.
+    related_event_ids:
+      - luke_007
+      - luke_008
+      - luke_009
+    source_refs:
+      - source_id: luke
+        citation: Luke 24:13-53
+
 claims:
+  - id: claim_synoptic_bethlehem_birth
+    statement: >
+      Matthew and Luke both anchor Jesus's birth in Bethlehem, while each
+      Gospel preserves distinct surrounding infancy material and theological
+      emphasis.
+    claim_type: synoptic_continuity
+    confidence: high
+    related_event_ids:
+      - luke_002
+    related_person_ids:
+      - jesus
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+    related_place_ids:
+      - bethlehem
+    source_refs:
+      - source_id: luke
+        citation: Luke 2:1-20
+  - id: claim_synoptic_baptism_inaugural_witness
+    statement: >
+      Matthew, Mark, and Luke each preserve Jesus's baptism by John as an
+      inaugural public scene, though they frame the heavenly affirmation and
+      surrounding narrative differently.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - luke_010
+    related_person_ids:
+      - jesus
+      - john_the_baptist
+    related_place_ids:
+      - jordan_river
+    source_refs:
+      - source_id: luke
+        citation: Luke 3:21-22
+  - id: claim_synoptic_feeding_five_thousand
+    statement: >
+      Matthew, Mark, and Luke all preserve the feeding of the five thousand,
+      while retaining distinct geographic and narrative emphases.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - luke_011
+    related_person_ids:
+      - jesus
+      - peter
+      - john
+      - james_zebedee
+    related_place_ids:
+      - bethsaida
+    source_refs:
+      - source_id: luke
+        citation: Luke 9:10-17
+  - id: claim_synoptic_entry_jerusalem
+    statement: >
+      Matthew, Mark, and Luke each narrate Jesus's royal entry into Jerusalem
+      as a public threshold to the passion, while preserving witness-specific
+      details.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - luke_012
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - jerusalem
+    source_refs:
+      - source_id: luke
+        citation: Luke 19:28-44
   - id: claim_luke_nazareth_programmatic_scene
     statement: >
       Many interpreters treat Luke's Nazareth synagogue episode as a

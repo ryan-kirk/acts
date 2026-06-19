@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 
+import {
+  formatBookCorpus,
+  formatPassageRange,
+  getLiteraryUnitsForBook,
+  getPrimaryScopeBook,
+  getPrimarySourceForBook
+} from "../domain/books";
 import type { Event, Source } from "../domain/dataset";
 import type { ExplorerDataset } from "../domain/library";
 import { formatDateRange, formatSourceType, type DatasetIndex } from "../domain/events";
@@ -41,6 +48,13 @@ export function SourcesView({
   onSelectEvent,
   selectedEvent
 }: SourcesViewProps) {
+  const activeScopeBook = getPrimaryScopeBook(dataset);
+  const activeScopeLiteraryUnits = activeScopeBook
+    ? getLiteraryUnitsForBook(dataset, activeScopeBook.id)
+    : [];
+  const activeScopePrimarySource = activeScopeBook
+    ? getPrimarySourceForBook(activeScopeBook, index)
+    : null;
   const allClaimRecords = buildClaimExplorerRecords(dataset, index, events);
   const claimRecords = filterClaimExplorerRecords(allClaimRecords, claimConfidenceFilter);
   const sourceRecords = buildSourceExplorerRecords(dataset, events, claimRecords);
@@ -260,6 +274,79 @@ export function SourcesView({
             </div>
           ) : null}
         </section>
+
+        {activeScopeBook ? (
+          <section className="sources-hero-card">
+            <div className="sources-hero-header">
+              <div>
+                <p className="stage-card-eyebrow">Book Metadata</p>
+                <h3>{activeScopeBook.title}</h3>
+                <p className="muted-copy">
+                  {activeScopeBook.summary ??
+                    "No active book summary has been modeled for this scope yet."}
+                </p>
+              </div>
+              <span className="entity-type-badge">
+                {formatBookCorpus(activeScopeBook.corpus)}
+              </span>
+            </div>
+
+            <dl className="preview-meta-grid">
+              <div>
+                <dt>Primary Source</dt>
+                <dd>{activeScopePrimarySource?.name ?? activeScopeBook.primary_source_id}</dd>
+              </div>
+              <div>
+                <dt>Canonical Order</dt>
+                <dd>{activeScopeBook.canonical_order}</dd>
+              </div>
+              <div>
+                <dt>Literary Units</dt>
+                <dd>{activeScopeLiteraryUnits.length}</dd>
+              </div>
+              <div>
+                <dt>Genres</dt>
+                <dd>{activeScopeBook.genre.join(", ")}</dd>
+              </div>
+            </dl>
+
+            {activeScopeBook.authorship_note ? (
+              <p className="context-note">{activeScopeBook.authorship_note}</p>
+            ) : null}
+
+            {activeScopePrimarySource?.usage_rights.trademark_usage_note ? (
+              <p className="muted-copy">
+                Trademark guardrail: {activeScopePrimarySource.usage_rights.trademark_usage_note}
+              </p>
+            ) : null}
+
+            {activeScopePrimarySource?.usage_rights.commercial_use_note ? (
+              <p className="muted-copy">
+                Commercial-use guardrail: {activeScopePrimarySource.usage_rights.commercial_use_note}
+              </p>
+            ) : null}
+
+            {activeScopeLiteraryUnits.length > 0 ? (
+              <div className="sources-subsection">
+                <div className="section-header-row">
+                  <h3>Literary units in scope</h3>
+                </div>
+                <ul className="linked-record-list compact-linked-list">
+                  {activeScopeLiteraryUnits.map((literaryUnit) => (
+                    <li key={literaryUnit.id}>
+                      <div className="linked-record-button static-linked-card">
+                        <strong>{literaryUnit.title}</strong>
+                        <span>
+                          {formatPassageRange(literaryUnit)} • {literaryUnit.unit_type}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </section>
+        ) : null}
 
         {groupedSourceRecords.map(({ section, records }) => (
           <section key={section.id} className="sources-section">

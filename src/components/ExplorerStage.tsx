@@ -4,6 +4,14 @@ import { MapView } from "../components/MapView";
 import { PeopleView } from "../components/PeopleView";
 import { SourcesView } from "../components/SourcesView";
 import { TimelineView } from "../components/TimelineView";
+import {
+  formatBookCorpus,
+  getBookNarrativeSemantics,
+  formatPassageRange,
+  getLiteraryUnitsForBook,
+  getPrimaryScopeBook,
+  isLetterLikeBook
+} from "../domain/books";
 import type { Event } from "../domain/dataset";
 import { explorerViews, type DatasetIndex, type ExplorerView } from "../domain/events";
 import type { BookFilterId, ExplorerDataset } from "../domain/library";
@@ -17,6 +25,7 @@ interface ExplorerStageProps {
   claimConfidenceFilter: ClaimConfidenceFilter;
   dataset: ExplorerDataset;
   library: ExplorerDataset;
+  libraryIndex: DatasetIndex;
   event: Event;
   eventBookLabels: Map<string, string>;
   events: Event[];
@@ -42,6 +51,7 @@ export function ExplorerStage({
   claimConfidenceFilter,
   dataset,
   library,
+  libraryIndex,
   event,
   eventBookLabels,
   events,
@@ -60,6 +70,13 @@ export function ExplorerStage({
   onViewChange
 }: ExplorerStageProps) {
   let content: JSX.Element;
+  const activeScopeBook = getPrimaryScopeBook(dataset);
+  const activeScopeLiteraryUnits = activeScopeBook
+    ? getLiteraryUnitsForBook(dataset, activeScopeBook.id)
+    : [];
+  const activeScopeNarrativeSemantics = activeScopeBook
+    ? getBookNarrativeSemantics(dataset.events, index)
+    : [];
 
   switch (activeView) {
     case "timeline":
@@ -116,7 +133,7 @@ export function ExplorerStage({
           eventBookLabels={eventBookLabels}
           events={events}
           focusedSourceId={focusedSourceId}
-          index={index}
+          index={libraryIndex}
           onFocusSource={onFocusSource}
           onSelectEvent={onSelectEvent}
           selectedEvent={event}
@@ -135,13 +152,16 @@ export function ExplorerStage({
         {
           id: "all" as const,
           label: "All Books",
-          title: "Luke-Acts Library",
+          title: "Canonical Scripture Library",
           eventCount: library.events.length,
           journeyCount: library.journeys.length,
           description:
             "Merged library view across normalized people, places, sources, and claims."
         },
-        ...library.books
+        ...library.books.map((book) => ({
+          ...book,
+          description: book.summary
+        }))
       ];
 
       content = (
@@ -173,9 +193,9 @@ export function ExplorerStage({
                 <span className="entity-type-badge">{activeBookLabel} active</span>
               </div>
               <p>
-                Acts remains the default explorer scope, but Luke is available as a parallel
-                canonical dataset and can be surfaced from here without changing the rest of the
-                shell layout.
+                Acts remains the default explorer scope, while Matthew, Mark, Luke, and John now
+                ship alongside it as canonical Gospel datasets that can be surfaced from here
+                without changing the rest of the shell layout.
               </p>
               <div className="overview-book-grid">
                 {scopeOptions.map((scopeOption) => {
@@ -248,6 +268,116 @@ export function ExplorerStage({
             </section>
           </div>
 
+          {activeScopeBook ? (
+            <div className="overview-control-grid">
+              <section className="stage-card overview-section-card">
+                <div className="section-header-row">
+                  <div>
+                    <p className="stage-card-eyebrow">Active Book Record</p>
+                    <h3>{activeScopeBook.title}</h3>
+                  </div>
+                  <span className="entity-type-badge">
+                    {formatBookCorpus(activeScopeBook.corpus)}
+                  </span>
+                </div>
+                <p>
+                  {activeScopeBook.summary ??
+                    "No active book summary has been modeled for this scope yet."}
+                </p>
+                <dl className="preview-meta-grid">
+                  <div>
+                    <dt>Canonical Order</dt>
+                    <dd>{activeScopeBook.canonical_order}</dd>
+                  </div>
+                  <div>
+                    <dt>Genres</dt>
+                    <dd>{activeScopeBook.genre.join(", ")}</dd>
+                  </div>
+                  <div>
+                    <dt>Literary Units</dt>
+                    <dd>{activeScopeLiteraryUnits.length}</dd>
+                  </div>
+                  <div>
+                    <dt>Letter Context</dt>
+                    <dd>{isLetterLikeBook(activeScopeBook) ? "Modeled" : "Not primary"}</dd>
+                  </div>
+                </dl>
+                {activeScopeBook.recipient_group ? (
+                  <p className="muted-copy">Recipient group: {activeScopeBook.recipient_group}</p>
+                ) : null}
+                {activeScopeBook.authorship_note ? (
+                  <p className="muted-copy">{activeScopeBook.authorship_note}</p>
+                ) : null}
+              </section>
+
+              <section className="stage-card overview-section-card">
+                <div className="section-header-row">
+                  <div>
+                    <p className="stage-card-eyebrow">Literary Anchors</p>
+                    <h3>{activeBookLabel} units</h3>
+                  </div>
+                  <span className="entity-type-badge">
+                    {activeScopeLiteraryUnits.length} modeled
+                  </span>
+                </div>
+                {activeScopeLiteraryUnits.length === 0 ? (
+                  <p className="muted-copy">
+                    No literary-unit anchors are modeled for the current scope yet.
+                  </p>
+                ) : (
+                  <ul className="linked-record-list compact-linked-list">
+                    {activeScopeLiteraryUnits.slice(0, 4).map((literaryUnit) => (
+                      <li key={literaryUnit.id}>
+                        <div className="linked-record-button static-linked-card">
+                          <strong>{literaryUnit.title}</strong>
+                          <span>
+                            {formatPassageRange(literaryUnit)} • {literaryUnit.unit_type}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+
+              {activeScopeNarrativeSemantics.length > 0 ? (
+                <section className="stage-card overview-section-card">
+                  <div className="section-header-row">
+                    <div>
+                      <p className="stage-card-eyebrow">Narrative Semantics</p>
+                      <h3>{activeBookLabel} signals</h3>
+                    </div>
+                    <span className="entity-type-badge">
+                      {activeScopeNarrativeSemantics.length} active
+                    </span>
+                  </div>
+                  <ul className="entity-card-list">
+                    {activeScopeNarrativeSemantics.map((semantic) => (
+                      <li key={semantic.id} className="entity-card">
+                        <div className="entity-card-header">
+                          <div>
+                            <strong>{semantic.label}</strong>
+                            <span className="entity-subtitle">
+                              {semantic.eventCount} event
+                              {semantic.eventCount === 1 ? "" : "s"}
+                            </span>
+                          </div>
+                          <span className="entity-type-badge">
+                            {semantic.tagLabels.join(", ")}
+                          </span>
+                        </div>
+                        <p className="entity-summary">{semantic.description}</p>
+                        <p className="entity-meta">
+                          Examples: {semantic.sampleEventTitles.join(" • ")}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+            </div>
+          ) : null}
+
           <div className="metric-grid" aria-label="Dataset counts">
             <article className="metric-card">
               <span>Books</span>
@@ -269,6 +399,10 @@ export function ExplorerStage({
               <span>Scope Claims</span>
               <strong>{dataset.claims.length}</strong>
             </article>
+            <article className="metric-card">
+              <span>Literary Units</span>
+              <strong>{dataset.literary_units.length}</strong>
+            </article>
           </div>
 
           <div className="overview-coverage-grid">
@@ -279,13 +413,19 @@ export function ExplorerStage({
                 <p>
                   {book.eventCount} canonical event
                   {book.eventCount === 1 ? "" : "s"} and {book.journeyCount} journey
-                  {book.journeyCount === 1 ? "" : "s"} are currently modeled for this book.
+                  {book.journeyCount === 1 ? "" : "s"} plus {book.literaryUnitCount} literary
+                  unit{book.literaryUnitCount === 1 ? "" : "s"} are currently modeled for this
+                  book.
                 </p>
-                {book.id === "luke" ? (
+                <p className="muted-copy">
+                  {formatBookCorpus(book.corpus)} • {book.genre.join(", ")}
+                </p>
+                {book.corpus === "gospel" ? (
                   <p className="muted-copy">
-                    Luke currently ships as a curated first-pass preview from infancy through the
-                    ascension. The overview keeps that partial coverage explicit so the dataset
-                    does not appear missing or broken.
+                    Gospel coverage currently ships as a curated first-pass set of events and
+                    literary anchors rather than a full chapter-by-chapter extraction. The
+                    overview keeps that partial coverage explicit so the dataset does not appear
+                    missing or broken.
                   </p>
                 ) : null}
               </article>

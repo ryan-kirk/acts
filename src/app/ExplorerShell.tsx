@@ -28,10 +28,13 @@ interface ExplorerShellProps {
 
 export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
   const [activeView, setActiveView] = useState<ExplorerView>("overview");
-  const [activeBookId, setActiveBookId] = useState<BookFilterId>("acts");
+  const [activeBookId, setActiveBookId] = useState<BookFilterId>(
+    () => dataset.books.find((book) => book.id === "acts")?.id ?? dataset.books[0]?.id ?? "all"
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const filteredDataset = filterExplorerDatasetByBook(dataset, provenance, activeBookId);
   const datasetIndex = buildDatasetIndex(filteredDataset);
+  const libraryIndex = buildDatasetIndex(dataset);
   const sortedEvents = sortEventsChronologically(filteredDataset.events);
   const eventBookLabels = getEventBookLabelMap(dataset, provenance);
   const activeBookLabel = getBookLabelForFilter(dataset, activeBookId);
@@ -47,12 +50,27 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
   const [isRailOpen, setIsRailOpen] = useState(false);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const deferredSearchQuery = useDeferredValue(searchQuery);
-  const lukeBook = dataset.books.find((book) => book.id === "luke") ?? null;
+  const libraryLabel =
+    dataset.books.length <= 3
+      ? dataset.books.map((book) => book.label).join(", ")
+      : `${dataset.books.length} books`;
+  const gospelCount = dataset.books.filter((book) => book.corpus === "gospel").length;
 
   const selectedEvent = datasetIndex.eventsById.get(selectedEventId) ?? sortedEvents[0] ?? null;
   const filteredEvents = filterEventsByQuery(sortedEvents, deferredSearchQuery, datasetIndex);
   const selectedEventHidden =
     selectedEvent !== null && !filteredEvents.some((event) => event.id === selectedEvent.id);
+
+  useEffect(() => {
+    const activeBookStillExists =
+      activeBookId === "all" || dataset.books.some((book) => book.id === activeBookId);
+
+    if (activeBookStillExists) {
+      return;
+    }
+
+    setActiveBookId(dataset.books.find((book) => book.id === "acts")?.id ?? dataset.books[0]?.id ?? "all");
+  }, [activeBookId, dataset.books]);
 
   useEffect(() => {
     if (sortedEvents.length === 0) {
@@ -78,6 +96,20 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
   }
 
   function handleSelectEvent(eventId: string): void {
+    const selectedEventBookId = provenance.eventBookIds.get(eventId);
+
+    if (
+      activeBookId !== "all" &&
+      selectedEventBookId &&
+      selectedEventBookId !== activeBookId
+    ) {
+      setActiveBookId(selectedEventBookId);
+      setSearchQuery("");
+      setTimelineFilters({
+        ...defaultTimelineFilters
+      });
+    }
+
     setSelectedEventId(eventId);
     clearEntityFocus();
     setIsRailOpen(false);
@@ -138,9 +170,9 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
       <header className="hero-banner">
         <div>
           <p className="eyebrow">Bible Time &amp; Place Explorer</p>
-          <h1>Luke-Acts explorer with shared navigation, filtering, and synchronized context.</h1>
+          <h1>Scripture explorer with shared navigation, filtering, and synchronized context.</h1>
           <p className="lede">
-            Interactive scripture explorer · Luke and Acts · shared timeline, map, people, and
+            Interactive scripture explorer · {libraryLabel} · shared timeline, map, people, and
             source-grounded event context.
           </p>
         </div>
@@ -148,15 +180,14 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
           <span className="status-pill">Scope: {activeBookLabel}</span>
           <span className="status-pill">{dataset.events.length} events</span>
           <span className="status-pill">{dataset.journeys.length} journeys</span>
+          <span className="status-pill">{dataset.literary_units.length} literary units</span>
+          <span className="status-pill">{gospelCount} gospels loaded</span>
           <span className="status-pill">
             Claim lens:{" "}
             {claimConfidenceFilter === "all"
               ? "All confidences"
               : formatClaimConfidence(claimConfidenceFilter)}
           </span>
-          {activeBookId === "acts" && lukeBook ? (
-            <span className="status-pill">Luke preview: {lukeBook.eventCount} events</span>
-          ) : null}
           <span className="status-pill">Version {dataset.metadata.version}</span>
         </div>
       </header>
@@ -225,6 +256,7 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
             claimConfidenceFilter={claimConfidenceFilter}
             dataset={filteredDataset}
             library={dataset}
+            libraryIndex={libraryIndex}
             event={selectedEvent}
             eventBookLabels={eventBookLabels}
             events={sortedEvents}
@@ -254,7 +286,7 @@ export function ExplorerShell({ dataset, provenance }: ExplorerShellProps) {
               getEventBookLabel(dataset, provenance, selectedEvent.id) ?? activeBookLabel
             }
             events={sortedEvents}
-            index={datasetIndex}
+            index={libraryIndex}
             onSelectEvent={handleSelectEvent}
             onFocusPerson={handleFocusPerson}
             onFocusPlace={handleFocusPlace}

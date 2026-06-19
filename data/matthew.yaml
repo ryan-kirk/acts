@@ -1,0 +1,693 @@
+metadata:
+  dataset_id: matthew
+  title: Gospel of Matthew Canonical Dataset
+  version: "1.0.0"
+  schema_version: "1.0.0"
+  description: >
+    Canonical Matthew dataset for Bible Time & Place Explorer, modeled with
+    normalized synoptic records, shared entities, literary units, and
+    source-backed claims that merge cleanly with the broader scripture library.
+  created: "2026-06-12"
+  updated: "2026-06-12"
+
+books:
+  - id: matthew
+    label: Matthew
+    title: Gospel of Matthew
+    testament: new_testament
+    canonical_order: 1
+    corpus: gospel
+    genre:
+      - gospel
+      - narrative
+      - discourse
+    summary: >
+      Matthew presents Jesus as Israel's Messiah and authoritative teacher,
+      weaving birth, kingdom proclamation, conflict, passion, resurrection, and
+      mission into a Gospel shaped by scriptural fulfillment.
+    authorship_note: Traditionally attributed to Matthew the apostle.
+    primary_source_id: matthew
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 1:1-28:20
+
+sources:
+  - id: matthew
+    name: Gospel of Matthew
+    type: scripture
+    citation: New Testament, Matthew 1-28
+    author: Traditionally attributed to Matthew
+    publication_date: 1st century AD
+    usage_rights:
+      status: not_applicable
+      attribution_text: >
+        This dataset stores canonical scripture citations to Matthew and does
+        not reproduce licensed Bible translation text.
+      usage_notes: >
+        Event, place, person, and literary-unit records remain citation-based
+        only. Any future embedded translation text will require separate rights
+        review.
+      trademark_usage_note: >
+        If ESV-branded scripture text is added later, the ESV name and logo
+        must not be used as product branding without permission.
+      commercial_use_note: >
+        Any future commercial Bible-reference workflow that embeds direct ESV
+        text will require written permission and explicit release review.
+      requires_written_permission_for_commercial_use: true
+  - id: france_matthew_commentary
+    name: The Gospel of Matthew
+    type: commentary
+    author: R. T. France
+    citation: New International Commentary on the New Testament
+    publication_date: "2007"
+    usage_rights:
+      status: restricted
+      attribution_text: >
+        Commentary references support interpretive claims without embedding
+        copyrighted prose.
+      usage_notes: >
+        Any future quotations or extended excerpts require publisher-specific
+        rights review and attribution.
+
+places:
+  - id: bethlehem
+    name: Bethlehem
+    latitude: 31.7054
+    longitude: 35.2024
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 2:1
+
+  - id: nazareth
+    name: Nazareth
+    latitude: 32.6996
+    longitude: 35.3035
+    region: Galilee
+    modern_country: Israel
+    location_certainty: exact
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 2:23
+
+  - id: jordan_river
+    name: Jordan River
+    latitude: 31.8374
+    longitude: 35.555
+    region: Judean Wilderness
+    modern_country: Jordan
+    location_certainty: approximate
+    summary: >
+      The Jordan River marks the wilderness-water setting associated with
+      John's baptism ministry and the inauguration scenes of Jesus's public
+      ministry in the Synoptic Gospels.
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 3:5-17
+
+  - id: sea_of_galilee
+    name: Sea of Galilee
+    latitude: 32.8333
+    longitude: 35.5833
+    region: Galilee
+    modern_country: Israel
+    location_certainty: exact
+    summary: >
+      The Sea of Galilee and its surrounding shore settlements form a major
+      theater for Synoptic teaching, calling, healing, and feeding narratives.
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 4:18-25
+
+  - id: caesarea_philippi
+    name: Caesarea Philippi
+    latitude: 33.2486
+    longitude: 35.6964
+    region: Iturea
+    modern_country: Israel
+    location_certainty: approximate
+    summary: >
+      Caesarea Philippi stands near the northern edge of Jesus's public
+      activity and becomes a key identity-confession setting in the Synoptic
+      tradition.
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 16:13-20
+
+  - id: jerusalem
+    name: Jerusalem
+    latitude: 31.7683
+    longitude: 35.2137
+    region: Judea
+    modern_country: Israel
+    location_certainty: exact
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 21:1-11
+
+  - id: galilee
+    name: Galilee
+    latitude: 32.85
+    longitude: 35.45
+    region: Galilee
+    modern_country: Israel
+    location_certainty: approximate
+    summary: >
+      Galilee is the broader northern region associated with Jesus's early
+      ministry, many public signs, and the resurrection commission scene in
+      Matthew.
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 28:16-20
+
+people:
+  - id: jesus
+    name: Jesus Christ
+    aliases: []
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 1:1-28:20
+
+  - id: mary_mother_of_jesus
+    name: Mary
+    aliases:
+      - Mother of Jesus
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 1:18-25
+
+  - id: joseph_husband_of_mary
+    name: Joseph
+    aliases:
+      - Husband of Mary
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 1:18-25
+
+  - id: john_the_baptist
+    name: John the Baptist
+    aliases:
+      - John
+      - John son of Zechariah
+    role: Prophetic forerunner
+    summary: >
+      John the Baptist prepares the way for Jesus through wilderness preaching,
+      repentance, and baptism, and he stands at the threshold of the Synoptic
+      public-ministry narratives.
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 3:1-17
+
+  - id: peter
+    name: Peter
+    aliases:
+      - Simon Peter
+      - Cephas
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 4:18-20
+
+  - id: james_zebedee
+    name: James
+    aliases:
+      - James son of Zebedee
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 4:21
+
+  - id: john
+    name: John
+    aliases: []
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 4:21
+
+events:
+  - id: matthew_001
+    title: Birth of Jesus in Bethlehem
+    summary: >
+      Matthew anchors Jesus's birth in Bethlehem and frames it within royal
+      Davidic expectation, Joseph's obedient protection, and the fulfillment of
+      scriptural promise.
+    date:
+      start_year: -6
+      end_year: -4
+      certainty: estimated
+    location_id: bethlehem
+    participants:
+      - jesus
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+    tag_ids:
+      - nativity
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 1:18-2:6
+    related_event_ids:
+      - matthew_002
+
+  - id: matthew_002
+    title: Visit of the Magi
+    summary: >
+      The Magi's arrival brings Gentile homage, royal tension, and a public
+      sign that Jesus's significance extends beyond Judea from the beginning of
+      Matthew's Gospel.
+    date:
+      start_year: -5
+      end_year: -4
+      certainty: estimated
+    location_id: bethlehem
+    participants:
+      - jesus
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+    tag_ids:
+      - nativity
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 2:1-12
+    related_event_ids:
+      - matthew_001
+      - matthew_003
+
+  - id: matthew_003
+    title: Baptism of Jesus by John
+    summary: >
+      Jesus comes to John at the Jordan, is baptized, and receives the
+      heavenly affirmation that frames Matthew's public ministry around
+      obedience and divine approval.
+    date:
+      start_year: 27
+      end_year: 27
+      certainty: estimated
+    location_id: jordan_river
+    participants:
+      - jesus
+      - john_the_baptist
+    tag_ids:
+      - holy_spirit
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 3:13-17
+    related_event_ids:
+      - matthew_004
+
+  - id: matthew_004
+    title: Sermon on the Mount
+    summary: >
+      Matthew gathers kingdom teaching on the mountain into a concentrated
+      discourse that frames the character, prayer, righteousness, and
+      allegiance expected of Jesus's disciples.
+    date:
+      start_year: 28
+      end_year: 28
+      certainty: estimated
+    location_id: sea_of_galilee
+    participants:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    tag_ids:
+      - preaching
+      - discipleship
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 5:1-7:29
+    related_event_ids:
+      - matthew_003
+      - matthew_005
+
+  - id: matthew_005
+    title: Feeding of the Five Thousand
+    summary: >
+      Jesus feeds the gathered crowd in the wilderness setting, and Matthew
+      presents the sign as both compassionate provision and a formative scene
+      for the disciples.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: sea_of_galilee
+    participants:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    tag_ids:
+      - miracle
+      - discipleship
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 14:13-21
+    related_event_ids:
+      - matthew_004
+      - matthew_006
+
+  - id: matthew_006
+    title: Peter Confesses Jesus at Caesarea Philippi
+    summary: >
+      Peter identifies Jesus as the Messiah, and Matthew pairs the confession
+      with teaching about the church, revelation, and the shape of faithful
+      allegiance.
+    date:
+      start_year: 29
+      end_year: 29
+      certainty: estimated
+    location_id: caesarea_philippi
+    participants:
+      - jesus
+      - peter
+    tag_ids:
+      - discipleship
+      - leadership
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 16:13-20
+    related_event_ids:
+      - matthew_005
+      - matthew_007
+
+  - id: matthew_007
+    title: Triumphal Entry into Jerusalem
+    summary: >
+      Jesus enters Jerusalem in public royal symbolism, and Matthew presents
+      the entry as a decisive threshold into the final week of conflict and
+      fulfillment.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: jerusalem
+    participants:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    tag_ids:
+      - leadership
+      - preaching
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 21:1-11
+    related_event_ids:
+      - matthew_006
+      - matthew_008
+
+  - id: matthew_008
+    title: Great Commission in Galilee
+    summary: >
+      The risen Jesus commissions the disciples in Galilee to make disciples of
+      all nations, bringing Matthew's Gospel to a close with authority,
+      presence, and ongoing mission.
+    date:
+      start_year: 30
+      end_year: 30
+      certainty: estimated
+    location_id: galilee
+    participants:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    tag_ids:
+      - leadership
+      - preaching
+      - resurrection
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 28:16-20
+    related_event_ids:
+      - matthew_007
+
+journeys: []
+
+relationships:
+  - id: relationship_matthew_john_prepares_jesus
+    from_type: person
+    from_id: john_the_baptist
+    to_type: person
+    to_id: jesus
+    relationship_type: prepares_way_for
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 3:1-17
+
+  - id: relationship_matthew_jesus_peter_calls
+    from_type: person
+    from_id: jesus
+    to_type: person
+    to_id: peter
+    relationship_type: calls_to_follow
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 4:18-20
+
+tags:
+  - id: nativity
+    label: Nativity
+    description: Events focused on Jesus's conception, birth, and early promise.
+    group: theology
+
+  - id: holy_spirit
+    label: Holy Spirit
+    description: Events centered on the Spirit's empowering presence.
+    group: theology
+
+  - id: preaching
+    label: Preaching
+    description: Events centered on proclamation, speech, or public witness.
+    group: proclamation
+
+  - id: discipleship
+    label: Discipleship
+    description: Events focused on hearing, following, and responding to Jesus.
+    group: response
+
+  - id: miracle
+    label: Miracle
+    description: Events marked by extraordinary acts of divine power.
+    group: sign
+
+  - id: leadership
+    label: Leadership
+    description: Events focused on communal leadership and apostolic direction.
+    group: governance
+
+  - id: resurrection
+    label: Resurrection
+    description: Events centered on post-resurrection witness and recognition.
+    group: theology
+
+literary_units:
+  - id: matthew_unit_001
+    book_id: matthew
+    title: Origins, Protection, And Baptismal Preparation
+    unit_type: narrative
+    passage:
+      start_chapter: 1
+      start_verse: 1
+      end_chapter: 4
+      end_verse: 17
+    summary: >
+      Matthew opens with royal genealogy, infancy protection material,
+      wilderness preparation, and the baptismal threshold to Jesus's public
+      ministry.
+    location_id: bethlehem
+    participant_ids:
+      - jesus
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+      - john_the_baptist
+    related_event_ids:
+      - matthew_001
+      - matthew_002
+      - matthew_003
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 1:1-4:17
+
+  - id: matthew_unit_002
+    book_id: matthew
+    title: Kingdom Teaching And Galilean Provision
+    unit_type: discourse
+    passage:
+      start_chapter: 5
+      start_verse: 1
+      end_chapter: 14
+      end_verse: 21
+    summary: >
+      Major teaching, discipleship formation, and the feeding sign frame the
+      authority and compassion of Jesus's Galilean ministry.
+    location_id: sea_of_galilee
+    participant_ids:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    related_event_ids:
+      - matthew_004
+      - matthew_005
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 5:1-14:21
+
+  - id: matthew_unit_003
+    book_id: matthew
+    title: Identity Confession And Jerusalem Approach
+    unit_type: narrative
+    passage:
+      start_chapter: 16
+      start_verse: 13
+      end_chapter: 21
+      end_verse: 11
+    summary: >
+      Peter's confession and the entry into Jerusalem frame the movement from
+      revealed identity toward the final public conflict.
+    location_id: caesarea_philippi
+    participant_ids:
+      - jesus
+      - peter
+    related_event_ids:
+      - matthew_006
+      - matthew_007
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 16:13-21:11
+
+  - id: matthew_unit_004
+    book_id: matthew
+    title: Passion, Resurrection, And Universal Commission
+    unit_type: epilogue
+    passage:
+      start_chapter: 26
+      start_verse: 1
+      end_chapter: 28
+      end_verse: 20
+    summary: >
+      Matthew closes with passion, resurrection, and the Galilean commission
+      that extends the Gospel's horizon to all nations.
+    location_id: galilee
+    participant_ids:
+      - jesus
+      - peter
+      - james_zebedee
+      - john
+    related_event_ids:
+      - matthew_008
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 26:1-28:20
+
+claims:
+  - id: claim_synoptic_bethlehem_birth
+    statement: >
+      Matthew and Luke both anchor Jesus's birth in Bethlehem, while each
+      Gospel preserves distinct surrounding infancy material and theological
+      emphasis.
+    claim_type: synoptic_continuity
+    confidence: high
+    related_event_ids:
+      - matthew_001
+    related_person_ids:
+      - jesus
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+    related_place_ids:
+      - bethlehem
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 1:18-2:6
+
+  - id: claim_synoptic_baptism_inaugural_witness
+    statement: >
+      Matthew, Mark, and Luke each preserve Jesus's baptism by John as an
+      inaugural public scene, though they frame the heavenly affirmation and
+      surrounding narrative differently.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - matthew_003
+    related_person_ids:
+      - jesus
+      - john_the_baptist
+    related_place_ids:
+      - jordan_river
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 3:13-17
+
+  - id: claim_matthew_discourse_architecture
+    statement: >
+      Matthew concentrates Jesus's teaching into major discourse blocks, and
+      the Sermon on the Mount functions as a defining early concentration of
+      kingdom ethics and disciple formation.
+    claim_type: literary_structure
+    confidence: medium
+    related_event_ids:
+      - matthew_004
+    related_person_ids:
+      - jesus
+      - peter
+    related_place_ids:
+      - sea_of_galilee
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 5:1-7:29
+      - source_id: france_matthew_commentary
+        citation: France, Matthew, on 5:1-7:29
+
+  - id: claim_synoptic_feeding_five_thousand
+    statement: >
+      Matthew, Mark, and Luke all preserve the feeding of the five thousand,
+      while retaining distinct geographic and narrative emphases.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - matthew_005
+    related_person_ids:
+      - jesus
+      - peter
+    related_place_ids:
+      - sea_of_galilee
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 14:13-21
+
+  - id: claim_synoptic_entry_jerusalem
+    statement: >
+      Matthew, Mark, and Luke each narrate Jesus's royal entry into Jerusalem
+      as a public threshold to the passion, while preserving witness-specific
+      details.
+    claim_type: synoptic_parallel
+    confidence: high
+    related_event_ids:
+      - matthew_007
+    related_person_ids:
+      - jesus
+    related_place_ids:
+      - jerusalem
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 21:1-11
+
+  - id: claim_matthew_commission_nations_scope
+    statement: >
+      Matthew closes by concentrating resurrection authority and the mission to
+      all nations into a single Galilean commission scene.
+    claim_type: narrative_structure
+    confidence: medium
+    related_event_ids:
+      - matthew_008
+    related_person_ids:
+      - jesus
+      - peter
+    related_place_ids:
+      - galilee
+    source_refs:
+      - source_id: matthew
+        citation: Matthew 28:16-20
+      - source_id: france_matthew_commentary
+        citation: France, Matthew, on 28:16-20

@@ -1,7 +1,9 @@
 import type {
+  Book,
   CanonicalDataset,
   Event,
   Journey,
+  LiteraryUnit,
   Person,
   Place,
   Source,
@@ -17,8 +19,10 @@ export interface ExplorerViewOption {
 }
 
 export interface DatasetIndex {
+  booksById: Map<string, Book>;
   eventsById: Map<string, Event>;
   journeysById: Map<string, Journey>;
+  literaryUnitsById: Map<string, LiteraryUnit>;
   peopleById: Map<string, Person>;
   placesById: Map<string, Place>;
   sourcesById: Map<string, Source>;
@@ -60,8 +64,12 @@ export const explorerViews: ExplorerViewOption[] = [
 
 export function buildDatasetIndex(dataset: CanonicalDataset): DatasetIndex {
   return {
+    booksById: new Map(dataset.books.map((book) => [book.id, book])),
     eventsById: new Map(dataset.events.map((event) => [event.id, event])),
     journeysById: new Map(dataset.journeys.map((journey) => [journey.id, journey])),
+    literaryUnitsById: new Map(
+      dataset.literary_units.map((literaryUnit) => [literaryUnit.id, literaryUnit])
+    ),
     peopleById: new Map(dataset.people.map((person) => [person.id, person])),
     placesById: new Map(dataset.places.map((place) => [place.id, place])),
     sourcesById: new Map(dataset.sources.map((source) => [source.id, source])),

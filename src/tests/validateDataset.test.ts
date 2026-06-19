@@ -91,11 +91,57 @@ describe("validateDataset", () => {
     expect(() => validateDataset(dataset)).toThrow(/Unknown event ID 'missing_event'/);
   });
 
+  it("rejects malformed literary unit passage ranges", () => {
+    const dataset = createValidDataset();
+    dataset.literary_units[0]!.passage = {
+      start_chapter: 3,
+      start_verse: 12,
+      end_chapter: 3,
+      end_verse: 2
+    };
+
+    expect(() => validateDataset(dataset)).toThrow(
+      /Passage ranges within one chapter must not end before they begin/
+    );
+  });
+
+  it("rejects book metadata that points to unknown recipients or composition places", () => {
+    const dataset = createValidDataset();
+    dataset.books[0]!.recipient_person_ids = ["missing_recipient"];
+    dataset.books[0]!.composition_place_id = "missing_place";
+
+    expect(() => validateDataset(dataset)).toThrow(
+      /Unknown recipient_person_id 'missing_recipient'/
+    );
+    expect(() => validateDataset(dataset)).toThrow(
+      /Unknown composition_place_id 'missing_place'/
+    );
+  });
+
+  it("rejects literary units that point to unknown books or related events", () => {
+    const dataset = createValidDataset();
+    dataset.literary_units[0]!.book_id = "missing_book";
+    dataset.literary_units[0]!.related_event_ids = ["missing_event"];
+
+    expect(() => validateDataset(dataset)).toThrow(/Unknown book_id 'missing_book'/);
+    expect(() => validateDataset(dataset)).toThrow(
+      /Unknown literary unit related_event_id 'missing_event'/
+    );
+  });
+
   it("requires source usage rights metadata to be tracked", () => {
     const dataset = createValidDataset();
     // @ts-expect-error intentional fixture corruption for validation coverage
     delete dataset.sources[0]!.usage_rights;
 
     expect(() => validateDataset(dataset)).toThrow(/usage_rights/);
+  });
+
+  it("requires scripture legal guardrails to include a commercial-use note when permission is required", () => {
+    const dataset = createValidDataset();
+    dataset.sources[0]!.usage_rights.requires_written_permission_for_commercial_use = true;
+    delete dataset.sources[0]!.usage_rights.commercial_use_note;
+
+    expect(() => validateDataset(dataset)).toThrow(/commercial_use_note/);
   });
 });

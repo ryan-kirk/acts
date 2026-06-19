@@ -4,28 +4,58 @@ import { vi } from "vitest";
 vi.mock("leaflet", async () => await import("../test/leafletMock"));
 
 import App from "../app/App";
+import { mergeCanonicalDatasets } from "../domain/library";
 import { getLeafletMockState, resetLeafletMockState } from "../test/leafletMock";
+import { createValidEpistleDataset } from "./fixtures/datasetFixtures";
 
 describe("App", () => {
   beforeEach(() => {
     resetLeafletMockState();
   });
 
-  it("renders the explorer shell from the canonical Luke-Acts library", () => {
+  it("renders the explorer shell from the expanded canonical library", () => {
     render(<App />);
 
     expect(
       screen.getByRole("heading", {
-        name: /luke-acts explorer with shared navigation, filtering, and synchronized context/i
+        name: /scripture explorer with shared navigation, filtering, and synchronized context/i
       })
     ).toBeInTheDocument();
 
     expect(screen.getByRole("heading", { name: /event rail/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /ascension of jesus/i })).toBeInTheDocument();
     expect(screen.getAllByText(/scope: acts/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/luke preview: 9 events/i)).toBeInTheDocument();
+    expect(screen.getByText(/4 gospels loaded/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^matthew$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^mark$/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /focus john/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /focus luke/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /focus matthew/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^luke$/i })).toBeInTheDocument();
+  });
+
+  it("renders non-narrative book metadata and literary units without requiring journeys", () => {
+    const loadState = {
+      status: "ready" as const,
+      library: mergeCanonicalDatasets([createValidEpistleDataset()])
+    };
+
+    render(<App loadState={loadState} />);
+
+    expect(screen.getAllByText(/scope: romans/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/3 literary units/i).length).toBeGreaterThan(0);
+
+    const overview = screen.getByText(/active book record/i).closest("section");
+    expect(overview).not.toBeNull();
+    expect(screen.getAllByText(/pauline epistle/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/house churches in rome/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: /timeline/i }));
+    expect(screen.getByText(/letter opening and gospel thesis/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: /sources/i }));
+    expect(screen.getByText(/trademark guardrail/i)).toBeInTheDocument();
+    expect(screen.getByText(/commercial-use guardrail/i)).toBeInTheDocument();
   });
 
   it("keeps the selected event when switching views", () => {
@@ -70,7 +100,8 @@ describe("App", () => {
     fireEvent.click(screen.getByRole("tab", { name: /timeline/i }));
 
     const timeline = screen.getByLabelText(/scripture timeline/i);
-    const eventItems = within(timeline).getAllByRole("listitem");
+    const chronologyBoard = within(timeline).getByLabelText(/chronology board/i);
+    const eventItems = within(chronologyBoard).getAllByRole("listitem");
 
     expect(eventItems[0]).toHaveTextContent(/ascension of jesus/i);
     expect(eventItems[1]).toHaveTextContent(/selection of matthias/i);
@@ -234,6 +265,67 @@ describe("App", () => {
     expect(within(timeline).getByText(/luke chronology/i)).toBeInTheDocument();
     expect(within(timeline).getByRole("button", { name: /birth of jesus in bethlehem/i }))
       .toBeInTheDocument();
+  });
+
+  it("switches the explorer to John and surfaces Johannine narrative semantics", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /focus john/i }));
+
+    expect(screen.getByRole("button", { name: /water into wine at cana/i })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /shipwreck on malta/i })
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByText(/scope: john/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/narrative semantics/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/feast-linked chronology/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: /timeline/i }));
+
+    const timeline = screen.getByLabelText(/scripture timeline/i);
+    expect(within(timeline).getByText(/john chronology/i)).toBeInTheDocument();
+    expect(within(timeline).getByText(/^signs$/i)).toBeInTheDocument();
+    expect(within(timeline).getByText(/^discourses$/i)).toBeInTheDocument();
+
+    fireEvent.click(
+      within(timeline).getByRole("button", { name: /bread of life discourse at capernaum/i })
+    );
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+    expect(
+      within(inspector).getByRole("heading", { name: /bread of life discourse at capernaum/i })
+    ).toBeInTheDocument();
+    expect(within(inspector).getByText(/john 6:22-71/i)).toBeInTheDocument();
+  });
+
+  it("surfaces synoptic continuity cues and lets cross-book parallel links retarget the scope", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: /focus matthew/i }));
+    fireEvent.click(screen.getByRole("button", { name: /baptism of jesus by john/i }));
+
+    const inspector = screen.getByLabelText(/selected event details/i);
+
+    expect(within(inspector).getByRole("heading", { name: /synoptic continuity/i }))
+      .toBeInTheDocument();
+    expect(
+      within(inspector).getByText(
+        /matthew, mark, and luke each preserve jesus's baptism by john as an inaugural public scene/i
+      )
+    ).toBeInTheDocument();
+    expect(within(inspector).getByRole("button", { name: /baptism of jesus in the jordan/i }))
+      .toBeInTheDocument();
+    expect(within(inspector).getByRole("button", { name: /baptism of jesus while praying/i }))
+      .toBeInTheDocument();
+
+    fireEvent.click(
+      within(inspector).getByRole("button", { name: /baptism of jesus in the jordan/i })
+    );
+
+    expect(screen.getAllByText(/scope: mark/i).length).toBeGreaterThan(0);
+    expect(
+      within(inspector).getByRole("heading", { name: /baptism of jesus in the jordan/i })
+    ).toBeInTheDocument();
   });
 
   it("renders external claims in the inspector without replacing canonical event detail", () => {
@@ -482,7 +574,7 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /the luke-acts explorer could not start from the canonical datasets/i
+        name: /the explorer could not start from the canonical datasets/i
       })
     ).toBeInTheDocument();
 

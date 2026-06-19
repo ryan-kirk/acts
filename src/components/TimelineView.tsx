@@ -1,5 +1,12 @@
 import type { CanonicalDataset, Event } from "../domain/dataset";
 import {
+  formatBookCorpus,
+  getBookNarrativeSemantics,
+  formatPassageRange,
+  getLiteraryUnitsForBook,
+  getPrimaryScopeBook
+} from "../domain/books";
+import {
   formatDateCertainty,
   formatDateRange,
   getEventTags,
@@ -51,6 +58,13 @@ export function TimelineView({
 }: TimelineViewProps) {
   const filterOptions = getTimelineFilterOptions(dataset);
   const filteredEvents = filterTimelineEvents(events, filters);
+  const activeScopeBook = getPrimaryScopeBook(dataset);
+  const activeScopeLiteraryUnits = activeScopeBook
+    ? getLiteraryUnitsForBook(dataset, activeScopeBook.id)
+    : [];
+  const activeScopeNarrativeSemantics = activeScopeBook
+    ? getBookNarrativeSemantics(dataset.events, index)
+    : [];
   const timelineLayout = buildTimelineGridLayout(filteredEvents);
   const selectedEventHidden = !filteredEvents.some((event) => event.id === selectedEventId);
   const timelineGridTemplateColumns = timelineLayout
@@ -226,6 +240,101 @@ export function TimelineView({
         </div>
       ) : (
         <div className="timeline-surface-stack">
+          {activeScopeBook ? (
+            <section className="timeline-context-grid">
+              <article className="timeline-context-card">
+                <p className="stage-card-eyebrow">Book Context</p>
+                <div className="section-header-row">
+                  <h3>{activeScopeBook.title}</h3>
+                  <span className="entity-type-badge">
+                    {formatBookCorpus(activeScopeBook.corpus)}
+                  </span>
+                </div>
+                <p className="muted-copy">
+                  {activeScopeBook.summary ??
+                    "No book summary is currently modeled for the active scope."}
+                </p>
+                <dl className="preview-meta-grid">
+                  <div>
+                    <dt>Canonical Order</dt>
+                    <dd>{activeScopeBook.canonical_order}</dd>
+                  </div>
+                  <div>
+                    <dt>Genres</dt>
+                    <dd>{activeScopeBook.genre.join(", ")}</dd>
+                  </div>
+                  <div>
+                    <dt>Modeled Units</dt>
+                    <dd>{activeScopeLiteraryUnits.length}</dd>
+                  </div>
+                  <div>
+                    <dt>Visible Events</dt>
+                    <dd>{filteredEvents.length}</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article className="timeline-context-card">
+                <p className="stage-card-eyebrow">Literary Units</p>
+                <div className="section-header-row">
+                  <h3>{activeBookLabel} anchors</h3>
+                </div>
+                {activeScopeLiteraryUnits.length === 0 ? (
+                  <p className="muted-copy">
+                    No literary-unit anchors are available for this scope yet.
+                  </p>
+                ) : (
+                  <ul className="linked-record-list compact-linked-list">
+                    {activeScopeLiteraryUnits.map((literaryUnit) => (
+                      <li key={literaryUnit.id}>
+                        <div className="linked-record-button static-linked-card">
+                          <strong>{literaryUnit.title}</strong>
+                          <span>
+                            {formatPassageRange(literaryUnit)} • {literaryUnit.unit_type}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </article>
+
+              {activeScopeNarrativeSemantics.length > 0 ? (
+                <article className="timeline-context-card">
+                  <p className="stage-card-eyebrow">Narrative Semantics</p>
+                  <div className="section-header-row">
+                    <h3>{activeBookLabel} signals</h3>
+                    <span className="entity-type-badge">
+                      {activeScopeNarrativeSemantics.length} active
+                    </span>
+                  </div>
+                  <ul className="entity-card-list">
+                    {activeScopeNarrativeSemantics.map((semantic) => (
+                      <li key={semantic.id} className="entity-card">
+                        <div className="entity-card-header">
+                          <div>
+                            <strong>{semantic.label}</strong>
+                            <span className="entity-subtitle">
+                              {semantic.eventCount} event
+                              {semantic.eventCount === 1 ? "" : "s"}
+                            </span>
+                          </div>
+                          <span className="entity-type-badge">
+                            {semantic.tagLabels.join(", ")}
+                          </span>
+                        </div>
+                        <p className="entity-summary">{semantic.description}</p>
+                        <p className="entity-meta">
+                          Examples: {semantic.sampleEventTitles.join(" • ")}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ) : null}
+            </section>
+          ) : null}
+
           {timelineLayout && timelineLayout.records.length > 0 ? (
             <section className="timeline-board" aria-label="Chronology board">
               <div className="timeline-scroll-shell">

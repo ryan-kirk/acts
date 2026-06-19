@@ -1,5 +1,8 @@
 import actsDatasetRaw from "../../data/acts.yaml?raw";
+import johnDatasetRaw from "../../data/john.yaml?raw";
 import lukeDatasetRaw from "../../data/luke.yaml?raw";
+import markDatasetRaw from "../../data/mark.yaml?raw";
+import matthewDatasetRaw from "../../data/matthew.yaml?raw";
 
 import { parseDatasetDocument } from "../data/parseDataset";
 import {
@@ -33,7 +36,13 @@ export function loadEmbeddedDataset(
 }
 
 export function getExplorerDatasetLoadState(
-  datasetDocuments: readonly string[] = [actsDatasetRaw, lukeDatasetRaw]
+  datasetDocuments: readonly string[] = [
+    matthewDatasetRaw,
+    markDatasetRaw,
+    lukeDatasetRaw,
+    johnDatasetRaw,
+    actsDatasetRaw
+  ]
 ): ExplorerDatasetLoadState {
   try {
     const datasets = datasetDocuments.map((documentText) =>

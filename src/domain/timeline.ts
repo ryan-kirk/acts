@@ -74,6 +74,8 @@ export interface TimelineGridLayout {
 }
 
 export type TimelineCategoryTone =
+  | "discourse"
+  | "feast"
   | "governance"
   | "movement"
   | "opposition"
@@ -171,6 +173,16 @@ export const timelineCertaintyLegend = [
 ];
 
 export const timelineCategoryLegend: TimelineCategoryLegendEntry[] = [
+  {
+    tone: "discourse",
+    label: "Discourse",
+    color: "#70578a"
+  },
+  {
+    tone: "feast",
+    label: "Feast",
+    color: "#a77231"
+  },
   {
     tone: "movement",
     label: "Movement",
@@ -605,6 +617,8 @@ export function getTimelineCategoryTone(
   const primaryTagGroup = getPrimaryTimelineTag(event, index)?.group;
 
   switch (primaryTagGroup) {
+    case "discourse":
+    case "feast":
     case "governance":
     case "movement":
     case "opposition":

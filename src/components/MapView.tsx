@@ -3,6 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+import {
+  formatBookCorpus,
+  getBookCompositionPlace,
+  getBookDestinationPlace,
+  getPrimaryScopeBook,
+  isLetterLikeBook
+} from "../domain/books";
 import type { CanonicalDataset, Event, Place } from "../domain/dataset";
 import {
   formatCoordinate,
@@ -72,6 +79,7 @@ export function MapView({
   onSelectEvent,
   selectedEventId
 }: MapViewProps) {
+  const activeScopeBook = getPrimaryScopeBook(dataset);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
@@ -85,6 +93,12 @@ export function MapView({
 
   const placeRecords = getMapPlaceRecords(events, index);
   const journeyOverlays = getMapJourneyOverlays(dataset, index);
+  const activeScopeCompositionPlace = activeScopeBook
+    ? getBookCompositionPlace(activeScopeBook, index)
+    : null;
+  const activeScopeDestinationPlace = activeScopeBook
+    ? getBookDestinationPlace(activeScopeBook, index)
+    : null;
   const activePlaceRecord = getActiveMapPlaceRecord(
     focusedPlaceId,
     selectedEventId,
@@ -603,6 +617,52 @@ export function MapView({
       </div>
 
       <div className="map-detail-grid">
+        {activeScopeBook ? (
+          <section className="map-place-panel map-book-panel">
+            <div className="map-place-header">
+              <div>
+                <p className="section-eyebrow">Book Context</p>
+                <h3>{activeScopeBook.title}</h3>
+              </div>
+              <span className="entity-type-badge">
+                {formatBookCorpus(activeScopeBook.corpus)}
+              </span>
+            </div>
+
+            <p className="map-place-summary">
+              {activeScopeBook.summary ?? "No book-level geographic context is modeled yet."}
+            </p>
+
+            <dl className="preview-meta-grid">
+              <div>
+                <dt>Literary Form</dt>
+                <dd>{activeScopeBook.genre.join(", ")}</dd>
+              </div>
+              <div>
+                <dt>Journeys</dt>
+                <dd>{journeyOverlays.length}</dd>
+              </div>
+              <div>
+                <dt>Composition Place</dt>
+                <dd>{activeScopeCompositionPlace?.name ?? "Not modeled"}</dd>
+              </div>
+              <div>
+                <dt>Destination</dt>
+                <dd>{activeScopeDestinationPlace?.name ?? activeScopeBook.recipient_group ?? "Not modeled"}</dd>
+              </div>
+            </dl>
+
+            {activeScopeBook.dispatch_note ? (
+              <p className="muted-copy">{activeScopeBook.dispatch_note}</p>
+            ) : isLetterLikeBook(activeScopeBook) ? (
+              <p className="muted-copy">
+                Letter-style books can stay map-meaningful here through composition and
+                destination context even when journey overlays are sparse.
+              </p>
+            ) : null}
+          </section>
+        ) : null}
+
         <JourneyDetailPanel
           activeJourneyOverlay={activeJourneyOverlay}
           activePlaceId={activePlaceRecord?.place.id ?? null}

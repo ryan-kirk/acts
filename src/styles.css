@@ -1562,6 +1562,14 @@ body {
   background: #496a56;
 }
 
+.timeline-event-card.category-discourse .timeline-event-marker {
+  background: #70578a;
+}
+
+.timeline-event-card.category-feast .timeline-event-marker {
+  background: #a77231;
+}
+
 .timeline-event-card.category-movement .timeline-event-marker {
   background: #b58c3f;
 }
@@ -3524,6 +3532,10 @@ button,
   .sources-confidence-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .timeline-context-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 860px) {
@@ -3644,6 +3656,30 @@ button,
   min-height: 100%;
 }
 
+.compact-linked-list {
+  margin-top: 0;
+}
+
+.static-linked-card {
+  cursor: default;
+}
+
+.timeline-context-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.timeline-context-card {
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--shell-border);
+  border-radius: 0.45rem;
+  background:
+    linear-gradient(180deg, rgba(18, 14, 9, 0.98), rgba(15, 12, 8, 0.98)),
+    var(--shell-card);
+  box-shadow: var(--shell-shadow);
+}
+
 .timeline-inline-legend {
   display: flex;
   flex-wrap: wrap;
@@ -3689,6 +3725,17 @@ button,
 .timeline-surface-stack {
   display: grid;
   gap: 0.8rem;
+}
+
+.people-book-context-card,
+.map-book-panel {
+  min-height: 100%;
+}
+
+.people-book-context-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
 }
 
 .timeline-board,
@@ -3827,6 +3874,14 @@ button,
 
 .timeline-grid-anchor.category-governance {
   background: #496a56;
+}
+
+.timeline-grid-anchor.category-discourse {
+  background: #70578a;
+}
+
+.timeline-grid-anchor.category-feast {
+  background: #a77231;
 }
 
 .timeline-grid-anchor.category-movement {

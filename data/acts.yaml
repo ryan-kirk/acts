@@ -9,6 +9,29 @@ metadata:
   created: "2026-06-11"
   updated: "2026-06-11"
 
+books:
+  - id: acts
+    label: Acts
+    title: Book of Acts
+    testament: new_testament
+    canonical_order: 5
+    corpus: history
+    genre:
+      - history
+      - narrative
+    summary: >
+      Acts narrates the Spirit-empowered witness of Jesus's followers from
+      Jerusalem through Judea, Samaria, the eastern Mediterranean, and finally
+      Rome.
+    authorship_note: Traditionally attributed to Luke as the second volume of Luke-Acts.
+    primary_source_id: acts
+    recipient_group: >
+      Presented as the continuation of the earlier narrative addressed to
+      Theophilus and shaped for the wider reading community of Luke-Acts.
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:1-2
+
 sources:
   - id: acts
     name: Book of Acts
@@ -25,6 +48,13 @@ sources:
         Event, place, person, journey, and relationship records are grounded in
         passage references only. If translation text is added later, that text
         will require separate rights review.
+      trademark_usage_note: >
+        If ESV-branded scripture text is added later, the ESV name and logo
+        must not be used as product branding without permission.
+      commercial_use_note: >
+        Any future commercial Bible-reference workflow that embeds direct ESV
+        text will require written permission and explicit release review.
+      requires_written_permission_for_commercial_use: true
   - id: josephus_antiquities
     name: Antiquities of the Jews
     type: historical
@@ -159,8 +189,9 @@ places:
     modern_country: Israel
     location_certainty: exact
     summary: >
-      Jerusalem is the narrative starting point of Acts, the location of the
-      ascension, Pentecost, the Temple ministry, and the Jerusalem Council.
+      Jerusalem is the central Judean city where the Gospel passion and
+      resurrection scenes culminate and where Acts begins its expanding witness
+      narrative.
     source_refs:
       - source_id: acts
         citation: Acts 1:12
@@ -439,8 +470,10 @@ people:
     aliases: []
     role: Risen Lord
     summary: >
-      Jesus appears in the opening of Acts, commissions the apostles, and
-      ascends from the disciples' sight.
+      Jesus is the central figure of the Gospels and Acts, announced in the
+      birth narratives, active in Galilean and Judean ministry, crucified and
+      raised, and in Acts presented as the ascended Lord who commissions the
+      apostles.
     source_refs:
       - source_id: acts
         citation: Acts 1:1-11
@@ -463,8 +496,9 @@ people:
       - Cephas
     role: Apostle
     summary: >
-      Peter is a leading apostolic witness in the Jerusalem church and a key
-      figure in the Gentile-inclusion turning point with Cornelius.
+      Peter is a leading disciple in the Gospel tradition and a major apostolic
+      witness in Acts, appearing in call narratives, resurrection contexts, and
+      the early Jerusalem mission.
     source_refs:
       - source_id: acts
         citation: Acts 1:13
@@ -474,8 +508,8 @@ people:
     aliases: []
     role: Apostle
     summary: >
-      John appears alongside Peter in the early Jerusalem ministry, including
-      the Temple healing account.
+      John appears among Jesus's close disciples in the Gospel narratives and
+      later alongside Peter in the opening Jerusalem ministry of Acts.
     source_refs:
       - source_id: acts
         citation: Acts 1:13
@@ -486,8 +520,8 @@ people:
       - James son of Zebedee
     role: Apostle
     summary: >
-      James son of Zebedee is one of the Twelve and becomes an early martyr in
-      the apostolic period.
+      James son of Zebedee is one of Jesus's close disciples in the Gospels and
+      later becomes an early apostolic martyr in Acts.
     source_refs:
       - source_id: acts
         citation: Acts 12:2
@@ -1247,6 +1281,92 @@ tags:
     label: Voyage
     description: Events centered on significant sea travel and transit.
     group: movement
+
+literary_units:
+  - id: acts_unit_001
+    book_id: acts
+    title: Jerusalem Witness And Pentecost
+    unit_type: narrative
+    passage:
+      start_chapter: 1
+      start_verse: 1
+      end_chapter: 5
+      end_verse: 42
+    summary: >
+      The opening Jerusalem scenes move from ascension and apostolic
+      reconstitution through Pentecost, Temple ministry, and early communal
+      witness.
+    location_id: jerusalem
+    related_event_ids:
+      - acts_001
+      - acts_002
+      - acts_003
+      - acts_004
+    source_refs:
+      - source_id: acts
+        citation: Acts 1:1-5:42
+  - id: acts_unit_002
+    book_id: acts
+    title: Persecution, Samaria, And Gentile Inclusion
+    unit_type: narrative
+    passage:
+      start_chapter: 6
+      start_verse: 1
+      end_chapter: 12
+      end_verse: 25
+    summary: >
+      Escalating opposition, Stephen's martyrdom, Saul's conversion, and the
+      Cornelius turning point widen the witness beyond Jerusalem.
+    related_event_ids:
+      - acts_005
+      - acts_006
+      - acts_007
+      - acts_008
+    source_refs:
+      - source_id: acts
+        citation: Acts 6:1-12:25
+  - id: acts_unit_003
+    book_id: acts
+    title: Missionary Expansion Through Asia And Achaia
+    unit_type: travel_notice
+    passage:
+      start_chapter: 13
+      start_verse: 1
+      end_chapter: 20
+      end_verse: 38
+    summary: >
+      The missionary journey cycle carries the witness through Cyprus, Asia
+      Minor, Macedonia, Achaia, and Ephesus with speeches, conflict, and
+      ecclesial formation.
+    related_event_ids:
+      - acts_009
+      - acts_010
+      - acts_011
+      - acts_012
+      - acts_013
+      - acts_014
+    source_refs:
+      - source_id: acts
+        citation: Acts 13:1-20:38
+  - id: acts_unit_004
+    book_id: acts
+    title: Jerusalem Arrest, Trials, And Rome Voyage
+    unit_type: trial
+    passage:
+      start_chapter: 21
+      start_verse: 1
+      end_chapter: 28
+      end_verse: 31
+    summary: >
+      Paul's arrest, trial sequence, sea voyage, shipwreck, and Roman custody
+      form the final movement of Acts.
+    related_event_ids:
+      - acts_015
+      - acts_016
+      - acts_017
+    source_refs:
+      - source_id: acts
+        citation: Acts 21:1-28:31
 
 claims:
   - id: claim_acts_caesarea_context

@@ -21,9 +21,7 @@ coverage/
 .vite/
 
 # Specification files
-AGENTS.md
-BACKLOG.md
-STRATEGY.md
+BUGS.md
 
 # Virtual environments
 .venv/
