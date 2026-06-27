@@ -527,6 +527,55 @@ Deployment Requirements:
 | BL-100 | 13. New Testament source inventory and ESV rights | Planned | P2 | Compliance automation | Add release checks that flag embedded `ESV` text without rights metadata, missing attribution, or quotation usage that exceeds the published verse-count or percentage thresholds. | Validation or release tooling fails safely when direct `ESV` text appears without matching rights metadata, required attribution text, or compliant quotation-budget accounting. |
 | BL-101 | 13. New Testament source inventory and ESV rights | Done | P2 | Legal guardrails | Document and enforce product rules for `ESV` trademark usage and for any future commercial commentary or Bible-reference release that would require written permission. | [src/data/schema.ts](src/data/schema.ts) and [data/luke.yaml](data/luke.yaml) plus [data/acts.yaml](data/acts.yaml) now track scripture-source trademark and commercial-use notes explicitly, [src/components/SourcesView.tsx](src/components/SourcesView.tsx) surfaces those guardrails in the UI, and [SOURCES.md](SOURCES.md) records the public compliance policy. |
 
+## Phase 13b. Literary Reference Coverage And Foundational Closeout
+
+Description: Consolidate the remaining unfinished work from phases `5` through `13` into one pre-expansion closeout phase while extending the literary model so book metadata can carry fuller normalized people and place reference material.
+
+Goal: Finish the unresolved explorer, source-governance, and release-safety work from the first delivery arc while making the current Matthew-Mark-Luke-John-Acts library richer at the literary-unit level through explicit person and place references.
+
+Note: The original open backlog rows in phases `5` through `13` remain in place for dependency and historical traceability. This phase is the coordinated execution wrapper that groups those remaining items into one focused delivery sequence before more corpus expansion proceeds.
+
+Functional Criteria:
+- Literary modeling can express all currently modeled people and places relevant to a book or literary unit, not just a single anchor location or a narrow event-participant subset.
+- Current canonical book datasets can be backfilled with normalized literary people and place references, plus any missing supporting records needed for those references.
+- Active explorer view, selected event, and timeline filters can be restored from the URL.
+- Relationship context, Luke-Acts continuity, source discoverability, and claim cues are completed across the existing explorer surfaces.
+- Release verification catches unsupported `ESV` text usage or missing rights metadata before deployment.
+- Bundle-size or view-loading hardening reduces the current main-chunk risk without regressing explorer behavior.
+
+Verification Method:
+- Schema and validation tests cover literary-unit people and place references, duplicate prevention, and unknown-reference failures.
+- Dataset validation confirms every new literary reference resolves to known canonical people and places, and any intentional coverage limits are documented clearly in dataset notes or summaries.
+- UI tests cover deep linking, URL-backed filter restoration, relationship cards, continuity cues, source explorer controls, and claim discoverability indicators.
+- Release verification covers rights metadata, attribution requirements, quotation-budget rules, and current build-size expectations.
+
+Backend Methods:
+- None.
+- Static schema expansion, canonical dataset enrichment, client-side derived indexes, and release-time verification only.
+
+Frontend Features:
+- Literary-unit and book-level people or place reference context.
+- URL-persistent explorer state.
+- Relationship and continuity context.
+- Source explorer controls and rights-policy surfacing.
+- Claim discoverability cues.
+- Bundle-size hardening or lazy-loaded explorer surfaces where needed.
+
+Deployment Requirements:
+- Fly.io deployments must remain static-first and continue booting from validated canonical datasets.
+- Release verification must block unsupported direct `ESV` text usage, missing attribution metadata, or broken literary references.
+- Bundle strategy changes must preserve current map, timeline, inspector, and sources behavior under production builds.
+
+| ID | Phase | Status | Priority | Area | Feature | Validation |
+| --- | --- | --- | --- | --- | --- | --- |
+| BL-104 | 13b. Literary reference coverage and foundational closeout | Done | P1 | Literary schema | Extend the canonical literary model so `books` and `literary_units` can carry normalized people and place reference material beyond a single `location_id` or `participant_ids` list, with room to distinguish primary anchors from broader literary-reference context. | [src/data/schema.ts](src/data/schema.ts), [src/domain/dataset.ts](src/domain/dataset.ts), [src/data/literaryCoverage.ts](src/data/literaryCoverage.ts), and [src/data/validateDataset.ts](src/data/validateDataset.ts) now support `related_person_ids` and `related_place_ids`, reject unknown IDs, detect duplicate or anchor-colliding literary references, and compute book-level literary coverage summaries for validation tooling. |
+| BL-105 | 13b. Literary reference coverage and foundational closeout | Done | P1 | Canonical reference material | Backfill Matthew, Mark, Luke, John, and Acts with fuller literary-unit and book-level people or place references, adding any missing normalized person or place records required to support those references. | [data/matthew.yaml](data/matthew.yaml), [data/mark.yaml](data/mark.yaml), [data/luke.yaml](data/luke.yaml), [data/john.yaml](data/john.yaml), and [data/acts.yaml](data/acts.yaml) now carry book-level literary reference registries plus enriched literary-unit context, and [`npm run validate:data -- data/acts.yaml data/luke.yaml data/matthew.yaml data/mark.yaml data/john.yaml`](package.json) reports full literary coverage for all shipped people and places in every dataset. |
+| BL-106 | 13b. Literary reference coverage and foundational closeout | Planned | P1 | URL state | Complete the remaining deep-linking and filter-persistence work from phases `5` and `6` so active view, selected event, and timeline filters survive reloads, sharing, and browser navigation. | This phase closes [BL-043](#phase-6-event-inspector-and-record-detail) and [BL-044](#phase-5-timeline-explorer): shared URLs restore valid explorer state, invalid values fail safely, and browser back-forward behavior remains synchronized with shell state. |
+| BL-107 | 13b. Literary reference coverage and foundational closeout | Planned | P1 | Relationship and continuity context | Complete the remaining relationship-context work from phases `6`, `8`, and `10`, including richer Acts figure relationships and explicit Luke-to-Acts continuity cues grounded in normalized records. | This phase closes [BL-045](#phase-6-event-inspector-and-record-detail), [BL-047](#phase-8-people-explorer-and-entity-context), and [BL-048](#phase-10-luke-multi-book-expansion): inspector and people views surface denser relationship context, continuity cues resolve by stable IDs, and cross-record navigation remains validated. |
+| BL-108 | 13b. Literary reference coverage and foundational closeout | Planned | P2 | Source transparency and discoverability | Complete the remaining source-explorer and claim-discoverability work from phases `11` and `13`, including witness filters, cross-view claim cues, and in-app visibility for corpus coverage plus citation-only scripture policy. | This phase closes [BL-049](#phase-11-external-sources-and-claims-layer), [BL-050](#phase-11-external-sources-and-claims-layer), and [BL-099](#phase-13-new-testament-source-inventory-and-esv-rights): users can filter sources by type, confidence, or rights status, discover claim-backed records from dense surfaces, and review current source-policy coverage without leaving the app. |
+| BL-109 | 13b. Literary reference coverage and foundational closeout | Planned | P2 | Compliance automation | Complete the remaining `ESV` release-safety work from phase `13` by adding automated checks for direct-text usage, attribution requirements, rights metadata, and quotation-budget limits. | This phase closes [BL-100](#phase-13-new-testament-source-inventory-and-esv-rights): validation or release tooling fails safely when embedded `ESV` text appears without matching rights metadata, required attribution, or compliant verse-count accounting. |
+| BL-110 | 13b. Literary reference coverage and foundational closeout | Planned | P1 | Explorer performance | Complete the remaining bundle-size hardening work from phase `7`, likely through lazy-loading Leaflet or other view-specific surfaces, without weakening the current static-first deployment path. | This phase closes [BL-046](#phase-7-map-explorer-and-place-interaction): `npm run build` no longer emits the current large-chunk warning, or any remaining warning is deliberately re-baselined with measured tradeoffs and documented acceptance criteria. |
+
 ## Phase 14. Book Metadata And Literary Unit Modeling
 
 Description: Extend the canonical model beyond Acts-style event narratives so letters, sermons, and visionary material can be ingested without distortion.

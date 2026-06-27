@@ -27,6 +27,8 @@ describe("validate-data script", () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("Validated");
+    expect(result.stdout).toContain("literary_people=1/1");
+    expect(result.stdout).toContain("literary_places=1/1");
   });
 
   it("fails for an invalid dataset file", async () => {

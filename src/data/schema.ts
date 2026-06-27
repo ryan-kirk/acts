@@ -264,6 +264,8 @@ export const bookSchema = z.object({
   co_sender_ids: z.array(idSchema).default([]),
   recipient_person_ids: z.array(idSchema).default([]),
   recipient_place_ids: z.array(idSchema).default([]),
+  related_person_ids: z.array(idSchema).default([]),
+  related_place_ids: z.array(idSchema).default([]),
   recipient_group: optionalNonEmptyString,
   dispatch_note: optionalNonEmptyString,
   source_refs: z.array(sourceRefSchema).min(1)
@@ -356,6 +358,8 @@ export const literaryUnitSchema = z.object({
   summary: nonEmptyString,
   location_id: idSchema.optional(),
   participant_ids: z.array(idSchema).default([]),
+  related_person_ids: z.array(idSchema).default([]),
+  related_place_ids: z.array(idSchema).default([]),
   related_event_ids: z.array(idSchema).default([]),
   source_refs: z.array(sourceRefSchema).min(1),
   notes: optionalNonEmptyString

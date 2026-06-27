@@ -8,7 +8,7 @@ metadata:
     normalized synoptic records, shared entities, literary units, and
     source-backed claims that merge cleanly with the broader scripture library.
   created: "2026-06-12"
-  updated: "2026-06-12"
+  updated: "2026-06-27"
 
 books:
   - id: matthew
@@ -27,6 +27,22 @@ books:
       mission into a Gospel shaped by scriptural fulfillment.
     authorship_note: Traditionally attributed to Matthew the apostle.
     primary_source_id: matthew
+    related_person_ids:
+      - jesus
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+      - john_the_baptist
+      - peter
+      - james_zebedee
+      - john
+    related_place_ids:
+      - bethlehem
+      - nazareth
+      - jordan_river
+      - sea_of_galilee
+      - caesarea_philippi
+      - jerusalem
+      - galilee
     source_refs:
       - source_id: matthew
         citation: Matthew 1:1-28:20
@@ -501,6 +517,8 @@ literary_units:
       - mary_mother_of_jesus
       - joseph_husband_of_mary
       - john_the_baptist
+    related_place_ids:
+      - jordan_river
     related_event_ids:
       - matthew_001
       - matthew_002
@@ -550,6 +568,11 @@ literary_units:
     participant_ids:
       - jesus
       - peter
+    related_person_ids:
+      - james_zebedee
+      - john
+    related_place_ids:
+      - jerusalem
     related_event_ids:
       - matthew_006
       - matthew_007

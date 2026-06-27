@@ -8,7 +8,7 @@ metadata:
     signs, discourses, feast-linked chronology, and source-backed claims that
     preserve Johannine distinctiveness within the shared library.
   created: "2026-06-17"
-  updated: "2026-06-17"
+  updated: "2026-06-27"
 
 books:
   - id: john
@@ -30,6 +30,24 @@ books:
       and later authorship discussions remain matters for source-backed claims
       rather than canonical summary.
     primary_source_id: john
+    related_person_ids:
+      - jesus
+      - mary_mother_of_jesus
+      - nicodemus
+      - samaritan_woman
+      - martha
+      - mary_of_bethany
+      - lazarus
+      - peter
+      - thomas
+      - mary_magdalene
+    related_place_ids:
+      - cana
+      - jerusalem
+      - sychar
+      - sea_of_galilee
+      - capernaum
+      - bethany
     source_refs:
       - source_id: john
         citation: John 1:1-21:25
@@ -654,6 +672,9 @@ literary_units:
       - mary_mother_of_jesus
       - nicodemus
       - samaritan_woman
+    related_place_ids:
+      - jerusalem
+      - sychar
     related_event_ids:
       - john_001
       - john_002
@@ -679,6 +700,9 @@ literary_units:
     participant_ids:
       - jesus
       - peter
+    related_place_ids:
+      - capernaum
+      - sea_of_galilee
     related_event_ids:
       - john_005
       - john_006
@@ -706,6 +730,8 @@ literary_units:
       - lazarus
       - martha
       - mary_of_bethany
+    related_place_ids:
+      - jerusalem
     related_event_ids:
       - john_009
       - john_010
@@ -731,6 +757,8 @@ literary_units:
       - peter
       - thomas
       - mary_magdalene
+    related_place_ids:
+      - sea_of_galilee
     related_event_ids:
       - john_011
       - john_012

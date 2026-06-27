@@ -8,7 +8,7 @@ metadata:
     normalized places, people, events, tags, and source-backed references that
     can merge cleanly with Acts through shared stable IDs.
   created: 2026-06-11
-  updated: 2026-06-11
+  updated: 2026-06-27
 
 books:
   - id: luke
@@ -29,6 +29,28 @@ books:
     recipient_group: >
       Addressed to Theophilus and framed for a broader reading community
       seeking confidence in the received apostolic account.
+    related_person_ids:
+      - jesus
+      - peter
+      - john
+      - james_zebedee
+      - john_the_baptist
+      - mary_mother_of_jesus
+      - joseph_husband_of_mary
+      - martha
+      - mary_of_bethany
+      - zacchaeus
+      - cleopas
+    related_place_ids:
+      - nazareth
+      - bethlehem
+      - capernaum
+      - jordan_river
+      - bethsaida
+      - bethany
+      - jericho
+      - emmaus
+      - jerusalem
     source_refs:
       - source_id: luke
         citation: Luke 1:1-4
@@ -737,6 +759,15 @@ literary_units:
     summary: >
       Luke opens with temple, annunciation, nativity, and baptism material
       that frames Jesus's mission within Israel's hopes and the Spirit's work.
+    related_person_ids:
+      - jesus
+      - john_the_baptist
+      - joseph_husband_of_mary
+      - mary_mother_of_jesus
+    related_place_ids:
+      - bethlehem
+      - jordan_river
+      - nazareth
     related_event_ids:
       - luke_001
       - luke_002
@@ -756,6 +787,15 @@ literary_units:
     summary: >
       Early public ministry in Galilee establishes Jesus's proclamation,
       healing, rejection, and disciple-forming authority.
+    related_person_ids:
+      - james_zebedee
+      - jesus
+      - john
+      - peter
+    related_place_ids:
+      - bethsaida
+      - capernaum
+      - nazareth
     related_event_ids:
       - luke_003
       - luke_004
@@ -775,6 +815,15 @@ literary_units:
     summary: >
       The long travel narrative gathers teaching, encounters, hospitality, and
       response scenes on the way toward Jerusalem.
+    related_person_ids:
+      - jesus
+      - martha
+      - mary_of_bethany
+      - zacchaeus
+    related_place_ids:
+      - bethany
+      - jericho
+      - jerusalem
     related_event_ids:
       - luke_005
       - luke_006
@@ -794,6 +843,16 @@ literary_units:
     summary: >
       Luke closes with Emmaus recognition, Jerusalem commissioning, and the
       ascension near Bethany as the hinge into Acts.
+    related_person_ids:
+      - cleopas
+      - james_zebedee
+      - jesus
+      - john
+      - peter
+    related_place_ids:
+      - bethany
+      - emmaus
+      - jerusalem
     related_event_ids:
       - luke_007
       - luke_008

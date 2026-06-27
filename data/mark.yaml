@@ -8,7 +8,7 @@ metadata:
     normalized places, people, events, literary units, and a first-pass
     synoptic continuity layer.
   created: "2026-06-12"
-  updated: "2026-06-12"
+  updated: "2026-06-27"
 
 books:
   - id: mark
@@ -26,6 +26,22 @@ books:
       unsettling urgency of resurrection witness.
     authorship_note: Traditionally associated with John Mark and Petrine memory.
     primary_source_id: mark
+    related_person_ids:
+      - jesus
+      - john_the_baptist
+      - peter
+      - andrew
+      - james_zebedee
+      - john
+      - mary_magdalene
+    related_place_ids:
+      - jordan_river
+      - sea_of_galilee
+      - gerasa
+      - bethsaida
+      - caesarea_philippi
+      - jerusalem
+      - mount_of_olives
     source_refs:
       - source_id: mark
         citation: Mark 1:1-16:8
@@ -496,6 +512,8 @@ literary_units:
       - andrew
       - james_zebedee
       - john
+    related_place_ids:
+      - sea_of_galilee
     related_event_ids:
       - mark_001
       - mark_002
@@ -523,6 +541,8 @@ literary_units:
       - andrew
       - james_zebedee
       - john
+    related_place_ids:
+      - gerasa
     related_event_ids:
       - mark_003
       - mark_004
@@ -546,6 +566,11 @@ literary_units:
     participant_ids:
       - jesus
       - peter
+    related_person_ids:
+      - james_zebedee
+      - john
+    related_place_ids:
+      - jerusalem
     related_event_ids:
       - mark_005
       - mark_006
@@ -572,6 +597,8 @@ literary_units:
       - james_zebedee
       - john
       - mary_magdalene
+    related_place_ids:
+      - jerusalem
     related_event_ids:
       - mark_007
       - mark_008

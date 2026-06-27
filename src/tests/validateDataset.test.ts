@@ -129,6 +129,43 @@ describe("validateDataset", () => {
     );
   });
 
+  it("rejects unknown book-level literary people and place references", () => {
+    const dataset = createValidDataset();
+    dataset.books[0]!.related_person_ids = ["missing_person"];
+    dataset.books[0]!.related_place_ids = ["missing_place"];
+
+    expect(() => validateDataset(dataset)).toThrow(/Unknown related_person_id 'missing_person'/);
+    expect(() => validateDataset(dataset)).toThrow(/Unknown related_place_id 'missing_place'/);
+  });
+
+  it("rejects literary metadata that does not cover all dataset people and places", () => {
+    const dataset = createValidDataset();
+    dataset.books[0]!.related_person_ids = [];
+    dataset.books[0]!.related_place_ids = [];
+    dataset.literary_units[0]!.participant_ids = [];
+    dataset.literary_units[0]!.location_id = undefined;
+
+    expect(() => validateDataset(dataset)).toThrow(
+      /Book 'acts' literary metadata does not cover people IDs: peter/
+    );
+    expect(() => validateDataset(dataset)).toThrow(
+      /Book 'acts' literary metadata does not cover place IDs: jerusalem/
+    );
+  });
+
+  it("rejects literary unit related references that duplicate anchor metadata", () => {
+    const dataset = createValidDataset();
+    dataset.literary_units[0]!.related_person_ids = ["peter"];
+    dataset.literary_units[0]!.related_place_ids = ["jerusalem"];
+
+    expect(() => validateDataset(dataset)).toThrow(
+      /duplicates a participant_id anchor/
+    );
+    expect(() => validateDataset(dataset)).toThrow(
+      /duplicates the primary location_id anchor/
+    );
+  });
+
   it("requires source usage rights metadata to be tracked", () => {
     const dataset = createValidDataset();
     // @ts-expect-error intentional fixture corruption for validation coverage

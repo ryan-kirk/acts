@@ -6,13 +6,14 @@ Bible Time & Place Explorer is a source-grounded application for exploring bibli
 
 ## Current Development Status
 
-The repository now has a working Phase 16 explorer layer on top of the scaffold, delivery baseline, validation tooling, multi-book canonical datasets, explorer shell, timeline explorer, map explorer, people explorer, journey overlays, source explorer, event inspector, and the shared book-metadata plus literary-unit modeling layer.
+The repository now has a working Phase 16 explorer layer on top of the scaffold, delivery baseline, validation tooling, multi-book canonical datasets, explorer shell, timeline explorer, map explorer, people explorer, journey overlays, source explorer, event inspector, and the shared book-metadata plus literary-reference modeling layer.
 
 - Core planning documents are in place in `AGENTS.md`, `STRATEGY.md`, and `BACKLOG.md`.
 - A strict TypeScript `React + Vite + Vitest` frontend scaffold is in place.
 - The current UI boots from validated canonical Matthew, Mark, Luke, John, and Acts datasets, merges them into one shared library, and keeps a shared selected-event state across top-level views.
 - Delivery hardening is in place with GitHub Actions verification, Node runtime guidance, and baseline Fly.io deployment files for the static frontend.
 - Canonical schema and validation tooling are in place for normalized YAML or JSON datasets, including referential-integrity checks, book metadata, literary units, source-rights metadata, and a dataset validation CLI.
+- Phase `13b` literary coverage work is now partially complete: books and literary units can carry normalized related people and place references, and validation now proves each shipped dataset records all of its canonical people and places inside the literary metadata layer.
 - Validated canonical datasets now exist in [data/matthew.yaml](data/matthew.yaml), [data/mark.yaml](data/mark.yaml), [data/luke.yaml](data/luke.yaml), [data/john.yaml](data/john.yaml), and [data/acts.yaml](data/acts.yaml), covering `5` modeled book records, `20` literary units, `58` total events, `24` merged claims, `35` places, and `27` people in the shared library.
 - [SOURCES.md](SOURCES.md) now inventories all `27` New Testament books, documents the currently modeled Matthew-Mark-Luke-John-Acts extraction coverage, and records the project’s current citation-only `ESV` rights workflow.
 - The explorer shell includes top-level `Overview`, `Timeline`, `Map`, `People`, and `Sources` navigation, a searchable scripture event rail, book filters for `All Books`, `Acts`, `Matthew`, `Mark`, `Luke`, and `John`, explicit scope messaging, and a responsive detail panel.
@@ -65,6 +66,8 @@ Validate the current canonical library inputs together:
 npm run validate:data -- data/acts.yaml data/luke.yaml data/matthew.yaml data/mark.yaml data/john.yaml
 ```
 
+The validation output now includes literary coverage totals such as `literary_people=14/14` and `literary_places=20/20` so we can verify that book and literary-unit metadata records every shipped person and place.
+
 ## Build
 
 Create a production build:
@@ -81,6 +84,7 @@ The current app is now a small but real Matthew-Mark-Luke-John-Acts explorer she
 - It boots directly from the validated canonical datasets in `data/matthew.yaml`, `data/mark.yaml`, `data/luke.yaml`, `data/john.yaml`, and `data/acts.yaml`.
 - It merges those datasets into a normalized library while preserving shared IDs for common people, places, sources, tags, and continuity claims.
 - It models canonical book records and literary units so future epistles, sermons, and apocalyptic books do not need to be forced into an Acts-like journey shape.
+- It now tracks book-level and literary-unit-level related people or place references and validates that every shipped canonical person and place is represented in the literary metadata for its book.
 - It defaults to an Acts-focused view while letting users switch to `All Books`, `Acts`, `Matthew`, `Mark`, `Luke`, or `John` from the shell.
 - It includes first-pass synoptic continuity cues in the inspector so gospel parallels can be followed across books without flattening their witness-specific summaries.
 - It includes first-pass Johannine narrative semantics in the overview and timeline so signs, discourses, and feast-linked chronology remain visible as book-level structure.

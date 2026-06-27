@@ -1,5 +1,6 @@
 import path from "node:path";
 
+import { getDatasetBookLiteraryCoverage } from "../src/data/literaryCoverage";
 import { loadDatasetFromFile } from "../src/data/loadDataset";
 import { DatasetValidationError } from "../src/data/validateDataset";
 
@@ -17,6 +18,13 @@ async function main(): Promise<void> {
 
     try {
       const dataset = await loadDatasetFromFile(resolvedPath);
+      const coverageSummary = getDatasetBookLiteraryCoverage(dataset)
+        .map(
+          (coverage) =>
+            `${coverage.bookId}:literary_people=${coverage.coveredPersonIds.length}/${coverage.totalPeopleCount},literary_places=${coverage.coveredPlaceIds.length}/${coverage.totalPlacesCount}`
+        )
+        .join("; ");
+
       console.log(
         [
           `Validated ${resolvedPath}`,
@@ -27,7 +35,8 @@ async function main(): Promise<void> {
           `journeys=${dataset.journeys.length}`,
           `relationships=${dataset.relationships.length}`,
           `tags=${dataset.tags.length}`,
-          `claims=${dataset.claims.length}`
+          `claims=${dataset.claims.length}`,
+          coverageSummary
         ].join(" | ")
       );
     } catch (error) {

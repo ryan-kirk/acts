@@ -1,5 +1,6 @@
 import { ZodIssue } from "zod";
 
+import { getDatasetBookLiteraryCoverage } from "./literaryCoverage";
 import {
   datasetSchema,
   type BookSchema,
@@ -37,6 +38,24 @@ function fromZodIssue(issue: ZodIssue): ValidationIssue {
 
 function addIssue(issues: ValidationIssue[], path: string, message: string): void {
   issues.push({ path, message });
+}
+
+function assertNoDuplicateReferences(
+  issues: ValidationIssue[],
+  path: string,
+  values: string[],
+  label: string
+): void {
+  const seen = new Set<string>();
+
+  values.forEach((value, index) => {
+    if (!seen.has(value)) {
+      seen.add(value);
+      return;
+    }
+
+    addIssue(issues, `${path}.${index}`, `Duplicate ${label} '${value}'.`);
+  });
 }
 
 function checkDuplicateIds(
@@ -178,6 +197,39 @@ function assertBookReferencesResolve(
         );
       }
     });
+
+    book.related_person_ids.forEach((personId, personIndex) => {
+      if (!knownPersonIds.has(personId)) {
+        addIssue(
+          issues,
+          `${path}.related_person_ids.${personIndex}`,
+          `Unknown related_person_id '${personId}'.`
+        );
+      }
+    });
+
+    book.related_place_ids.forEach((placeId, placeIndex) => {
+      if (!knownPlaceIds.has(placeId)) {
+        addIssue(
+          issues,
+          `${path}.related_place_ids.${placeIndex}`,
+          `Unknown related_place_id '${placeId}'.`
+        );
+      }
+    });
+
+    assertNoDuplicateReferences(
+      issues,
+      `${path}.related_person_ids`,
+      book.related_person_ids,
+      "related_person_id"
+    );
+    assertNoDuplicateReferences(
+      issues,
+      `${path}.related_place_ids`,
+      book.related_place_ids,
+      "related_place_id"
+    );
 
     assertSourceRefsResolve(issues, path, book.source_refs, knownSourceIds);
   });
@@ -325,6 +377,65 @@ function assertLiteraryUnitReferencesResolve(
           issues,
           `${path}.participant_ids.${personIndex}`,
           `Unknown literary unit participant_id '${personId}'.`
+        );
+      }
+    });
+
+    literaryUnit.related_person_ids.forEach((personId, personIndex) => {
+      if (!knownPersonIds.has(personId)) {
+        addIssue(
+          issues,
+          `${path}.related_person_ids.${personIndex}`,
+          `Unknown literary unit related_person_id '${personId}'.`
+        );
+      }
+    });
+
+    literaryUnit.related_place_ids.forEach((placeId, placeIndex) => {
+      if (!knownPlaceIds.has(placeId)) {
+        addIssue(
+          issues,
+          `${path}.related_place_ids.${placeIndex}`,
+          `Unknown literary unit related_place_id '${placeId}'.`
+        );
+      }
+    });
+
+    assertNoDuplicateReferences(
+      issues,
+      `${path}.participant_ids`,
+      literaryUnit.participant_ids,
+      "participant_id"
+    );
+    assertNoDuplicateReferences(
+      issues,
+      `${path}.related_person_ids`,
+      literaryUnit.related_person_ids,
+      "related_person_id"
+    );
+    assertNoDuplicateReferences(
+      issues,
+      `${path}.related_place_ids`,
+      literaryUnit.related_place_ids,
+      "related_place_id"
+    );
+
+    literaryUnit.related_person_ids.forEach((personId) => {
+      if (literaryUnit.participant_ids.includes(personId)) {
+        addIssue(
+          issues,
+          `${path}.related_person_ids`,
+          `Literary unit related_person_id '${personId}' duplicates a participant_id anchor.`
+        );
+      }
+    });
+
+    literaryUnit.related_place_ids.forEach((placeId) => {
+      if (literaryUnit.location_id === placeId) {
+        addIssue(
+          issues,
+          `${path}.related_place_ids`,
+          `Literary unit related_place_id '${placeId}' duplicates the primary location_id anchor.`
         );
       }
     });
@@ -523,6 +634,26 @@ export function validateDataset(input: unknown): DatasetSchema {
     knownPlaceIds,
     knownSourceIds
   );
+
+  const literaryCoverage = getDatasetBookLiteraryCoverage(dataset);
+
+  literaryCoverage.forEach((coverage, index) => {
+    if (coverage.missingPersonIds.length > 0) {
+      addIssue(
+        issues,
+        `books.${index}.related_person_ids`,
+        `Book '${coverage.bookId}' literary metadata does not cover people IDs: ${coverage.missingPersonIds.join(", ")}.`
+      );
+    }
+
+    if (coverage.missingPlaceIds.length > 0) {
+      addIssue(
+        issues,
+        `books.${index}.related_place_ids`,
+        `Book '${coverage.bookId}' literary metadata does not cover place IDs: ${coverage.missingPlaceIds.join(", ")}.`
+      );
+    }
+  });
 
   if (issues.length > 0) {
     throw new DatasetValidationError(issues);

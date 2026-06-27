@@ -25,6 +25,8 @@ export function createValidDataset(): CanonicalDataset {
         co_sender_ids: [],
         recipient_person_ids: [],
         recipient_place_ids: [],
+        related_person_ids: ["peter"],
+        related_place_ids: ["jerusalem"],
         source_refs: [
           {
             source_id: "acts",
@@ -167,6 +169,8 @@ export function createValidDataset(): CanonicalDataset {
         summary: "Opening Jerusalem witness material from the ascension through Pentecost.",
         location_id: "jerusalem",
         participant_ids: ["peter"],
+        related_person_ids: [],
+        related_place_ids: [],
         related_event_ids: ["acts_001"],
         source_refs: [
           {
@@ -231,6 +235,8 @@ export function createValidEpistleDataset(): CanonicalDataset {
         co_sender_ids: [],
         recipient_person_ids: [],
         recipient_place_ids: ["rome"],
+        related_person_ids: ["paul", "phoebe"],
+        related_place_ids: ["corinth", "rome"],
         recipient_group: "House churches in Rome",
         dispatch_note: "Phoebe is commended as a trusted carrier and patronal connection.",
         source_refs: [
@@ -387,6 +393,8 @@ export function createValidEpistleDataset(): CanonicalDataset {
         summary: "Salutation, prayer, and thesis statement for the righteousness of God.",
         location_id: "rome",
         participant_ids: ["paul"],
+        related_person_ids: ["phoebe"],
+        related_place_ids: ["corinth"],
         related_event_ids: ["romans_001"],
         source_refs: [
           {
@@ -408,6 +416,8 @@ export function createValidEpistleDataset(): CanonicalDataset {
         },
         summary: "Paul argues from universal need toward justification by faith.",
         participant_ids: ["paul"],
+        related_person_ids: [],
+        related_place_ids: [],
         related_event_ids: ["romans_001"],
         source_refs: [
           {
@@ -429,6 +439,8 @@ export function createValidEpistleDataset(): CanonicalDataset {
         },
         summary: "Union with Christ, the Spirit, and hope frame the middle argument.",
         participant_ids: ["paul"],
+        related_person_ids: [],
+        related_place_ids: [],
         related_event_ids: ["romans_001"],
         source_refs: [
           {
@@ -468,6 +480,8 @@ export function createValidApocalypticDataset(): CanonicalDataset {
         recipient_person_ids: [],
         recipient_group: "Seven churches in Asia",
         recipient_place_ids: ["asia_minor"],
+        related_person_ids: ["john_of_patmos"],
+        related_place_ids: ["patmos", "asia_minor"],
         source_refs: [
           {
             source_id: "revelation",
@@ -608,6 +622,8 @@ export function createValidApocalypticDataset(): CanonicalDataset {
         summary: "Revelation opens with commission, throne-language, and the seven church messages.",
         location_id: "patmos",
         participant_ids: ["john_of_patmos"],
+        related_person_ids: [],
+        related_place_ids: ["asia_minor"],
         related_event_ids: ["revelation_001"],
         source_refs: [
           {

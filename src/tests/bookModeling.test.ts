@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { getDatasetBookLiteraryCoverage } from "../data/literaryCoverage";
 import { validateDataset } from "../data/validateDataset";
 import {
   formatPassageRange,
@@ -130,5 +131,24 @@ describe("book metadata and literary-unit modeling", () => {
     );
     expect(semantics.find((semantic) => semantic.id === "discourse")?.eventCount).toBe(1);
     expect(semantics.find((semantic) => semantic.id === "feast")?.eventCount).toBe(2);
+  });
+
+  it("summarizes literary people and place coverage at the book level", () => {
+    const dataset = createValidEpistleDataset();
+
+    const [coverage] = getDatasetBookLiteraryCoverage(dataset);
+    if (!coverage) {
+      throw new Error("Expected Romans literary coverage to be defined.");
+    }
+
+    expect(coverage).toMatchObject({
+      bookId: "romans",
+      totalPeopleCount: 2,
+      totalPlacesCount: 2,
+      missingPersonIds: [],
+      missingPlaceIds: []
+    });
+    expect(coverage.coveredPersonIds).toEqual(["paul", "phoebe"]);
+    expect(coverage.coveredPlaceIds).toEqual(["corinth", "rome"]);
   });
 });

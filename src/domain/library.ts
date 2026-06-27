@@ -267,6 +267,14 @@ function mergeBookRecord(leftBook: Book, rightBook: Book): Book {
       ...leftBook.recipient_place_ids,
       ...rightBook.recipient_place_ids
     ]),
+    related_person_ids: dedupeStrings([
+      ...leftBook.related_person_ids,
+      ...rightBook.related_person_ids
+    ]),
+    related_place_ids: dedupeStrings([
+      ...leftBook.related_place_ids,
+      ...rightBook.related_place_ids
+    ]),
     recipient_group: mergeOptionalString(
       "book recipient_group",
       leftBook.id,

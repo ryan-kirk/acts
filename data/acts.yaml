@@ -7,7 +7,7 @@ metadata:
     Canonical Acts dataset for Bible Time & Place Explorer, normalized for
     timeline, map, relationship, and source-grounded UI views.
   created: "2026-06-11"
-  updated: "2026-06-11"
+  updated: "2026-06-27"
 
 books:
   - id: acts
@@ -28,6 +28,42 @@ books:
     recipient_group: >
       Presented as the continuation of the earlier narrative addressed to
       Theophilus and shaped for the wider reading community of Luke-Acts.
+    related_person_ids:
+      - jesus
+      - matthias
+      - peter
+      - john
+      - james_zebedee
+      - stephen
+      - philip
+      - paul
+      - barnabas
+      - silas
+      - timothy
+      - luke
+      - cornelius
+      - james_brother_of_jesus
+    related_place_ids:
+      - jerusalem
+      - damascus
+      - caesarea
+      - sidon
+      - myra
+      - antioch
+      - salamis
+      - paphos
+      - lystra
+      - philippi
+      - athens
+      - corinth
+      - ephesus
+      - miletus
+      - fair_havens
+      - malta
+      - syracuse
+      - rhegium
+      - puteoli
+      - rome
     source_refs:
       - source_id: acts
         citation: Acts 1:1-2
@@ -1297,6 +1333,11 @@ literary_units:
       reconstitution through Pentecost, Temple ministry, and early communal
       witness.
     location_id: jerusalem
+    related_person_ids:
+      - jesus
+      - john
+      - matthias
+      - peter
     related_event_ids:
       - acts_001
       - acts_002
@@ -1317,6 +1358,17 @@ literary_units:
     summary: >
       Escalating opposition, Stephen's martyrdom, Saul's conversion, and the
       Cornelius turning point widen the witness beyond Jerusalem.
+    related_person_ids:
+      - barnabas
+      - cornelius
+      - paul
+      - peter
+      - stephen
+    related_place_ids:
+      - antioch
+      - caesarea
+      - damascus
+      - jerusalem
     related_event_ids:
       - acts_005
       - acts_006
@@ -1338,6 +1390,19 @@ literary_units:
       The missionary journey cycle carries the witness through Cyprus, Asia
       Minor, Macedonia, Achaia, and Ephesus with speeches, conflict, and
       ecclesial formation.
+    related_person_ids:
+      - barnabas
+      - james_brother_of_jesus
+      - paul
+      - peter
+      - silas
+    related_place_ids:
+      - athens
+      - ephesus
+      - jerusalem
+      - miletus
+      - paphos
+      - philippi
     related_event_ids:
       - acts_009
       - acts_010
@@ -1360,6 +1425,12 @@ literary_units:
     summary: >
       Paul's arrest, trial sequence, sea voyage, shipwreck, and Roman custody
       form the final movement of Acts.
+    related_person_ids:
+      - paul
+    related_place_ids:
+      - jerusalem
+      - malta
+      - rome
     related_event_ids:
       - acts_015
       - acts_016
